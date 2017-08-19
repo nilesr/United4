@@ -1,0 +1,61 @@
+<!doctype html>
+<html>
+    <head>
+        <style>
+            body {
+                background-color: #444444;
+                color: white;
+                font-size: 250%;
+                font-family: monospace;
+            }
+            input[type='checkbox'] {
+                width: 30px;
+                height: 30px;
+                border: 3px solid black;
+                background-color: lightgrey;
+            }
+        </style>
+        <script>
+            var ol = function onLoad() {
+                var startup_music = unitedPropertiesIf.getProperty("startup_music");
+                if (startup_music == null || startup_music == undefined || startup_music.trim().toUpperCase() != "TRUE") {
+                    startup_music = false;
+                } else {
+                    startup_music = true;
+                }
+                document.getElementById("startup_music").checked = startup_music;
+            }
+            var save_startup_music = function save_startup_music() {
+                unitedPropertiesIf.setProperty("startup_music", document.getElementById("startup_music").checked.toString());
+            }
+        </script>
+    </head>
+    <body onLoad='ol()'>
+        <h3>PATCH NOTES (new and old):</h3>
+        -COMPLETE MUSIC ENGINE OVERHAUL
+        <br />
+        ~Bug fixes
+        <br />
+        ~Added Startup music setting
+        <br />
+        ~Added Kira Miki app
+        <br />
+        ~More themes
+        <h3>PLEASE HELP US!:</h3>
+        <img onClick='unitedPropertiesIf.launchHTML("https://patreon.com/united")' src="patreon.png" />
+        <br />
+        <br />
+        We really need your help to keep /u/ alive.
+        <br />
+        <input type="checkbox" id="startup_music" onChange="save_startup_music()" name="startup_music" />
+        <label for="startup_music">Startup Music</label>
+        <h3>CREDIT (Twitter):</h3>
+        @TheAnonE - Main Gui and base app
+        <br />
+        @garoadmusic - Allowed us to use his soundtrack!
+        <br />
+        @SukebanGames - Created the game Va-11 Hall-a
+        <br />
+        @purifetchi - Creation of danger/u/ &amp; T.A.E.
+    </body>
+</html>

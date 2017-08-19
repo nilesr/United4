@@ -31,7 +31,13 @@
                 var playing = false;
                 try {
                     theme = unitedPropertiesIf.getProperty("theme");
-                    playing = unitedPropertiesIf.getProperty("music_playing").toUpperCase() == "TRUE";
+                    playing = unitedPropertiesIf.getProperty("is_playing").toUpperCase() == "TRUE";
+                    startup_music = unitedPropertiesIf.getProperty("startup_music").toUpperCase() == "TRUE";
+                    if (startup_music && !playing) {
+                        playing = true;
+                        console.log("Playing welcome music")
+                        unitedPropertiesIf.playSong("Welcome To VA-11 HALL-A");
+                    }
                 } catch (e) {
                     //
                 }
@@ -67,14 +73,15 @@
     body {
         margin: 0;
         min-height: 100vh;
+        font-family: monospace;
     }
 </style>
     </head>
     <body onLoad='ol()'>
         <div class="row one_two">
             <img id="dangeru" onClick="unitedPropertiesIf.launchHTML('https://boards.dangeru.us/mobile')" />
-            <img id="patch_notes" />
-            <div id="patch_notes_text"></div>
+            <img id="patch_notes" onClick="unitedPropertiesIf.launchHTML('file:///android_res/raw/patch_notes.html')" />
+            <div id="patch_notes_text" onClick="unitedPropertiesIf.launchHTML('file:///android_res/raw/patch_notes.html')"></div>
         </div>
         <div class="row one_one">
             <img id="ae" onClick="unitedPropertiesIf.launchHTML('https://augmented.dangeru.us/')" />

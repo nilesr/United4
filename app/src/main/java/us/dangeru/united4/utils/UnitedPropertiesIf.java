@@ -4,6 +4,8 @@ import android.app.Activity;
 
 import java.lang.ref.WeakReference;
 
+import us.dangeru.united4.application.United;
+
 /**
  * Created by Niles on 8/18/17.
  */
@@ -30,5 +32,8 @@ public class UnitedPropertiesIf {
     }
     @android.webkit.JavascriptInterface public void closeWindow() {
         activity.get().closeWindow();
+    }
+    @android.webkit.JavascriptInterface public void playSong(String name) throws Exception {
+        ((United) activity.get().getApplication()).playSong(name);
     }
 }

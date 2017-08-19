@@ -8,6 +8,7 @@ import android.os.Bundle;
 import android.webkit.WebView;
 
 import us.dangeru.united4.R;
+import us.dangeru.united4.application.United;
 import us.dangeru.united4.fragments.UnitedWebFragment;
 import us.dangeru.united4.utils.ParcelableMap;
 import us.dangeru.united4.utils.UnitedActivity;
@@ -90,5 +91,11 @@ public class MainActivity extends Activity implements UnitedActivity {
         } else {
             finish();
         }
+    }
+
+    @Override
+    public void finish() {
+        United.playBackSound();
+        super.finish();
     }
 }

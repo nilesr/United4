@@ -68,9 +68,10 @@ public class United extends Application {
         reader.beginObject();
         int id = -1;
         while (reader.hasNext()) {
-            int name = parseInt(reader.nextName());
-            if (reader.nextString().equals(song)) {
-                id = name;
+            String name = reader.nextName();
+            int read = parseInt(reader.nextString());
+            if (name.equals(song)) {
+                id = read;
                 Log.i(TAG, "Song id is " + id);
                 break;
             }

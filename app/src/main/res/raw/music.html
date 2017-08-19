@@ -7,24 +7,70 @@
             var ol = function ol() {
                 var img1 = document.getElementById("img1");
                 var img2 = document.getElementById("img2");
-                var song = document.getElementById("song");
                 var i1h = img1.clientHeight;
                 img2.style.top = i1h.toString() + "px";
                 var i2h = img2.clientHeight;
-                song.style.top = (i1h + (i2h/2) - (song.clientHeight/2)).toString() + "px";
                 document.getElementById("prev").style.top = (i1h + i2h).toString() + "px";
                 document.getElementById("next").style.top = (i1h + i2h).toString() + "px";
+                document.getElementById("content").style.top = (i1h + i2h).toString() + "px";
                 page = unitedPropertiesIf.getSessionVariable("page");
                 if (page == null || page == undefined || page.trim().length == 0) {
                     page = 0;
                 }
+                changeCurrentSong();
                 newPage();
             }
+            var changeCurrentSong = function changeCurrentSong() {
+                var song = document.getElementById("song");
+                var i1h = img1.clientHeight;
+                img2.style.top = i1h.toString() + "px";
+                var i2h = img2.clientHeight;
+                var playing_song = unitedPropertiesIf.getProperty("playing_song");
+                var text = playing_song;
+                if (playing_song == null || playing_song == undefined || playing_song.trim().length == 0) {
+                    text = "Nothing Playing";
+                }
+                song.innerText = text;
+                song.style.top = (i1h + (i2h/2) - (song.clientHeight/2)).toString() + "px";
+            }
             var newPage = function newPage() {
+                var contents = document.getElementById("contents");
+                contents.innerHTML = "";
                 var start = page * items_per_page;
                 unitedPropertiesIf.setSessionVariable("page", page.toString());
-                var all_songs = unitedPropertiesIf.getProperty("all_songs");
-                // TODO
+                var all_songs = unitedPropertiesIf.getProperty("ordered_songs");
+                for (var i = 0; i < items_per_page.length; i++) {
+                    var index = start + i;
+                    var song = ordered_songs[index];
+                    var wrapper = document.createElement("div");
+                    var img = document.createElement("img");
+                    if (song == unitedPropertiesIf.getProperty("playing_song")) {
+                        img.src = "song_enabled.png";
+                    } else {
+                        img.src = "song_disabled.png";
+                    }
+                    (function(img, song) {
+                        img.addEventListener("click", function() {
+                            playSong(song);
+                        })
+                    })(img, song);
+                    img.classList.add("song")
+                    var text = document.createElement("span");
+                    text.innerText = song;
+                    text.classList.add("text");
+                    wrapper.appendChild(img);
+                    wrapper.appendChild(text);
+                    text.style.marginTop = (img.clientHeight/2) - (text.clientHeight/2)
+                    text.style.width = "100%";
+                    text.style.textAlign = "center";
+                    contents.appendChild(wrapper);
+                }
+            }
+            var playSong = function playSong(title) {
+                unitedPropertiesIf.setProperty("playing_song", title);
+                unitedPropertiesIf.playSong(title);
+                document.getElementById("song").innerText = title;
+                newPage();
             }
         </script>
         <style>
@@ -55,13 +101,21 @@
                 left: 0;
                 width: 10%;
             }
+            #content {
+                width: 100%;
+            }
+            .song {
+                width: 90%;
+            }
         </style>
     </head>
     <body onLoad='ol()'>
         <img id="img1" src="music_backdrop.png" />
         <img id="img2" src="music_text_backdrop.png" />
-        <div id="song" style="z-index: 10;">some text here</div>
+        <div id="song" style="z-index: 10;"></div>
         <img id="prev" />
         <img id="next" />
+        <div id="content">
+        </div>
     </body>
 </html>

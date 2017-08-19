@@ -7,7 +7,9 @@ import android.support.annotation.Nullable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.webkit.WebResourceRequest;
 import android.webkit.WebView;
+import android.webkit.WebViewClient;
 
 import us.dangeru.united4.R;
 import us.dangeru.united4.utils.UnitedPropertiesIf;
@@ -41,25 +43,12 @@ public class UnitedWebFragment extends Fragment {
                 //webview.getSettings().setDomStorageEnabled(true);
                 //webview.getSettings().setAllowFileAccessFromFileURLs(true);
                 //webview.getSettings().setAllowUniversalAccessFromFileURLs(true);
-                webview.addJavascriptInterface(new UnitedPropertiesIf(getActivity()), "UnitedPropertiesIf");
-                if (starting_url != null) {
-                    webview.loadUrl(starting_url);
-                }
+                webview.addJavascriptInterface(new UnitedPropertiesIf(getActivity()), "unitedPropertiesIf");
+                webview.setWebViewClient(new UnitedWebFragmentWebViewClient());
+                webview.loadUrl(starting_url);
             }
         });
         return res;
-    }
-    public void loadUrl(final String url) {
-        if (getView() == null) {
-            throw new IllegalStateException("wtf");
-        }
-        getView().post(new Runnable() {
-            @Override
-            public void run() {
-                WebView webview = getView().findViewById(R.id.main_webkit);
-                webview.loadUrl(RESOURCE_FOLDER + url);
-            }
-        });
     }
 
     @Override
@@ -67,5 +56,17 @@ public class UnitedWebFragment extends Fragment {
         super.onSaveInstanceState(outState);
         if (getView() == null) return;
         outState.putString("URL", ((WebView) getView().findViewById(R.id.main_webkit)).getUrl());
+    }
+
+    private static class UnitedWebFragmentWebViewClient extends WebViewClient {
+        @Override
+        public boolean shouldOverrideUrlLoading(WebView view, String url) {
+            return false;
+        }
+
+        @Override
+        public boolean shouldOverrideUrlLoading(WebView view, WebResourceRequest request) {
+            return false;
+        }
     }
 }

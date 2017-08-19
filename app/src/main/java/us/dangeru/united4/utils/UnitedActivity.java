@@ -5,5 +5,5 @@ package us.dangeru.united4.utils;
  */
 
 public interface UnitedActivity {
-    // TODO
+    void launchHTML(String resource);
 }

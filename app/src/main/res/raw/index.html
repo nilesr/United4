@@ -1,2 +1,87 @@
-<h1>It works</h1>
-<a href="temp.html">asdfasdf</a>
+<!doctype html>
+<html>
+    <head>
+        <script>
+            var ol = function ol() {
+                var spacing = 10;
+                var total_width = document.body.clientWidth;
+                var running_height = 20;
+                var image_height = (total_width - (2 * spacing)) * (102 / 378);
+                Array.prototype.slice.call(document.getElementsByClassName("row"), 0).forEach(function(elem) {
+                    elem.style.top = running_height + "px";
+                    running_height += image_height + spacing;
+                    if (elem.classList.contains("one")) {
+                        elem.children[0].style.left = spacing + "px";
+                        elem.children[0].style.width = (total_width - (2 * spacing)).toString() + "px";
+                    } else if (elem.classList.contains("one_one")) {
+                        var each_width = (total_width - (3 * spacing))/2;
+                        elem.children[0].style.left = spacing + "px";
+                        elem.children[0].style.width = each_width.toString() + "px";
+                        elem.children[1].style.left = (each_width + (2 * spacing)).toString() + "px";
+                        elem.children[1].style.width = each_width.toString() + "px";
+                    } else if (elem.classList.contains("one_two")) {
+                        var first_width = (total_width - (3 * spacing))/3;
+                        elem.children[0].style.left = spacing + "px";
+                        elem.children[0].style.width = first_width.toString() + "px";
+                        elem.children[1].style.left = (first_width + (spacing * 2)).toString() + "px";
+                        elem.children[1].style.width = (first_width * 2).toString() + "px";
+                    }
+                });
+                var theme = "normal";
+                var playing = false;
+                try {
+                    theme = unitedPropertiesIf.getProperty("theme");
+                    playing = unitedPropertiesIf.getProperty("music_playing").toUpperCase() == "TRUE";
+                } catch (e) {
+                    //
+                }
+                if (theme == null || theme == undefined || theme.trim().length == 0) {
+                    theme = "normal";
+                }
+                document.body.style.background = "url(\"" + theme + "_home.png\") no-repeat center/cover fixed";
+                Array.prototype.slice.call(document.getElementsByTagName("img"), 0).forEach(function(elem) {
+                    elem.style.height = image_height.toString() + "px";
+                    if (elem.id == "music" && !playing) elem.id = "music2"
+                    elem.src = theme + "_" + elem.id + ".png";
+                });
+                var pn = document.getElementById("patch_notes");
+                var pnt = document.getElementById("patch_notes_text");
+                pnt.style.left = pn.style.left;
+                pnt.style.top = pn.style.top;
+                pnt.style.width = pn.style.width;
+                pnt.innerText = unitedPropertiesIf.getProperty("version_notes");
+            }
+        </script>
+<style>
+    img, .row, #patch_notes_text {
+        display: block;
+        position: absolute;
+    }
+    #patch_notes_text {
+        text-align: center;
+        color: white;
+        font-size: 2em;
+        line-height: 2;
+        padding-top: 8px;
+    }
+</style>
+    </head>
+    <body onLoad='ol()'>
+        <div class="row one_two">
+            <img id="dangeru" onClick="unitedPropertiesIf.launchHTML('https://boards.dangeru.us/mobile')" />
+            <img id="patch_notes" />
+            <div id="patch_notes_text"></div>
+        </div>
+        <div class="row one_one">
+            <img id="ae" onClick="unitedPropertiesIf.launchHTML('https://augmented.dangeru.us/')" />
+            <img id="music" />
+        </div>
+        <div class="row one">
+            <img id="save" />
+        </div>
+        <div class="row one_one">
+            <img id="camo" onClick="unitedPropertiesIf.launchHTML('file:///android_res/raw/camo.html')" />
+            <img id="kira" onClick="unitedPropertiesIf.launchHTML('file:///android_res/raw/kira.html')" />
+        </div>
+    </body>
+</html>

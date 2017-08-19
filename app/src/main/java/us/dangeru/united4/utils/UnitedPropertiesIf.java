@@ -2,19 +2,26 @@ package us.dangeru.united4.utils;
 
 import android.app.Activity;
 
+import java.lang.ref.WeakReference;
+
 /**
  * Created by Niles on 8/18/17.
  */
 
 public class UnitedPropertiesIf {
-    UnitedActivity activity;
+    WeakReference<UnitedActivity> activity;
     public UnitedPropertiesIf(Activity activity) {
-        this.activity = (UnitedActivity) activity;
+        this.activity = new WeakReference<>((UnitedActivity) activity);
     }
     @android.webkit.JavascriptInterface public String getProperty(String key) {
         return PropertiesSingleton.get().getProperty(key);
     }
     @android.webkit.JavascriptInterface public void setProperty(String key, String value) {
         PropertiesSingleton.get().setProperty(key, value);
+    }
+    @android.webkit.JavascriptInterface public void launchHTML(String resource) {
+        if (activity.get() != null) {
+            activity.get().launchHTML(resource);
+        }
     }
 }

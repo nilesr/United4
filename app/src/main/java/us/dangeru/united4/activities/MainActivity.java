@@ -3,6 +3,7 @@ package us.dangeru.united4.activities;
 import android.app.Activity;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
+import android.content.Intent;
 import android.os.Bundle;
 
 import us.dangeru.united4.R;
@@ -25,7 +26,11 @@ public class MainActivity extends Activity implements UnitedActivity {
         if (webFragment == null) {
             webFragment = new UnitedWebFragment();
             Bundle args = new Bundle();
-            args.putString("URL", RESOURCE_FOLDER + "index.html");
+            if (getIntent() != null && getIntent().hasExtra("URL")) {
+                args.putString("URL", getIntent().getStringExtra("URL"));
+            } else {
+                args.putString("URL", RESOURCE_FOLDER + "index.html");
+            }
             webFragment.setArguments(args);
             FragmentTransaction trans = manager.beginTransaction();
             trans.replace(R.id.activity_main_activity, webFragment, "main_webkit_wrapper");
@@ -37,5 +42,19 @@ public class MainActivity extends Activity implements UnitedActivity {
     @Override
     protected void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
+    }
+
+    @Override
+    public void launchHTML(String resource) {
+        Intent i = new Intent(this, MainActivity.class);
+        Bundle extras = new Bundle();
+        extras.putString("URL", resource);
+        i.putExtras(extras);
+        startActivity(i);
+    }
+
+    @Override
+    public void onBackPressed() {
+        finish();
     }
 }

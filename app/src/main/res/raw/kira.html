@@ -1,0 +1,42 @@
+<!doctype html>
+<html>
+    <head>
+        <style>
+            body {
+                background-image: url(meme_home.png);
+                background: url("meme_home.png") no-repeat center/cover fixed;
+                margin: 0;
+                height: 100vh;
+                width: 100vw;
+            }
+            img {
+                position: absolute;
+                display: block;
+            }
+        </style>
+        <script>
+            var ol = function ol() {
+                var total_width = window.innerWidth;
+                var img = document.getElementById("img")
+                img.style.top = "0";
+                img.style.width = (total_width).toString() + "px"
+                var img_height = total_width * (210/360)
+                img.style.height = img_height.toString() + "px";
+                var img2 = document.getElementById("img2")
+                var width = total_width * 0.8;
+                img2.style.left = "10%";
+                img2.style.width = width.toString() + "px";
+                img2.style.height = (width * (546/1366)).toString();
+                img2.style.top = (img_height + (((document.body.clientHeight - img_height)/2) - (img2.clientHeight/2))).toString() + "px"
+            }
+        </script>
+    </head>
+    <body onLoad='ol()'>
+        <a href="https://prefetcher.dangeru.us/kiramiki/">
+            <img id="img" src="kira1.png">
+        </a>
+        <a href="https://prefetcher.dangeru.us/iabsolutelydontknow/">
+            <img id="img2" src="kira2.png">
+        </a>
+    </body>
+</html>

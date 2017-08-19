@@ -32,7 +32,17 @@
                 try {
                     theme = unitedPropertiesIf.getProperty("theme");
                     playing = unitedPropertiesIf.getProperty("is_playing").toUpperCase() == "TRUE";
-                    startup_music = unitedPropertiesIf.getProperty("startup_music").toUpperCase() == "TRUE";
+                    var startup_music = unitedPropertiesIf.getProperty("startup_music").toUpperCase() == "TRUE";
+                    var opened = unitedPropertiesIf.getSessionVariable("open_phone_played")
+                    if (opened != null && opened != undefined && opened.trim().toUpperCase() == "TRUE") {
+                        opened = true;
+                        console.log("Already opened not playing sound: " + opened)
+                    } else {
+                        console.log("Playing sound")
+                        unitedPropertiesIf.setSessionVariable("open_phone_played", true.toString());
+                        unitedPropertiesIf.playSound("open_phone.mp3");
+                        console.log(audio.toString());
+                    }
                     if (startup_music && !playing) {
                         playing = true;
                         console.log("Playing welcome music")
@@ -53,9 +63,26 @@
                 var pn = document.getElementById("patch_notes");
                 var pnt = document.getElementById("patch_notes_text");
                 pnt.style.left = pn.style.left;
-                pnt.style.top = pn.style.top;
                 pnt.style.width = pn.style.width;
                 pnt.innerText = unitedPropertiesIf.getProperty("version_notes");
+                pnt.style.paddingTop = pnt.style.paddingBottom = (pn.clientHeight / 8).toString() + "px";
+                var font_size = pn.clientHeight / 4;
+                pnt.style.fontSize = font_size.toString() + "px";
+                pnt.style.lineHeight = "1.5";
+                while (pnt.clientHeight > pn.clientHeight) {
+                    font_size -= 1;
+                    pnt.style.fontSize = font_size.toString() + "px";
+                }
+                pnt.style.top = (pn.style.top + (pn.clientHeight/2) - (pnt.clientHeight/2)).toString() + "px";
+
+            }
+            var kira_counter = 0;
+            window.kira = function kira() {
+                kira_counter++;
+                unitedPropertiesIf.toast("Not Implemented Yet (press "+(5 - kira_counter).toString()+" times if you're a developer)")
+                if (kira_counter > 4) {
+                    unitedPropertiesIf.launchHTML('file:///android_res/raw/kira.html');
+                }
             }
         </script>
 <style>
@@ -66,9 +93,6 @@
     #patch_notes_text {
         text-align: center;
         color: white;
-        font-size: 2em;
-        line-height: 2;
-        padding-top: 8px;
     }
     body {
         margin: 0;
@@ -85,14 +109,17 @@
         </div>
         <div class="row one_one">
             <img id="ae" onClick="unitedPropertiesIf.launchHTML('https://augmented.dangeru.us/')" />
-            <img id="music" />
+            <img id="music" onClick='unitedPropertiesIf.launchHTML("file:///android_res/raw/music.html");' />
         </div>
         <div class="row one">
-            <img id="save" />
+            <img id="save" onClick="unitedPropertiesIf.launchHTML('http://sukeban.moe')" />
         </div>
         <div class="row one_one">
             <img id="camo" onClick="unitedPropertiesIf.launchHTML('file:///android_res/raw/camo.html')" />
+            <!--
             <img id="kira" onClick="unitedPropertiesIf.launchHTML('file:///android_res/raw/kira.html')" />
+            -->
+            <img id="kira" onClick="window.kira()" />
         </div>
     </body>
 </html>

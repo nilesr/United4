@@ -1,0 +1,67 @@
+<!doctype html>
+<html>
+    <head>
+        <script>
+            var page = 0;
+            var items_per_page = 3;
+            var ol = function ol() {
+                var img1 = document.getElementById("img1");
+                var img2 = document.getElementById("img2");
+                var song = document.getElementById("song");
+                var i1h = img1.clientHeight;
+                img2.style.top = i1h.toString() + "px";
+                var i2h = img2.clientHeight;
+                song.style.top = (i1h + (i2h/2) - (song.clientHeight/2)).toString() + "px";
+                document.getElementById("prev").style.top = (i1h + i2h).toString() + "px";
+                document.getElementById("next").style.top = (i1h + i2h).toString() + "px";
+                page = unitedPropertiesIf.getSessionVariable("page");
+                if (page == null || page == undefined || page.trim().length == 0) {
+                    page = 0;
+                }
+                newPage();
+            }
+            var newPage = function newPage() {
+                var start = page * items_per_page;
+                unitedPropertiesIf.setSessionVariable("page", page.toString());
+                var all_songs = unitedPropertiesIf.getProperty("all_songs");
+                // TODO
+            }
+        </script>
+        <style>
+            body {
+                text-align: center;
+            }
+            #img1 {
+                position: absolute;
+                top: 0;
+                left: 0;
+                width: 100%;
+            }
+            #img2, #song {
+                position: absolute;
+                left: 0;
+                width: 100%;
+                color: white;
+            }
+            #next {
+                position: absolute;
+                z-index: 10;
+                left: 90%;
+                width: 10%;
+            }
+            #prev {
+                position: absolute;
+                z-index: 10;
+                left: 0;
+                width: 10%;
+            }
+        </style>
+    </head>
+    <body onLoad='ol()'>
+        <img id="img1" src="music_backdrop.png" />
+        <img id="img2" src="music_text_backdrop.png" />
+        <div id="song" style="z-index: 10;">some text here</div>
+        <img id="prev" />
+        <img id="next" />
+    </body>
+</html>

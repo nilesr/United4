@@ -95,7 +95,12 @@ public class MainActivity extends Activity implements UnitedActivity {
 
     @Override
     public void finish() {
-        United.playBackSound();
+        new Thread() {
+            @Override
+            public void run() {
+                United.playSound("back_sound.mp3");
+            }
+        }.start();
         super.finish();
     }
 }

@@ -54,7 +54,7 @@ public final class PropertiesSingleton {
         properties.put("looping", "false");
         properties.put("shuffle", "false");
         properties.put("current_song", "");
-
+        resetForAppStart();
     }
 
     private void resetForAppStart() {

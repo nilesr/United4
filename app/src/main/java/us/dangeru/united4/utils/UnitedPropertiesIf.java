@@ -1,6 +1,8 @@
 package us.dangeru.united4.utils;
 
 import android.app.Activity;
+import android.webkit.JavascriptInterface;
+import android.widget.Toast;
 
 import java.lang.ref.WeakReference;
 
@@ -15,25 +17,31 @@ public class UnitedPropertiesIf {
     public UnitedPropertiesIf(Activity activity) {
         this.activity = new WeakReference<>((UnitedActivity) activity);
     }
-    @android.webkit.JavascriptInterface public String getProperty(String key) {
+    @JavascriptInterface public static String getProperty(String key) {
         return PropertiesSingleton.get().getProperty(key);
     }
-    @android.webkit.JavascriptInterface public void setProperty(String key, String value) {
+    @JavascriptInterface public static void setProperty(String key, String value) {
         PropertiesSingleton.get().setProperty(key, value);
     }
-    @android.webkit.JavascriptInterface public String getSessionVariable(String key) {
+    @JavascriptInterface public String getSessionVariable(String key) {
         return activity.get().getSessionVariable(key);
     }
-    @android.webkit.JavascriptInterface public void setSessionVariable(String key, String value) {
+    @JavascriptInterface public void setSessionVariable(String key, String value) {
         activity.get().setSessionVariable(key, value);
     }
-    @android.webkit.JavascriptInterface public void launchHTML(String resource) {
+    @JavascriptInterface public void launchHTML(String resource) {
         activity.get().launchHTML(resource);
     }
-    @android.webkit.JavascriptInterface public void closeWindow() {
+    @JavascriptInterface public void closeWindow() {
         activity.get().closeWindow();
     }
-    @android.webkit.JavascriptInterface public void playSong(String name) throws Exception {
+    @JavascriptInterface public void playSong(String name) throws Exception {
         ((United) activity.get().getApplication()).playSong(name);
+    }
+    @JavascriptInterface public static void playSound(String name) {
+        United.playSound(name);
+    }
+    @JavascriptInterface public static void toast(String text) {
+        Toast.makeText(United.getContext(), text, Toast.LENGTH_LONG).show();
     }
 }

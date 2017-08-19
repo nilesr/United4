@@ -2,6 +2,7 @@ package us.dangeru.united4.application;
 
 import android.app.Application;
 import android.content.Context;
+import android.content.res.AssetFileDescriptor;
 import android.media.AudioManager;
 import android.media.MediaPlayer;
 import android.media.SoundPool;
@@ -12,7 +13,6 @@ import android.util.Log;
 import java.io.StringReader;
 import java.lang.ref.WeakReference;
 
-import us.dangeru.united4.R;
 import us.dangeru.united4.utils.PropertiesSingleton;
 
 import static java.lang.Integer.parseInt;
@@ -24,17 +24,32 @@ import static java.lang.Integer.parseInt;
 public class United extends Application {
     private static final String TAG = United.class.getSimpleName();
     private static WeakReference<Context> singleton = null;
-    private static SoundPool pool = null;
-    private static int back_id = 0;
     private static MediaPlayer player = null;
 
-    public static void playBackSound() {
-        new Thread() {
-            @Override
-            public void run() {
-                pool.play(back_id, 1, 1, 0, 0, 1);
-            }
-        }.start();
+    public static void playSound(String file) {
+        SoundPool pool = buildPool();
+        try {
+            AssetFileDescriptor fd = getContext().getAssets().openFd(file);
+            pool.setOnLoadCompleteListener(new SoundPool.OnLoadCompleteListener() {
+                @Override
+                public void onLoadComplete(SoundPool soundPool, int i, int i1) {
+                    soundPool.play(i, 1, 1, 1, 0, 1);
+                }
+            });
+            pool.load(fd, 1);
+        } catch (Exception ignored) {
+            //
+        }
+    }
+
+    private static SoundPool buildPool() {
+        SoundPool pool;
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            pool = new SoundPool.Builder().setMaxStreams(10).build();
+        } else {
+            pool = new SoundPool(10, AudioManager.STREAM_MUSIC, 1);
+        }
+        return pool;
     }
 
     public static Context getContext() {
@@ -44,12 +59,6 @@ public class United extends Application {
     public void onCreate() {
         super.onCreate();
         singleton = new WeakReference<>(getApplicationContext());
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            pool = new SoundPool.Builder().setMaxStreams(10).build();
-        } else {
-            pool = new SoundPool(10, AudioManager.STREAM_MUSIC, 1);
-        }
-        back_id = pool.load(getApplicationContext(), R.raw.back_sound, 1);
     }
 
     public void playSong(String song) throws Exception {

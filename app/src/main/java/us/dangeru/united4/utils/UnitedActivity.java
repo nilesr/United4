@@ -1,6 +1,5 @@
 package us.dangeru.united4.utils;
 
-import android.app.Activity;
 import android.app.Application;
 
 /**

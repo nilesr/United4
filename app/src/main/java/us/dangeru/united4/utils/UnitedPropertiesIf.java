@@ -19,9 +19,16 @@ public class UnitedPropertiesIf {
     @android.webkit.JavascriptInterface public void setProperty(String key, String value) {
         PropertiesSingleton.get().setProperty(key, value);
     }
+    @android.webkit.JavascriptInterface public String getSessionVariable(String key) {
+        return activity.get().getSessionVariable(key);
+    }
+    @android.webkit.JavascriptInterface public void setSessionVariable(String key, String value) {
+        activity.get().setSessionVariable(key, value);
+    }
     @android.webkit.JavascriptInterface public void launchHTML(String resource) {
-        if (activity.get() != null) {
-            activity.get().launchHTML(resource);
-        }
+        activity.get().launchHTML(resource);
+    }
+    @android.webkit.JavascriptInterface public void closeWindow() {
+        activity.get().closeWindow();
     }
 }

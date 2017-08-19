@@ -8,6 +8,7 @@ import android.os.Bundle;
 
 import us.dangeru.united4.R;
 import us.dangeru.united4.fragments.UnitedWebFragment;
+import us.dangeru.united4.utils.ParcelableMap;
 import us.dangeru.united4.utils.UnitedActivity;
 
 import static us.dangeru.united4.fragments.UnitedWebFragment.RESOURCE_FOLDER;
@@ -16,12 +17,18 @@ import static us.dangeru.united4.fragments.UnitedWebFragment.RESOURCE_FOLDER;
  * Main activity for danger/u/
  */
 public class MainActivity extends Activity implements UnitedActivity {
+    ParcelableMap session;
     @SuppressWarnings("FieldCanBeLocal")
     private UnitedWebFragment webFragment;
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main_activity);
         FragmentManager manager = getFragmentManager();
+        if (savedInstanceState != null) {
+            session = ParcelableMap.fromParcel(savedInstanceState.getParcelable("session"));
+        } else {
+            session = new ParcelableMap();
+        }
         webFragment = (UnitedWebFragment) manager.findFragmentByTag("main_webkit_wrapper");
         if (webFragment == null) {
             webFragment = new UnitedWebFragment();
@@ -42,6 +49,7 @@ public class MainActivity extends Activity implements UnitedActivity {
     @Override
     protected void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
+        outState.putParcelable("session", session.parcel());
     }
 
     @Override
@@ -51,6 +59,21 @@ public class MainActivity extends Activity implements UnitedActivity {
         extras.putString("URL", resource);
         i.putExtras(extras);
         startActivity(i);
+    }
+
+    @Override
+    public String getSessionVariable(String key) {
+        return session.get(key);
+    }
+
+    @Override
+    public void setSessionVariable(String key, String value) {
+        session.put(key, value);
+    }
+
+    @Override
+    public void closeWindow() {
+        finish();
     }
 
     @Override

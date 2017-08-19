@@ -1,9 +1,51 @@
 <!doctype html>
 <html>
     <head>
+        <script>
+            var ol = function ol() {
+                //var img1 = document.getElementById("img1");
+            }
+        </script>
+        <style>
+            body {
+                background: url('camo_bg.png') no-repeat center/cover fixed;
+                text-align: center;
+                min-height: 100vh;
+                margin: 0;
+            }
+            img {
+                position: absolute;
+                display: block;
+            }
+            #img1 {
+                width: 80%;
+                left: 10%;
+                top: 3%;
+            }
+            #img2 {
+                left: 3%;
+                top: 65%;
+                height: 84px;
+                width: 276px;
+            }
+            #img3 {
+                left: 3%;
+                top: 80%;
+                height: 84px;
+                width: 308px;
+            }
+        </style>
     </head>
     <body onLoad='ol()'>
-        
+        <a href="camo_customize.html">
+            <img id="img1" src="customize.png" />
+        </a>
+        <a href="camo_about_page.html">
+            <img id="img2" src="about.png" />
+        </a>
+        <a href="camo_mascot_page.html">
+            <img id="img3" src="mascot.png" />
+        </a>
     </body>
 </html>
 

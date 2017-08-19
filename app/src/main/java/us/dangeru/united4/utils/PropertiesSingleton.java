@@ -1,6 +1,10 @@
 package us.dangeru.united4.utils;
 
+import org.json.JSONArray;
+
+import java.util.Arrays;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -15,9 +19,12 @@ public final class PropertiesSingleton {
     }
     private PropertiesSingleton() {
         properties = new HashMap<>();
-        properties.put("version_notes", "Version 3.6!\nTap for Patch Notes");
+        properties.put("version_notes", "Version 4.0!\nTap for Patch Notes");
         properties.put("theme", "normal");
         properties.put("is_playing", "false");
+        List<String> themes = Arrays.asList("normal", "dotted", "steam", "kira", "meme");
+        String str = new JSONArray(themes).toString();
+        properties.put("all_themes", str);
     }
     public static PropertiesSingleton get() {
         return singleton;

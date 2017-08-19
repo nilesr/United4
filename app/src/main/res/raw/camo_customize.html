@@ -1,0 +1,75 @@
+<!doctype html>
+<html>
+    <head>
+        <script>
+            var ol = function ol() {
+                var tab = unitedPropertiesIf.getSessionVariable("tab");
+                if (tab == null || tab == undefined || tab.trim().length == 0) {
+                    tab = "1"
+                }
+                var tab1 = document.getElementById("tab1");
+                var all_themes = JSON.parse(unitedPropertiesIf.getProperty("all_themes"));
+                all_themes.forEach(function(theme) {
+                    var img = document.createElement("img");
+                    img.src = theme + "_icon.png";
+                    (function(img, theme) {
+                        img.addEventListener("click", function() {
+                            changeTheme(theme)
+                        })
+                    })(img, theme);
+                    img.style.width = "95%";
+                    img.style.marginTop = "10px";
+                    tab1.appendChild(img);
+                });
+                showTab(tab);
+            }
+            var showTab = function showTab(tab) {
+                unitedPropertiesIf.setSessionVariable("tab", tab);
+                Array.prototype.slice.call(document.getElementsByClassName("tab"), 0).forEach(function(elem) {
+                    if (elem.id == "tab" + tab) {
+                        elem.style.display = "block";
+                    } else {
+                        elem.style.display = "none";
+                    }
+                });
+                Array.prototype.slice.call(document.getElementsByClassName("button"), 0).forEach(function(elem) {
+                    if (elem.id == "button" + tab) {
+                        elem.src = elem.id + "_selected.png"
+                    } else {
+                        elem.src = elem.id + "_unselected.png"
+                    }
+                });
+            }
+            var changeTheme = function changeTheme(new_theme) {
+                unitedPropertiesIf.setProperty("theme", new_theme);
+                unitedPropertiesIf.closeWindow();
+            }
+        </script>
+        <style>
+            body {
+                background: url('camo_tile.png');
+                text-align: center;
+                min-height: 100vh;
+                margin: 0;
+            }
+            .button {
+                padding-top: 30px;
+                position: relative;
+                display: inline-block;
+                margin-left: 1%;
+                width: 47.5%
+            }
+        </style>
+    </head>
+    <body onLoad='ol()'>
+        <img class="button" id="button1" onClick="showTab('1')" style="margin-left: 0;"></img>
+        <img class="button" id="button2" onClick="showTab('2')"></img>
+        <div class="tab" id="tab1" style="display: none;">
+        </div>
+        <div class="tab" id="tab2" style="display: none;">
+            <img src="unavailable.png">
+        </div>
+    </body>
+</html>
+
+

@@ -5,6 +5,22 @@
             var page = 0;
             var items_per_page = 3;
             var ol = function ol() {
+                if (typeof(window.unitedPropertiesIf) == "undefined") {
+                    window.unitedPropertiesIf = {
+                        getSessionVariable: function(name) {
+                            return "0";
+                        },
+                        getProperty: function(name) {
+                            if (name == "playing_song") return null;
+                            return JSON.stringify(["a", "b", "c"]);
+                        },
+                        setSessionVariable: function(name, value) {},
+                        setProperty: function(name, value) {},
+                        playSong: function(name) {
+                            alert("Playing song " + name)
+                        }
+                    }
+                }
                 var img1 = document.getElementById("img1");
                 var img2 = document.getElementById("img2");
                 var i1h = img1.clientHeight;
@@ -12,7 +28,7 @@
                 var i2h = img2.clientHeight;
                 document.getElementById("prev").style.top = (i1h + i2h).toString() + "px";
                 document.getElementById("next").style.top = (i1h + i2h).toString() + "px";
-                document.getElementById("content").style.top = (i1h + i2h).toString() + "px";
+                document.getElementById("contents").style.top = (i1h + i2h).toString() + "px";
                 page = unitedPropertiesIf.getSessionVariable("page");
                 if (page == null || page == undefined || page.trim().length == 0) {
                     page = 0;
@@ -36,34 +52,52 @@
             var newPage = function newPage() {
                 var contents = document.getElementById("contents");
                 contents.innerHTML = "";
-                var start = page * items_per_page;
                 unitedPropertiesIf.setSessionVariable("page", page.toString());
-                var all_songs = unitedPropertiesIf.getProperty("ordered_songs");
-                for (var i = 0; i < items_per_page.length; i++) {
+                var all_songs = JSON.parse(unitedPropertiesIf.getProperty("ordered_songs"));
+                var max_page = Math.ceil(all_songs.length / items_per_page) - 1;
+                var start = page * items_per_page;
+                if (page == 0) {
+                    document.getElementById("prev").src = "prev_disabled.png";
+                } else {
+                    document.getElementById("prev").src = "prev_enabled.png";
+                }
+                console.log(max_page)
+                if (page >= max_page) {
+                    document.getElementById("next").src = "next_disabled.png";
+                } else {
+                    document.getElementById("next").src = "next_enabled.png";
+                }
+                for (var i = 0; i < items_per_page; i++) {
                     var index = start + i;
-                    var song = ordered_songs[index];
-                    var wrapper = document.createElement("div");
-                    var img = document.createElement("img");
-                    if (song == unitedPropertiesIf.getProperty("playing_song")) {
-                        img.src = "song_enabled.png";
-                    } else {
-                        img.src = "song_disabled.png";
-                    }
-                    (function(img, song) {
-                        img.addEventListener("click", function() {
-                            playSong(song);
-                        })
-                    })(img, song);
-                    img.classList.add("song")
+                    var song = all_songs[index];
+                    if (song == undefined) breal;
                     var text = document.createElement("span");
+                    (function(text, song) {
+                        text.addEventListener("click", function() {
+                            playSong(song);
+                        });
+                    })(text, song);
                     text.innerText = song;
+                    if (song == unitedPropertiesIf.getProperty("playing_song")) {
+                        text.style.border = "2px solid #ffbb31";
+                    } else {
+                        text.style.border = "2px solid #3C84CF"
+                    }
                     text.classList.add("text");
-                    wrapper.appendChild(img);
-                    wrapper.appendChild(text);
-                    text.style.marginTop = (img.clientHeight/2) - (text.clientHeight/2)
-                    text.style.width = "100%";
+                    text.style.lineHeight = "50px";
+                    text.style.color = "white"
+                    text.style.zIndex = "10"
+                    text.style.position = "absolute"
+                    text.style.display = "block"
                     text.style.textAlign = "center";
-                    contents.appendChild(wrapper);
+                    text.classList.add("wrapper");
+                    contents.appendChild(text);
+                    text.style.top = (20 + (i * 70)).toString() + "px";
+                    var size = 15;
+                    do {
+                        text.style.fontSize = size.toString() + "px"
+                        size--;
+                    } while (text.clientHeight > 50)
                 }
             }
             var playSong = function playSong(title) {
@@ -72,10 +106,21 @@
                 document.getElementById("song").innerText = title;
                 newPage();
             }
+            window.prev = function prev() {
+                page = Math.max(page - 1, 0);
+                newPage();
+            }
+            window.next = function next() {
+                if (document.getElementById("next").src.indexOf("disabled") >= 0) return;
+                page += 1;
+                newPage();
+            }
         </script>
         <style>
             body {
                 text-align: center;
+                background-color: black;
+                font-family: monospace;
             }
             #img1 {
                 position: absolute;
@@ -101,11 +146,19 @@
                 left: 0;
                 width: 10%;
             }
-            #content {
+            #contents {
                 width: 100%;
+                position: absolute;
+                left: 0;
             }
             .song {
                 width: 90%;
+            }
+            .wrapper {
+                position: absolute;
+                width: auto;
+                left: 12%;
+                right: 12%;
             }
         </style>
     </head>
@@ -113,9 +166,9 @@
         <img id="img1" src="music_backdrop.png" />
         <img id="img2" src="music_text_backdrop.png" />
         <div id="song" style="z-index: 10;"></div>
-        <img id="prev" />
-        <img id="next" />
-        <div id="content">
+        <img id="prev" onClick='window.prev()' />
+        <img id="next" onClick='window.next()' />
+        <div id="contents">
         </div>
     </body>
 </html>

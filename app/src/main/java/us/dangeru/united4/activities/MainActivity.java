@@ -5,6 +5,7 @@ import android.app.FragmentManager;
 import android.app.FragmentTransaction;
 import android.content.Intent;
 import android.os.Bundle;
+import android.webkit.WebView;
 
 import us.dangeru.united4.R;
 import us.dangeru.united4.fragments.UnitedWebFragment;
@@ -17,7 +18,7 @@ import static us.dangeru.united4.fragments.UnitedWebFragment.RESOURCE_FOLDER;
  * Main activity for danger/u/
  */
 public class MainActivity extends Activity implements UnitedActivity {
-    ParcelableMap session;
+    private ParcelableMap session;
     @SuppressWarnings("FieldCanBeLocal")
     private UnitedWebFragment webFragment;
     protected void onCreate(Bundle savedInstanceState) {
@@ -57,6 +58,7 @@ public class MainActivity extends Activity implements UnitedActivity {
         Intent i = new Intent(this, MainActivity.class);
         Bundle extras = new Bundle();
         extras.putString("URL", resource);
+        extras.putBoolean("support_back_button", true);
         i.putExtras(extras);
         startActivity(i);
     }
@@ -78,6 +80,15 @@ public class MainActivity extends Activity implements UnitedActivity {
 
     @Override
     public void onBackPressed() {
-        finish();
+        if (getIntent() != null && getIntent().hasExtra("support_back_button") && getIntent().getBooleanExtra("support_back_button", false)) {
+            WebView webview = findViewById(R.id.main_webkit);
+            if (webview.canGoBack()) {
+                webview.goBack();
+            } else {
+                finish();
+            }
+        } else {
+            finish();
+        }
     }
 }

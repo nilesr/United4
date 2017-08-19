@@ -8,3 +8,4 @@
 - nanocam (new activity)
 	- mascot (link)
 		- words.png needs to be in there
+- save properties to json file somewhere

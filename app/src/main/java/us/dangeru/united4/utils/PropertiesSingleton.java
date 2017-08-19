@@ -18,6 +18,7 @@ public final class PropertiesSingleton {
         singleton = new PropertiesSingleton();
     }
     private PropertiesSingleton() {
+        // TODO load from a file
         properties = new HashMap<>();
         properties.put("version_notes", "Version 4.0!\nTap for Patch Notes");
         properties.put("theme", "normal");
@@ -34,5 +35,6 @@ public final class PropertiesSingleton {
     }
     public void setProperty(String key, String value) {
         properties.put(key, value);
+        // TODO save to a file
     }
 }

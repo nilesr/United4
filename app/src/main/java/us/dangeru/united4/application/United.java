@@ -47,6 +47,7 @@ public class United extends Application {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             pool = new SoundPool.Builder().setMaxStreams(10).build();
         } else {
+            //noinspection deprecation
             pool = new SoundPool(10, AudioManager.STREAM_MUSIC, 1);
         }
         return pool;
@@ -61,35 +62,39 @@ public class United extends Application {
         singleton = new WeakReference<>(getApplicationContext());
     }
 
-    public void playSong(String song) throws Exception {
-        Log.i(TAG, "playSong called on " + song);
-        String songs = PropertiesSingleton.get().getProperty("songs");
-        JsonReader reader = new JsonReader(new StringReader(songs));
-        reader.beginObject();
-        int id = -1;
-        while (reader.hasNext()) {
-            String name = reader.nextName();
-            int read = parseInt(reader.nextString());
-            if (name.equals(song)) {
-                id = read;
-                Log.i(TAG, "Song id is " + id);
-                break;
+    public static void playSong(String song) {
+        try {
+            Log.i(TAG, "playSong called on " + song);
+            String songs = PropertiesSingleton.get().getProperty("songs");
+            JsonReader reader = new JsonReader(new StringReader(songs));
+            reader.beginObject();
+            int id = -1;
+            while (reader.hasNext()) {
+                String name = reader.nextName();
+                int read = parseInt(reader.nextString());
+                if (name.equals(song)) {
+                    id = read;
+                    Log.i(TAG, "Song id is " + id);
+                    break;
+                }
             }
+            if (id == -1) {
+                Log.e(TAG, "Song not found");
+                throw new IllegalArgumentException("song not found");
+            }
+            Log.i(TAG, "Loading sound");
+            stop();
+            PropertiesSingleton.get().setProperty("is_playing", "true");
+            player = MediaPlayer.create(getContext(), id);
+            player.start();
+            // make methods for these two things so they can be changed from the webkit
+            // TODO get looping from properties singleton
+            // TODO get shuffle and set onCompletionListener
+        } catch (Exception ignored) {
+            //
         }
-        if (id == -1) {
-            Log.e(TAG, "Song not found");
-            throw new IllegalArgumentException("song not found");
-        }
-        Log.i(TAG, "Loading sound");
-        stop();
-        PropertiesSingleton.get().setProperty("is_playing", "true");
-        player = MediaPlayer.create(this, id);
-        player.start();
-        // make methods for these two things so they can be changed from the webkit
-        // TODO get looping from properties singleton
-        // TODO get shuffle and set onCompletionListener
     }
-    public void stop() {
+    public static void stop() {
         if (player != null) player.stop();
     }
 }

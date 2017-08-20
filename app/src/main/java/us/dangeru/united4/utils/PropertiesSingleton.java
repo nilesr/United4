@@ -117,7 +117,7 @@ public final class PropertiesSingleton {
         properties.put("ordered_songs", new JSONArray(ordered_songs).toString());
     }
 
-    private static void put(HashMap<String, String> map, ArrayList<String> ordered_songs, int id, String s) {
+    private static void put(Map<String, String> map, @SuppressWarnings("TypeMayBeWeakened") List<String> ordered_songs, int id, String s) {
         map.put(s, Integer.toString(id));
         ordered_songs.add(s);
     }

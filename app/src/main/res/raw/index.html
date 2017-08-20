@@ -33,6 +33,8 @@
                     theme = unitedPropertiesIf.getProperty("theme");
                     playing = unitedPropertiesIf.getProperty("is_playing").toUpperCase() == "TRUE";
                     var startup_music = unitedPropertiesIf.getProperty("startup_music").toUpperCase() == "TRUE";
+                    console.log("PropertiesSingleton reports startup_music as " + startup_music);
+                    console.log("PropertiesSingleton reports playing as " + playing);
                     var opened = unitedPropertiesIf.getSessionVariable("open_phone_played")
                     if (opened != null && opened != undefined && opened.trim().toUpperCase() == "TRUE") {
                         opened = true;
@@ -41,12 +43,12 @@
                         console.log("Playing sound")
                         unitedPropertiesIf.setSessionVariable("open_phone_played", true.toString());
                         unitedPropertiesIf.playSound("open_phone.mp3");
-                        console.log(audio.toString());
                     }
                     if (startup_music && !playing) {
                         playing = true;
                         console.log("Playing welcome music")
                         unitedPropertiesIf.playSong("Welcome To VA-11 HALL-A");
+                        unitedPropertiesIf.setProperty("current_song", "Welcome To VA-11 HALL-A");
                     }
                 } catch (e) {
                     //

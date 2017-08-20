@@ -107,11 +107,20 @@
                 newPage();
             }
             window.prev = function prev() {
-                page = Math.max(page - 1, 0);
+                if (page == 0) {
+                    unitedPropertiesIf.playSound("NoPagesLeft.mp3");
+                    return;
+                }
+                unitedPropertiesIf.playSound("NextPage.mp3");
+                page--;
                 newPage();
             }
             window.next = function next() {
-                if (document.getElementById("next").src.indexOf("disabled") >= 0) return;
+                if (document.getElementById("next").src.indexOf("disabled") >= 0) {
+                    unitedPropertiesIf.playSound("NoPagesLeft.mp3");
+                    return;
+                }
+                unitedPropertiesIf.playSound("NextPage.mp3");
                 page += 1;
                 newPage();
             }

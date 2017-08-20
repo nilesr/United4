@@ -65,7 +65,7 @@ public final class PropertiesSingleton {
     }
 
     private void resetForAppStart() {
-        properties.put("version_notes", "Version 4.0.4!\nTap for Patch Notes");
+        properties.put("version_notes", "Version 4.0.5!\nTap for Patch Notes");
         properties.put("is_playing", "false");
         //List<String> themes = Arrays.asList("normal", "dotted", "steam", "kira", "meme", "vaporwave");
         List<String> themes = Arrays.asList("normal", "vaporwave");

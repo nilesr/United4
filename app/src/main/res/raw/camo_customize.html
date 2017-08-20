@@ -4,36 +4,48 @@
         <script src="mock.js"></script>
         <script>
             var ol = function ol() {
+                // Load which tab the user had selected (theme tab or unknown tab) from session variables
                 var tab = unitedPropertiesIf.getSessionVariable("tab");
                 if (tab == null || tab == undefined || tab.trim().length == 0) {
                     tab = "1"
                 }
                 var tab1 = document.getElementById("tab1");
+                // put each of the themes in the first tab
                 var all_themes = JSON.parse(unitedPropertiesIf.getProperty("all_themes"));
                 all_themes.forEach(function(theme) {
                     var img = document.createElement("img");
+                    // theme previews are in the form of `themename`_icon.png
                     img.src = theme + "_icon.png";
+                    // add the onClick listener, in a closure
                     (function(img, theme) {
                         img.addEventListener("click", function() {
                             changeTheme(theme)
                         })
                     })(img, theme);
+                    // styling
                     img.style.width = "95%";
                     img.style.marginTop = "10px";
                     tab1.appendChild(img);
                 });
+                // switch to the user's selected tab
                 showTab(tab);
             }
+            // called when the user switches tabs with the number of the tab the user switched to (1 or 2)
             var showTab = function showTab(tab) {
+                // save which tab the user tapped
                 unitedPropertiesIf.setSessionVariable("tab", tab);
+                // for each tab's contents
                 Array.prototype.slice.call(document.getElementsByClassName("tab"), 0).forEach(function(elem) {
+                    // if the tab is the selected one, display it, otherwise hide it
                     if (elem.id == "tab" + tab) {
                         elem.style.display = "block";
                     } else {
                         elem.style.display = "none";
                     }
                 });
+                // for each tab button
                 Array.prototype.slice.call(document.getElementsByClassName("button"), 0).forEach(function(elem) {
+                    // if the tab is the selected one, use the seleced image, otherwise the unselected image
                     if (elem.id == "button" + tab) {
                         elem.src = elem.id + "_selected.png"
                     } else {
@@ -41,6 +53,7 @@
                     }
                 });
             }
+            // called when the user selects a new theme, sets the theme property then finishes the activity and reloads the page below it (the main app screen)
             var changeTheme = function changeTheme(new_theme) {
                 unitedPropertiesIf.setProperty("theme", new_theme);
                 unitedPropertiesIf.closeWindow("true");

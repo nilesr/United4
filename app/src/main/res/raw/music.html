@@ -3,34 +3,48 @@
     <head>
         <script src="mock.js"></script>
         <script>
+            // some defaults in case something fails to get set
             var page = 0;
             var items_per_page = 3;
             var ol = function ol() {
+                // img1 is the music box, make it flush with the top and as wide as it can go
                 var img1 = document.getElementById("img1");
+                // img2 is the box that the current song is shown in, make it flush with the top of img1 and the same width
                 var img2 = document.getElementById("img2");
                 var i1h = img1.clientHeight;
                 img2.style.top = i1h.toString() + "px";
                 var i2h = img2.clientHeight;
+                // then make the previous and next buttons and song list flush with the bottom of #img2
                 document.getElementById("prev").style.top = (i1h + i2h).toString() + "px";
                 document.getElementById("next").style.top = (i1h + i2h).toString() + "px";
                 document.getElementById("contents").style.top = (i1h + i2h).toString() + "px";
+                // get the current page from session variables
+                // helpfully, Number("") returns 0
                 page = Number(unitedPropertiesIf.getSessionVariable("page"));
+                // skip back, play/pause, skip forward, loop and shuffle buttons go 40% down into #img1 and 30% of its height
                 document.getElementById("buttons").style.top = (i1h * 0.4).toString() + "px";
                 Array.prototype.slice.call(document.getElementById("buttons").children, 0).forEach(function(elem) {
                     elem.style.height = (i1h * 0.3).toString() + "px";
                 });
+                // I really feel like this should work but apparently it breaks things
                 //items_per_page = ((window.screen.height - i1h - i2h - 40) / 70) - 3;
                 changeButtonSrcs();
                 changeCurrentSong();
                 newPage();
             }
+            // Called when the music state changes, sets the play/pause button to the play or pause png file based on whether
+            // music is playing or not, sets the shuffling and looping buttons to their enabled/disabled (yellow/white) pngs
+            // based on their state as well
             var changeButtonSrcs = function changeButtonSrcs() {
+                // get the buttons
                 var pp = document.getElementById("play_pause");
                 var loop = document.getElementById("loop");
                 var shuffle = document.getElementById("shuffle");
+                // get their associated properties
                 var playing = unitedPropertiesIf.getProperty("is_playing").toUpperCase() == "TRUE";
                 var looping = unitedPropertiesIf.getProperty("looping").toUpperCase() == "TRUE";
                 var shuffling = unitedPropertiesIf.getProperty("shuffle").toUpperCase() == "TRUE";
+                // update their srcs
                 if (playing) {
                     pp.src = "pause.png";
                 } else {
@@ -47,26 +61,38 @@
                     loop.src = "loop_disabled.png";
                 }
             }
+            // called to change the text in the box that shows the currently playing song
             var changeCurrentSong = function changeCurrentSong() {
+                // find the box's text element
                 var song = document.getElementById("song");
+                // we need these things heights to vertically center it properly
+                var img1 = document.getElementById("img1");
+                var img2 = document.getElementById("img2");
                 var i1h = img1.clientHeight;
-                img2.style.top = i1h.toString() + "px";
                 var i2h = img2.clientHeight;
                 var current_song = unitedPropertiesIf.getProperty("current_song");
+                // we have to set the text before song.clientHeight will return the value we need to vertically center it
                 var text = current_song;
                 if (current_song == null || current_song == undefined || current_song.trim().length == 0) {
                     text = "Nothing Playing";
                 }
                 song.innerText = text;
+                // set the top to the right amount to vertically center it
                 song.style.top = (i1h + (i2h/2) - (song.clientHeight/2)).toString() + "px";
             }
+            // called when the user changes a page, it redraws the list of songs
             var newPage = function newPage() {
                 var contents = document.getElementById("contents");
+                // Clear the song list because we're about to redraw it
                 contents.innerHTML = "";
+                // Set the page session variable
                 unitedPropertiesIf.setSessionVariable("page", page.toString());
                 var all_songs = JSON.parse(unitedPropertiesIf.getProperty("ordered_songs"));
+                // on the page max_page the next button will be disabled
                 var max_page = Math.ceil(all_songs.length / items_per_page) - 1;
+                // starting index into all_songs
                 var start = page * items_per_page;
+                // enable or disable the next/previous page buttons
                 if (page == 0) {
                     document.getElementById("prev").src = "prev_disabled.png";
                 } else {
@@ -78,17 +104,21 @@
                 } else {
                     document.getElementById("next").src = "next_enabled.png";
                 }
+                // For each song on the current page
                 for (var i = 0; i < items_per_page; i++) {
                     var index = start + i;
                     var song = all_songs[index];
-                    if (song == undefined) break;
+                    if (song == undefined) break; // we're out of songs to draw (fewer than items_per_page items on the last page)
                     var text = document.createElement("div");
+                    // add the click listener to play the song when the user clicks it, in a closure
                     (function(text, song) {
                         text.addEventListener("click", function() {
                             playSong(song);
                         });
                     })(text, song);
+                    // set the text on the song
                     text.innerText = song;
+                    // if it's the currently playing song, make the border gold, otherwise the standard blue
                     if (song == unitedPropertiesIf.getProperty("current_song")) {
                         text.style.border = "2px solid #ffbb31";
                     } else {
@@ -101,6 +131,9 @@
                     text.style.textAlign = "center";
                     text.classList.add("wrapper");
                     contents.appendChild(text);
+                    // Shrink the text pixel by pixel until it fits in the fucking box
+                    // in the future we could set something like padding-top and padding-bottom instead of line-height and
+                    // we wouldn't need this because we wouldn't need to worry about it spanning multiple lines
                     text.style.top = (20 + (i * 70)).toString() + "px";
                     var size = 15;
                     do {
@@ -108,19 +141,25 @@
                         size--;
                     } while (text.clientHeight > 50)
                 }
+                // add the "4/13" text, and below that a "Get Soundtrack" button
                 var marker = document.createElement("div");
                 marker.innerHTML = (Number(page) + 1) + "/" + Math.ceil(all_songs.length / items_per_page) + "<br /><span onClick='unitedPropertiesIf.launchHTML(\"https://garoad.bandcamp.com\")' class=\"get_soundtrack\">Get Soundtrack</span>"
                 marker.style.marginTop = (20 + (70 * items_per_page)).toString() + "px";
                 marker.style.color = "white";
                 contents.appendChild(marker);
             }
+            // called to play a song
             var playSong = function playSong(title) {
+                // set the current song and play it, requesting that the current page NOT be reloaded due to the song having changed
+                // then redraw the list of songs and since our state might have gone from paused to playing, fix the play/pause button's src
                 unitedPropertiesIf.setProperty("current_song", title);
                 unitedPropertiesIf.playSong(title, false);
+                // TODO we should be calling changeCurrentSong
                 document.getElementById("song").innerText = title;
                 changeButtonSrcs();
                 newPage();
             }
+            // called to skip backwards a song
             window.skip_back = function skip_back() {
                 var all_songs = JSON.parse(unitedPropertiesIf.getProperty("ordered_songs"));
                 var current_song = unitedPropertiesIf.getProperty("current_song");
@@ -133,10 +172,12 @@
                     if (idx == -1) idx = 1;
                 }
                 idx -= 1;
+                // wrap around to the end of the list if we were going to go past the beginning of the list
                 if (idx < 0) idx = all_songs.length - 1;
                 console.log("Playing song at index " + idx)
                 playSong(all_songs[idx]);
             }
+            // called to skip forwards a song
             window.skip_forward = function skip_forward() {
                 var all_songs = JSON.parse(unitedPropertiesIf.getProperty("ordered_songs"));
                 var current_song = unitedPropertiesIf.getProperty("current_song");
@@ -148,23 +189,28 @@
                     idx = all_songs.indexOf(current_song);
                 }
                 idx += 1;
+                // if we're shuffling, randomize
                 if (unitedPropertiesIf.getProperty("shuffle").toUpperCase() == "TRUE") {
                     idx = Math.floor(Math.random() * (all_songs.length));
                 }
+                // if we were going to go off the end, loop back to the beginning
                 if (idx >= all_songs.length) idx = 0;
                 console.log("Playing song at index " + idx)
                 playSong(all_songs[idx]);
             }
+            // called to toggle whether we're looping or not
             window.loop = function loop() {
                 var looping = unitedPropertiesIf.getProperty("looping").toUpperCase() == "TRUE";
                 unitedPropertiesIf.setProperty("looping", (!looping).toString());
                 changeButtonSrcs();
             }
+            // called to toggle whether we're shuffling or not
             window.shuffle = function shuffle() {
                 var shuffling = unitedPropertiesIf.getProperty("shuffle").toUpperCase() == "TRUE";
                 unitedPropertiesIf.setProperty("shuffle", (!shuffling).toString());
                 changeButtonSrcs();
             }
+            // called to go back a page
             window.prev = function prev() {
                 if (page == 0) {
                     unitedPropertiesIf.playSound("NoPagesLeft.mp3");
@@ -174,6 +220,7 @@
                 page--;
                 newPage();
             }
+            // called to go forward a page
             window.next = function next() {
                 if (document.getElementById("next").src.indexOf("disabled") >= 0) {
                     unitedPropertiesIf.playSound("NoPagesLeft.mp3");
@@ -183,6 +230,7 @@
                 page += 1;
                 newPage();
             }
+            // called to toggle whether we're playing or pausing a song
             window.play_pause = function play_pause() {
                 var playing = unitedPropertiesIf.getProperty("is_playing").toUpperCase() == "TRUE";
                 unitedPropertiesIf.setProperty("is_playing", (!playing).toString());

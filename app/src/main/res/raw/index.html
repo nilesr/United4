@@ -4,30 +4,45 @@
         <script src="mock.js"></script>
         <script>
             var ol = function ol() {
-                unitedPropertiesIf.setSessionVariable("kira_counter", "0");
+                // increment for more space between the buttons
                 var spacing = 10;
+                // used for calculations later
                 var total_width = document.body.clientWidth;
+                // start 20 pixels from the top, it will be incremented each time we add a row
                 var running_height = 20;
+                // 102/378 is the aspect ratio of the normal_save.png file (sukeban games opening button). It's fullwidth;
+                // so with a spacing on the left and a spacing on the right, we should be able to multiply that ratio by the whole
+                // width to get the height
                 var image_height = (total_width - (2 * spacing)) * (102 / 378);
+                // for each row
                 Array.prototype.slice.call(document.getElementsByClassName("row"), 0).forEach(function(elem) {
+                    // set the top offset of the row to running_height, then increase running_height by the height
+                    // of the image we're about to make plus some vertical spacing
                     elem.style.top = running_height + "px";
                     running_height += image_height + spacing;
+                    // we want to start (spacing) pixels from the left and end (spacing) pixels from the right
+                    // if there's only one icon on this row, make it start at (spacing) pixels (screen_width - (2 * spacing)) pixels wide
                     if (elem.classList.contains("one")) {
                         elem.children[0].style.left = spacing + "px";
                         elem.children[0].style.width = (total_width - (2 * spacing)).toString() + "px";
                     } else if (elem.classList.contains("one_one")) {
+                        // case for two buttons of equal proportions
+                        // there will be three spacings, once on the left, one in the middle and one on the right
+                        // the width remaining after that will be divided evenly between the two buttons
                         var each_width = (total_width - (3 * spacing))/2;
                         elem.children[0].style.left = spacing + "px";
                         elem.children[0].style.width = each_width.toString() + "px";
                         elem.children[1].style.left = (each_width + (2 * spacing)).toString() + "px";
                         elem.children[1].style.width = each_width.toString() + "px";
                     } else if (elem.classList.contains("one_two")) {
+                        // case for two buttons where the left button is 1/3rd the width and the right is the other 2/3rds
                         var first_width = (total_width - (3 * spacing))/3;
                         elem.children[0].style.left = spacing + "px";
                         elem.children[0].style.width = first_width.toString() + "px";
                         elem.children[1].style.left = (first_width + (spacing * 2)).toString() + "px";
                         elem.children[1].style.width = (first_width * 2).toString() + "px";
                     } else if (elem.classList.contains("one_three")) {
+                        // case for two buttons where the left button is 1/4th the width and the right is the other 3/4ths
                         var first_width = (total_width - (3 * spacing))/4;
                         elem.children[0].style.left = spacing + "px";
                         elem.children[0].style.width = first_width.toString() + "px";
@@ -35,15 +50,19 @@
                         elem.children[1].style.width = (first_width * 3).toString() + "px";
                     }
                 });
+                // default theme and playing if there's a problem pulling them from unitedPropertiesIf
                 var theme = "normal";
                 var playing = false;
                 try {
+                    // get theme, playing, whether to play startup music or not from properties and
+                    // whether or not we've played open_phone.mp3 yet from session variables
                     theme = unitedPropertiesIf.getProperty("theme");
                     playing = unitedPropertiesIf.getProperty("is_playing").toUpperCase() == "TRUE";
                     var startup_music = unitedPropertiesIf.getProperty("startup_music").toUpperCase() == "TRUE";
                     console.log("PropertiesSingleton reports startup_music as " + startup_music);
                     console.log("PropertiesSingleton reports playing as " + playing);
                     var opened = unitedPropertiesIf.getSessionVariable("open_phone_played")
+                    // if we need to play open_phone.mp3, do it
                     if (opened != null && opened != undefined && opened.trim().toUpperCase() == "TRUE") {
                         opened = true;
                         console.log("Already opened not playing sound: " + opened)
@@ -52,6 +71,8 @@
                         unitedPropertiesIf.setSessionVariable("open_phone_played", true.toString());
                         unitedPropertiesIf.playSound("open_phone.mp3");
                     }
+                    // if we need to play music on startup and there's no song already playing (we might be loaded as a result
+                    // of the user returning from music.html), then play "Every Day is Night"
                     if (startup_music && !playing) {
                         playing = true;
                         console.log("Playing welcome music")
@@ -59,23 +80,31 @@
                         unitedPropertiesIf.setProperty("current_song", "Every Day is Night");
                     }
                 } catch (e) {
-                    //
+                    // whatever
                 }
+                // if we failed to pull the theme, make it default to "normal" just in case
                 if (theme == null || theme == undefined || theme.trim().length == 0) {
                     theme = "normal";
                 }
+                // set the background image to `theme`_home.png
                 document.body.style.background = "url(\"" + theme + "_home.png\") no-repeat center/cover fixed";
+                // set each image to the theme's image for that button, based on it's id
                 Array.prototype.slice.call(document.getElementsByTagName("img"), 0).forEach(function(elem) {
                     elem.style.height = image_height.toString() + "px";
                     if (elem.id == "music" && !playing) elem.id = "music2"
                     elem.src = theme + "_" + elem.id + ".png";
                 });
+                // patch notes text needs to go on top of the patch notes button
                 var pn = document.getElementById("patch_notes");
                 var pnt = document.getElementById("patch_notes_text");
+                // put the patch notes text over the patch notes
                 pnt.style.left = pn.style.left;
                 pnt.style.width = pn.style.width;
+                // set its text
                 pnt.innerText = unitedPropertiesIf.getProperty("version_notes");
+                // give it some padding on the top and bottom
                 pnt.style.paddingTop = pnt.style.paddingBottom = (pn.clientHeight / 8).toString() + "px";
+                // try out a font size, and if it's going to overflow, reduce the font size one pixel at a time until it all fits
                 var font_size = pn.clientHeight / 4;
                 pnt.style.fontSize = font_size.toString() + "px";
                 pnt.style.lineHeight = "1.5";
@@ -83,14 +112,19 @@
                     font_size -= 1;
                     pnt.style.fontSize = font_size.toString() + "px";
                 }
+                // vertically center the patch notes text on the button
                 pnt.style.top = (pn.style.top + (pn.clientHeight/2) - (pnt.clientHeight/2)).toString() + "px";
 
             }
             var kira_counter = 0;
             window.kira = function kira() {
+                // Helpfully, `Number("")` returns 0
                 var kira_counter = Number(unitedPropertiesIf.getSessionVariable("kira_counter"))
+                // they clicked it, so increment the counter
                 kira_counter++;
+                // save the new counter
                 unitedPropertiesIf.setSessionVariable("kira_counter", kira_counter.toString());
+                // notify the user that it's not done yet
                 unitedPropertiesIf.toast("Not Implemented Yet (press "+(5 - kira_counter).toString()+" times if you're a developer)")
                 if (kira_counter > 4) {
                     unitedPropertiesIf.launchHTML('file:///android_res/raw/kira.html');

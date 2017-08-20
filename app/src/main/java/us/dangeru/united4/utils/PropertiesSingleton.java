@@ -123,7 +123,9 @@ public final class PropertiesSingleton {
     }
 
     public String getProperty(String key) {
-        return properties.get(key);
+        String res = properties.get(key);
+        if (res == null) return "";
+        return res;
     }
 
     public void setProperty(String key, String value) {

@@ -68,7 +68,9 @@ public class MainActivity extends Activity implements UnitedActivity {
 
     @Override
     public String getSessionVariable(String key) {
-        return session.get(key);
+        String res = session.get(key);
+        if (res == null) return "";
+        return res;
     }
 
     @Override

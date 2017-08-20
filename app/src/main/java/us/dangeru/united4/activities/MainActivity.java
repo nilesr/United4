@@ -11,6 +11,7 @@ import us.dangeru.united4.R;
 import us.dangeru.united4.application.United;
 import us.dangeru.united4.fragments.UnitedWebFragment;
 import us.dangeru.united4.utils.ParcelableMap;
+import us.dangeru.united4.utils.ReloadService;
 import us.dangeru.united4.utils.UnitedActivity;
 
 import static us.dangeru.united4.fragments.UnitedWebFragment.RESOURCE_FOLDER;
@@ -24,6 +25,7 @@ public class MainActivity extends Activity implements UnitedActivity {
     private UnitedWebFragment webFragment;
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        ReloadService.register(this);
         setContentView(R.layout.main_activity);
         FragmentManager manager = getFragmentManager();
         if (savedInstanceState != null) {
@@ -77,6 +79,11 @@ public class MainActivity extends Activity implements UnitedActivity {
     @Override
     public void closeWindow() {
         finish();
+    }
+
+    @Override
+    public Activity asActivity() {
+        return this;
     }
 
     @Override

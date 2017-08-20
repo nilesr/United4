@@ -1,8 +1,10 @@
 <!doctype html>
 <html>
     <head>
+        <script src="mock.js"></script>
         <script>
             var ol = function ol() {
+                unitedPropertiesIf.setSessionVariable("kira_counter", "0");
                 var spacing = 10;
                 var total_width = document.body.clientWidth;
                 var running_height = 20;
@@ -25,6 +27,12 @@
                         elem.children[0].style.width = first_width.toString() + "px";
                         elem.children[1].style.left = (first_width + (spacing * 2)).toString() + "px";
                         elem.children[1].style.width = (first_width * 2).toString() + "px";
+                    } else if (elem.classList.contains("one_three")) {
+                        var first_width = (total_width - (3 * spacing))/4;
+                        elem.children[0].style.left = spacing + "px";
+                        elem.children[0].style.width = first_width.toString() + "px";
+                        elem.children[1].style.left = (first_width + (spacing * 2)).toString() + "px";
+                        elem.children[1].style.width = (first_width * 3).toString() + "px";
                     }
                 });
                 var theme = "normal";
@@ -47,8 +55,8 @@
                     if (startup_music && !playing) {
                         playing = true;
                         console.log("Playing welcome music")
-                        unitedPropertiesIf.playSong("Welcome To VA-11 HALL-A", false);
-                        unitedPropertiesIf.setProperty("current_song", "Welcome To VA-11 HALL-A");
+                        unitedPropertiesIf.playSong("Every Day is Night", false);
+                        unitedPropertiesIf.setProperty("current_song", "Every Day is Night");
                     }
                 } catch (e) {
                     //
@@ -80,7 +88,9 @@
             }
             var kira_counter = 0;
             window.kira = function kira() {
+                var kira_counter = Number(unitedPropertiesIf.getSessionVariable("kira_counter"))
                 kira_counter++;
+                unitedPropertiesIf.setSessionVariable("kira_counter", kira_counter.toString());
                 unitedPropertiesIf.toast("Not Implemented Yet (press "+(5 - kira_counter).toString()+" times if you're a developer)")
                 if (kira_counter > 4) {
                     unitedPropertiesIf.launchHTML('file:///android_res/raw/kira.html');
@@ -104,7 +114,10 @@
 </style>
     </head>
     <body onLoad='ol()'>
+        <!--
         <div class="row one_two">
+        -->
+        <div class="row one_three">
             <img id="dangeru" onClick="unitedPropertiesIf.launchHTML('https://boards.dangeru.us/mobile')" />
             <img id="patch_notes" onClick="unitedPropertiesIf.launchHTML('file:///android_res/raw/patch_notes.html')" />
             <div id="patch_notes_text" onClick="unitedPropertiesIf.launchHTML('file:///android_res/raw/patch_notes.html')"></div>

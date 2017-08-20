@@ -1,27 +1,11 @@
 <!doctype html>
 <html>
     <head>
+        <script src="mock.js"></script>
         <script>
             var page = 0;
             var items_per_page = 3;
             var ol = function ol() {
-                if (typeof(window.unitedPropertiesIf) == "undefined") {
-                    window.unitedPropertiesIf = {
-                        getSessionVariable: function(name) {
-                            return "0";
-                        },
-                        getProperty: function(name) {
-                            if (name == "current_song") return null;
-                            return JSON.stringify(["a", "b", "c", "test"]);
-                        },
-                        setSessionVariable: function(name, value) {},
-                        setProperty: function(name, value) {},
-                        playSong: function(name, bool) {
-                            alert("Playing song " + name)
-                        },
-                        playSound: function(name) {}
-                    }
-                }
                 var img1 = document.getElementById("img1");
                 var img2 = document.getElementById("img2");
                 var i1h = img1.clientHeight;
@@ -30,10 +14,7 @@
                 document.getElementById("prev").style.top = (i1h + i2h).toString() + "px";
                 document.getElementById("next").style.top = (i1h + i2h).toString() + "px";
                 document.getElementById("contents").style.top = (i1h + i2h).toString() + "px";
-                page = unitedPropertiesIf.getSessionVariable("page");
-                if (page == null || page == undefined || page.trim().length == 0) {
-                    page = 0;
-                }
+                page = Number(unitedPropertiesIf.getSessionVariable("page"));
                 document.getElementById("buttons").style.top = (i1h * 0.4).toString() + "px";
                 Array.prototype.slice.call(document.getElementById("buttons").children, 0).forEach(function(elem) {
                     elem.style.height = (i1h * 0.3).toString() + "px";

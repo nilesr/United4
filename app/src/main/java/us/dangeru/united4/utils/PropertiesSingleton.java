@@ -70,7 +70,7 @@ public final class PropertiesSingleton {
         properties.put("version_notes", "Version 4.0.4!\nTap for Patch Notes");
         properties.put("is_playing", "false");
         //List<String> themes = Arrays.asList("normal", "dotted", "steam", "kira", "meme", "vaporwave");
-        List<String> themes = Collections.singletonList("normal");
+        List<String> themes = Arrays.asList("normal", "vaporwave");
         String str = new JSONArray(themes).toString();
         properties.put("all_themes", str);
         HashMap<String, String> map = new HashMap<>();

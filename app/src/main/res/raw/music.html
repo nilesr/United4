@@ -11,14 +11,15 @@
                             return "0";
                         },
                         getProperty: function(name) {
-                            if (name == "playing_song") return null;
-                            return JSON.stringify(["a", "b", "c"]);
+                            if (name == "current_song") return null;
+                            return JSON.stringify(["a", "b", "c", "test"]);
                         },
                         setSessionVariable: function(name, value) {},
                         setProperty: function(name, value) {},
                         playSong: function(name) {
                             alert("Playing song " + name)
-                        }
+                        },
+                        playSound: function(name) {}
                     }
                 }
                 var img1 = document.getElementById("img1");
@@ -33,17 +34,45 @@
                 if (page == null || page == undefined || page.trim().length == 0) {
                     page = 0;
                 }
+                document.getElementById("buttons").style.top = (i1h * 0.4).toString() + "px";
+                Array.prototype.slice.call(document.getElementById("buttons").children, 0).forEach(function(elem) {
+                    elem.style.height = (i1h * 0.3).toString() + "px";
+                });
+                changeButtonSrcs();
                 changeCurrentSong();
                 newPage();
+            }
+            var changeButtonSrcs = function changeButtonSrcs() {
+                var pp = document.getElementById("play_pause");
+                var loop = document.getElementById("loop");
+                var shuffle = document.getElementById("shuffle");
+                var playing = unitedPropertiesIf.getProperty("is_playing").toUpperCase() == "TRUE";
+                var looping = unitedPropertiesIf.getProperty("looping").toUpperCase() == "TRUE";
+                var shuffling = unitedPropertiesIf.getProperty("shuffle").toUpperCase() == "TRUE";
+                if (playing) {
+                    pp.src = "pause.png";
+                } else {
+                    pp.src = "play.png";
+                }
+                if (shuffling) {
+                    shuffle.src = "shuffle_enabled.png";
+                } else {
+                    shuffle.src = "shuffle_disabled.png";
+                }
+                if (looping) {
+                    loop.src = "loop_enabled.png";
+                } else {
+                    loop.src = "loop_disabled.png";
+                }
             }
             var changeCurrentSong = function changeCurrentSong() {
                 var song = document.getElementById("song");
                 var i1h = img1.clientHeight;
                 img2.style.top = i1h.toString() + "px";
                 var i2h = img2.clientHeight;
-                var playing_song = unitedPropertiesIf.getProperty("playing_song");
-                var text = playing_song;
-                if (playing_song == null || playing_song == undefined || playing_song.trim().length == 0) {
+                var current_song = unitedPropertiesIf.getProperty("current_song");
+                var text = current_song;
+                if (current_song == null || current_song == undefined || current_song.trim().length == 0) {
                     text = "Nothing Playing";
                 }
                 song.innerText = text;
@@ -70,25 +99,23 @@
                 for (var i = 0; i < items_per_page; i++) {
                     var index = start + i;
                     var song = all_songs[index];
-                    if (song == undefined) breal;
-                    var text = document.createElement("span");
+                    if (song == undefined) break;
+                    var text = document.createElement("div");
                     (function(text, song) {
                         text.addEventListener("click", function() {
                             playSong(song);
                         });
                     })(text, song);
                     text.innerText = song;
-                    if (song == unitedPropertiesIf.getProperty("playing_song")) {
+                    if (song == unitedPropertiesIf.getProperty("current_song")) {
                         text.style.border = "2px solid #ffbb31";
                     } else {
                         text.style.border = "2px solid #3C84CF"
                     }
                     text.classList.add("text");
-                    text.style.lineHeight = "50px";
+                    text.style.lineHeight = "50px"; // poor man's vertical centering
                     text.style.color = "white"
-                    text.style.zIndex = "10"
                     text.style.position = "absolute"
-                    text.style.display = "block"
                     text.style.textAlign = "center";
                     text.classList.add("wrapper");
                     contents.appendChild(text);
@@ -99,12 +126,59 @@
                         size--;
                     } while (text.clientHeight > 50)
                 }
+                var marker = document.createElement("div");
+                marker.innerText = (Number(page) + 1) + "/" + Math.ceil(all_songs.length / items_per_page)
+                marker.style.marginTop = (20 + (70 * items_per_page)).toString() + "px";
+                marker.style.color = "white";
+                contents.appendChild(marker);
             }
             var playSong = function playSong(title) {
-                unitedPropertiesIf.setProperty("playing_song", title);
+                unitedPropertiesIf.setProperty("current_song", title);
                 unitedPropertiesIf.playSong(title);
                 document.getElementById("song").innerText = title;
+                changeButtonSrcs();
                 newPage();
+            }
+            window.skip_back = function skip_back() {
+                var all_songs = JSON.parse(unitedPropertiesIf.getProperty("ordered_songs"));
+                var current_song = unitedPropertiesIf.getProperty("current_song");
+                console.log("Starting point - " + current_song);
+                var idx;
+                if (current_song == null || current_song == undefined || current_song.trim().length == 0) {
+                    idx = 1;
+                } else {
+                    idx = all_songs.indexOf(current_song);
+                    if (idx == -1) idx = 1;
+                }
+                idx -= 1;
+                if (idx < 0) idx = all_songs.length - 1;
+                console.log("Playing song at index " + idx)
+                playSong(all_songs[idx]);
+            }
+            window.skip_forward = function skip_forward() {
+                var all_songs = JSON.parse(unitedPropertiesIf.getProperty("ordered_songs"));
+                var current_song = unitedPropertiesIf.getProperty("current_song");
+                console.log("Starting point - " + current_song);
+                var idx;
+                if (current_song == null || current_song == undefined || current_song.trim().length == 0) {
+                    idx = -1;
+                } else {
+                    idx = all_songs.indexOf(current_song);
+                }
+                idx += 1;
+                if (idx >= all_songs.length) idx = 0;
+                console.log("Playing song at index " + idx)
+                playSong(all_songs[idx]);
+            }
+            window.loop = function loop() {
+                var looping = unitedPropertiesIf.getProperty("looping").toUpperCase() == "TRUE";
+                unitedPropertiesIf.setProperty("looping", (!looping).toString());
+                changeButtonSrcs();
+            }
+            window.shuffle = function shuffle() {
+                var shuffling = unitedPropertiesIf.getProperty("shuffle").toUpperCase() == "TRUE";
+                unitedPropertiesIf.setProperty("shuffle", (!shuffling).toString());
+                changeButtonSrcs();
             }
             window.prev = function prev() {
                 if (page == 0) {
@@ -123,6 +197,11 @@
                 unitedPropertiesIf.playSound("NextPage.mp3");
                 page += 1;
                 newPage();
+            }
+            window.play_pause = function play_pause() {
+                var playing = unitedPropertiesIf.getProperty("is_playing").toUpperCase() == "TRUE";
+                unitedPropertiesIf.setProperty("is_playing", (!playing).toString());
+                changeButtonSrcs();
             }
         </script>
         <style>
@@ -169,10 +248,23 @@
                 left: 12%;
                 right: 12%;
             }
+            #buttons {
+                z-index: 10;
+                width: 100%;
+                position: absolute;
+                left: 0;
+            }
         </style>
     </head>
     <body onLoad='ol()'>
         <img id="img1" src="music_backdrop.png" />
+        <div id="buttons">
+            <img id="skip_back" onClick="window.skip_back()" src="skip_back.png" />
+            <img id="play_pause" onClick="window.play_pause()" />
+            <img id="skip_forward" onClick="window.skip_forward()" src="skip.png" />
+            <img id="loop" onClick="window.loop()" />
+            <img id="shuffle" onClick="window.shuffle()" />
+        </div>
         <img id="img2" src="music_text_backdrop.png" />
         <div id="song" style="z-index: 10;"></div>
         <img id="prev" onClick='window.prev()' />

@@ -44,4 +44,7 @@ public class UnitedPropertiesIf {
     @JavascriptInterface public static void toast(String text) {
         Toast.makeText(United.getContext(), text, Toast.LENGTH_LONG).show();
     }
+    @JavascriptInterface public static void stopSong() {
+        United.stop();
+    }
 }

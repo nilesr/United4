@@ -201,6 +201,11 @@
             window.play_pause = function play_pause() {
                 var playing = unitedPropertiesIf.getProperty("is_playing").toUpperCase() == "TRUE";
                 unitedPropertiesIf.setProperty("is_playing", (!playing).toString());
+                if (playing) {
+                    unitedPropertiesIf.stopSong();
+                } else {
+                    playSong(unitedPropertiesIf.getProperty("current_song"))
+                }
                 changeButtonSrcs();
             }
         </script>

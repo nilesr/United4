@@ -25,7 +25,9 @@ public final class ReloadService {
                 item.get().asActivity().runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        webview.reload();
+                        if (webview.getUrl().contains("music.html")) {
+                            webview.reload();
+                        }
                     }
                 });
             } catch (Throwable ignored) {

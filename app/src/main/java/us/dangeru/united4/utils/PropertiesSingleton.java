@@ -66,7 +66,7 @@ public final class PropertiesSingleton {
     }
 
     private void resetForAppStart() {
-        properties.put("version_notes", "Version 4.0.1!\nTap for Patch Notes");
+        properties.put("version_notes", "Version 4.0.2!\nTap for Patch Notes");
         properties.put("is_playing", "false");
         List<String> themes = Arrays.asList("normal", "dotted", "steam", "kira", "meme");
         String str = new JSONArray(themes).toString();

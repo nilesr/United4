@@ -32,8 +32,8 @@ public class UnitedPropertiesIf {
     @JavascriptInterface public void launchHTML(String resource) {
         activity.get().launchHTML(resource);
     }
-    @JavascriptInterface public void closeWindow() {
-        activity.get().closeWindow();
+    @JavascriptInterface public void closeWindow(String refresh) {
+        activity.get().closeWindow("true".equalsIgnoreCase(refresh));
     }
     @JavascriptInterface public void playSong(String name, String reload) throws Exception {
         United.playSong(name, "true".equalsIgnoreCase(reload));

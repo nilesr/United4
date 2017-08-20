@@ -63,7 +63,18 @@ public class MainActivity extends Activity implements UnitedActivity {
         extras.putString("URL", resource);
         extras.putBoolean("support_back_button", true);
         i.putExtras(extras);
-        startActivity(i);
+        startActivityForResult(i, 0);
+    }
+    @Override protected void onActivityResult(int request_code, int result_code, Intent bundle) {
+        if (result_code == 1) {
+            try {
+                getWebView().reload();
+            } catch (Throwable ignored) {
+                //
+            }
+        } else {
+            super.onActivityResult(request_code, result_code, bundle);
+        }
     }
 
     @Override
@@ -79,7 +90,12 @@ public class MainActivity extends Activity implements UnitedActivity {
     }
 
     @Override
-    public void closeWindow() {
+    public void closeWindow(boolean refresh) {
+        if (refresh) {
+            setResult(1);
+        } else {
+            setResult(0);
+        }
         finish();
     }
 

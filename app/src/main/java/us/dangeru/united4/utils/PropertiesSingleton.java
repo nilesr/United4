@@ -13,6 +13,7 @@ import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -66,9 +67,10 @@ public final class PropertiesSingleton {
     }
 
     private void resetForAppStart() {
-        properties.put("version_notes", "Version 4.0.3!\nTap for Patch Notes");
+        properties.put("version_notes", "Version 4.0.4!\nTap for Patch Notes");
         properties.put("is_playing", "false");
-        List<String> themes = Arrays.asList("normal", "dotted", "steam", "kira", "meme", "vaporwave");
+        //List<String> themes = Arrays.asList("normal", "dotted", "steam", "kira", "meme", "vaporwave");
+        List<String> themes = Collections.singletonList("normal");
         String str = new JSONArray(themes).toString();
         properties.put("all_themes", str);
         HashMap<String, String> map = new HashMap<>();

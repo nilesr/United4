@@ -1,4 +1,4 @@
-package us.dangeru.united4;
+package us.dangeru.launcher;
 
 import android.content.Context;
 import android.support.test.InstrumentationRegistry;
@@ -21,6 +21,6 @@ public class ExampleInstrumentedTest {
         // Context of the app under test.
         Context appContext = InstrumentationRegistry.getTargetContext();
 
-        assertEquals("us.dangeru.united4", appContext.getPackageName());
+        assertEquals("us.dangeru.launcher", appContext.getPackageName());
     }
 }

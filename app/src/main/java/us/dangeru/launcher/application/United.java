@@ -1,4 +1,4 @@
-package us.dangeru.united4.application;
+package us.dangeru.launcher.application;
 
 import android.app.Application;
 import android.content.Context;
@@ -7,10 +7,8 @@ import android.media.AudioManager;
 import android.media.MediaPlayer;
 import android.media.SoundPool;
 import android.os.Build;
-import android.provider.MediaStore;
 import android.util.JsonReader;
 import android.util.Log;
-import android.webkit.WebView;
 
 import org.json.JSONArray;
 
@@ -20,9 +18,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
-import us.dangeru.united4.utils.PropertiesSingleton;
-import us.dangeru.united4.utils.ReloadService;
-import us.dangeru.united4.utils.UnitedActivity;
+import us.dangeru.launcher.utils.PropertiesSingleton;
+import us.dangeru.launcher.utils.ReloadService;
 
 import static java.lang.Integer.parseInt;
 

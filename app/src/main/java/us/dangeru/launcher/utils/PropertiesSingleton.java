@@ -1,6 +1,5 @@
-package us.dangeru.united4.utils;
+package us.dangeru.launcher.utils;
 
-import android.annotation.SuppressLint;
 import android.content.Context;
 import android.util.JsonReader;
 import android.util.JsonWriter;
@@ -13,13 +12,12 @@ import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import us.dangeru.united4.R;
-import us.dangeru.united4.application.United;
+import us.dangeru.launcher.R;
+import us.dangeru.launcher.application.United;
 
 /**
  * Created by Niles on 8/18/17.
@@ -27,7 +25,7 @@ import us.dangeru.united4.application.United;
 
 public final class PropertiesSingleton {
     private static final String TAG = PropertiesSingleton.class.getSimpleName();
-    private static final String CONFIG = "united4_config.json";
+    private static final String CONFIG = "launcher_config.json";
     private static PropertiesSingleton singleton;
 
     static {

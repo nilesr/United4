@@ -1,4 +1,4 @@
-package us.dangeru.united4;
+package us.dangeru.launcher;
 
 import org.junit.Test;
 

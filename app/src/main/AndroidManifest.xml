@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="us.dangeru.united4">
+    package="us.dangeru.launcher">
 
     <uses-permission android:name="android.permission.INTERNET" />
     <application

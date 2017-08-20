@@ -1,4 +1,4 @@
-package us.dangeru.united4.utils;
+package us.dangeru.launcher.utils;
 
 import android.app.Activity;
 import android.webkit.JavascriptInterface;
@@ -6,7 +6,7 @@ import android.widget.Toast;
 
 import java.lang.ref.WeakReference;
 
-import us.dangeru.united4.application.United;
+import us.dangeru.launcher.application.United;
 
 /**
  * Created by Niles on 8/18/17.

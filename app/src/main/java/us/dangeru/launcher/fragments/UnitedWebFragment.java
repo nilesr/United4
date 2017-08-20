@@ -1,4 +1,4 @@
-package us.dangeru.united4.fragments;
+package us.dangeru.launcher.fragments;
 
 import android.annotation.SuppressLint;
 import android.app.Fragment;
@@ -11,8 +11,8 @@ import android.webkit.WebResourceRequest;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 
-import us.dangeru.united4.R;
-import us.dangeru.united4.utils.UnitedPropertiesIf;
+import us.dangeru.launcher.R;
+import us.dangeru.launcher.utils.UnitedPropertiesIf;
 
 /**
  * Created by Niles on 8/18/17.

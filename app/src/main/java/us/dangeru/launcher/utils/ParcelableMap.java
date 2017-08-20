@@ -1,7 +1,6 @@
-package us.dangeru.united4.utils;
+package us.dangeru.launcher.utils;
 
 import android.os.Bundle;
-import android.os.Parcel;
 import android.os.Parcelable;
 
 import java.util.HashMap;

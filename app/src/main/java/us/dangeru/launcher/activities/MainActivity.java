@@ -1,4 +1,4 @@
-package us.dangeru.united4.activities;
+package us.dangeru.launcher.activities;
 
 import android.app.Activity;
 import android.app.FragmentManager;
@@ -7,14 +7,14 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.webkit.WebView;
 
-import us.dangeru.united4.R;
-import us.dangeru.united4.application.United;
-import us.dangeru.united4.fragments.UnitedWebFragment;
-import us.dangeru.united4.utils.ParcelableMap;
-import us.dangeru.united4.utils.ReloadService;
-import us.dangeru.united4.utils.UnitedActivity;
+import us.dangeru.launcher.R;
+import us.dangeru.launcher.application.United;
+import us.dangeru.launcher.fragments.UnitedWebFragment;
+import us.dangeru.launcher.utils.ParcelableMap;
+import us.dangeru.launcher.utils.ReloadService;
+import us.dangeru.launcher.utils.UnitedActivity;
 
-import static us.dangeru.united4.fragments.UnitedWebFragment.RESOURCE_FOLDER;
+import static us.dangeru.launcher.fragments.UnitedWebFragment.RESOURCE_FOLDER;
 
 /**
  * Main activity for danger/u/

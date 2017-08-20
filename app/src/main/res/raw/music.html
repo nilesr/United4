@@ -19,6 +19,7 @@
                 Array.prototype.slice.call(document.getElementById("buttons").children, 0).forEach(function(elem) {
                     elem.style.height = (i1h * 0.3).toString() + "px";
                 });
+                //items_per_page = ((window.screen.height - i1h - i2h - 40) / 70) - 3;
                 changeButtonSrcs();
                 changeCurrentSong();
                 newPage();
@@ -108,7 +109,7 @@
                     } while (text.clientHeight > 50)
                 }
                 var marker = document.createElement("div");
-                marker.innerText = (Number(page) + 1) + "/" + Math.ceil(all_songs.length / items_per_page)
+                marker.innerHTML = (Number(page) + 1) + "/" + Math.ceil(all_songs.length / items_per_page) + "<br /><span onClick='unitedPropertiesIf.launchHTML(\"https://garoad.bandcamp.com\")' class=\"get_soundtrack\">Get Soundtrack</span>"
                 marker.style.marginTop = (20 + (70 * items_per_page)).toString() + "px";
                 marker.style.color = "white";
                 contents.appendChild(marker);
@@ -242,6 +243,10 @@
                 width: 100%;
                 position: absolute;
                 left: 0;
+            }
+            .get_soundtrack {
+                color: yellow;
+                font-size: 150%;
             }
         </style>
     </head>

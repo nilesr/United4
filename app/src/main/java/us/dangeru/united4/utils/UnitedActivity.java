@@ -1,6 +1,7 @@
 package us.dangeru.united4.utils;
 
 import android.app.Application;
+import android.webkit.WebView;
 
 /**
  * Created by Niles on 8/18/17.
@@ -12,4 +13,5 @@ public interface UnitedActivity {
     void setSessionVariable(String key, String value);
     void closeWindow();
     Application getApplication();
+    WebView getWebView();
 }

@@ -35,8 +35,8 @@ public class UnitedPropertiesIf {
     @JavascriptInterface public void closeWindow() {
         activity.get().closeWindow();
     }
-    @JavascriptInterface public static void playSong(String name) throws Exception {
-        United.playSong(name);
+    @JavascriptInterface public void playSong(String name, String reload) throws Exception {
+        United.playSong(name, "true".equalsIgnoreCase(reload), activity.get());
     }
     @JavascriptInterface public static void playSound(String name) {
         United.playSound(name);

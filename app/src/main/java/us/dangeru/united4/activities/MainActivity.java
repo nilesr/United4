@@ -80,9 +80,14 @@ public class MainActivity extends Activity implements UnitedActivity {
     }
 
     @Override
+    public WebView getWebView() {
+        return findViewById(R.id.main_webkit);
+    }
+
+    @Override
     public void onBackPressed() {
         if (getIntent() != null && getIntent().hasExtra("support_back_button") && getIntent().getBooleanExtra("support_back_button", false)) {
-            WebView webview = findViewById(R.id.main_webkit);
+            WebView webview = getWebView();
             if (webview.canGoBack()) {
                 webview.goBack();
             } else {

@@ -12,7 +12,6 @@ import android.util.Log;
 import android.webkit.WebView;
 
 import org.json.JSONArray;
-import org.json.JSONObject;
 
 import java.io.StringReader;
 import java.lang.ref.WeakReference;
@@ -96,8 +95,13 @@ public class United extends Application {
             player = MediaPlayer.create(getContext(), id);
             player.start();
             if (reload) {
-                WebView webview = activity.getWebView();
-                webview.reload();
+                // This doesn't work. I need a databaseConnectionListener-like service to fire off an event to ALL activities, which SHOULD reload if possible
+                try {
+                    WebView webview = activity.getWebView();
+                    webview.reload();
+                } catch (Throwable ignored) {
+                    // the activity has gone away
+                }
             }
             // make methods for these two things so they can be changed from the webkit
             player.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
@@ -124,7 +128,8 @@ public class United extends Application {
                             idx = (idx + 1) % all_songs.size();
                         }
                         String next_song = all_songs.get(idx);
-                        playSong(next_song, reload, activity);
+                        PropertiesSingleton.get().setProperty("current_sing", next_song);
+                        playSong(next_song, true, activity);
                     } catch (Exception ignored) {
                         //
                     }

@@ -16,7 +16,7 @@
                         },
                         setSessionVariable: function(name, value) {},
                         setProperty: function(name, value) {},
-                        playSong: function(name) {
+                        playSong: function(name, bool) {
                             alert("Playing song " + name)
                         },
                         playSound: function(name) {}
@@ -134,7 +134,7 @@
             }
             var playSong = function playSong(title) {
                 unitedPropertiesIf.setProperty("current_song", title);
-                unitedPropertiesIf.playSong(title);
+                unitedPropertiesIf.playSong(title, false);
                 document.getElementById("song").innerText = title;
                 changeButtonSrcs();
                 newPage();
@@ -166,6 +166,9 @@
                     idx = all_songs.indexOf(current_song);
                 }
                 idx += 1;
+                if (unitedPropertiesIf.getProperty("shuffle").toUpperCase() == "TRUE") {
+                    idx = Math.floor(Math.random() * (all_songs.length));
+                }
                 if (idx >= all_songs.length) idx = 0;
                 console.log("Playing song at index " + idx)
                 playSong(all_songs[idx]);

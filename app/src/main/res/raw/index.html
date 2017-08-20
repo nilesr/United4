@@ -47,7 +47,7 @@
                     if (startup_music && !playing) {
                         playing = true;
                         console.log("Playing welcome music")
-                        unitedPropertiesIf.playSong("Welcome To VA-11 HALL-A");
+                        unitedPropertiesIf.playSong("Welcome To VA-11 HALL-A", false);
                         unitedPropertiesIf.setProperty("current_song", "Welcome To VA-11 HALL-A");
                     }
                 } catch (e) {

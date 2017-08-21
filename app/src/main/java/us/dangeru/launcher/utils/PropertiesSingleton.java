@@ -51,7 +51,8 @@ public final class PropertiesSingleton {
                 read++;
                 String key = reader.nextName();
                 String value = reader.nextString();
-                Log.i(TAG, "Read prop " + key + ": " + value);
+                // do NOT log value -- contains passwords
+                Log.i(TAG, "Read prop " + key);
                 properties.put(key, value);
             }
             resetForAppStart();
@@ -127,6 +128,8 @@ public final class PropertiesSingleton {
         str = new JSONObject(map).toString();
         properties.put("songs", str);
         properties.put("ordered_songs", new JSONArray(ordered_songs).toString());
+        //properties.put("awoo_endpoint", "https://niles.lain.city");
+        properties.put("awoo_endpoint", "http://192.168.0.3:8080");
     }
 
     // helper function for putting things in both `songs` and `ordered_songs`
@@ -151,6 +154,7 @@ public final class PropertiesSingleton {
             for (Map.Entry<String, String> i : properties.entrySet()) {
                 Log.i(TAG, "Writing prop " + i.getKey());
                 writer.name(i.getKey());
+                // do NOT log value -- contains passwords
                 writer.value(i.getValue());
             }
             writer.endObject();

@@ -3,7 +3,9 @@ package us.dangeru.launcher.activities;
 import android.app.Activity;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
+import android.content.ComponentName;
 import android.content.Intent;
+import android.content.pm.ComponentInfo;
 import android.os.Bundle;
 import android.webkit.WebView;
 
@@ -119,6 +121,14 @@ public class MainActivity extends Activity implements UnitedActivity {
     @Override
     public WebView getWebView() {
         return findViewById(R.id.main_webkit);
+    }
+
+    @Override
+    public void doAction(String componentPackage, String componentKey) {
+        ComponentName component = new ComponentName(componentPackage, componentKey);
+        Intent i = new Intent();
+        i.setComponent(component);
+        startActivity(i);
     }
 
     // If support_back_button is unset or false, tries to go back in the webview, and if there's no more history, will finish the activity

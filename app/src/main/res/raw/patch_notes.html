@@ -19,6 +19,7 @@
             }
         </style>
         <script>
+            var toggle_count = 0;
             var ol = function onLoad() {
                 var startup_music = unitedPropertiesIf.getProperty("startup_music");
                 if (startup_music == null || startup_music == undefined || startup_music.trim().toUpperCase() != "TRUE") {
@@ -30,6 +31,10 @@
             }
             var save_startup_music = function save_startup_music() {
                 unitedPropertiesIf.setProperty("startup_music", document.getElementById("startup_music").checked.toString());
+                toggle_count++;
+                if (toggle_count > 5) {
+                    unitedPropertiesIf.doAction("us.dangeru.launcher", "us.dangeru.launcher.activities.JanitorLoginActivity");
+                }
             }
         </script>
     </head>

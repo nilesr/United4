@@ -94,6 +94,9 @@ if (typeof(window.unitedPropertiesIf) == "undefined") {
 			if (typeof(window._audio) != "undefined") {
 			    window._audio.pause();
 			}
+		},
+		doAction: function() {
+            alert("Cannot perform action - not andorid")
 		}
 	}
 }

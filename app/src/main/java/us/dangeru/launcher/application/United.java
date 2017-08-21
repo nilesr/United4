@@ -9,6 +9,7 @@ import android.media.SoundPool;
 import android.os.Build;
 import android.util.JsonReader;
 import android.util.Log;
+import android.webkit.CookieSyncManager;
 
 import org.json.JSONArray;
 
@@ -70,6 +71,7 @@ public class United extends Application {
     // Set up the application context singleton
     public void onCreate() {
         super.onCreate();
+        CookieSyncManager.createInstance(this);
         singleton = new WeakReference<>(getApplicationContext());
     }
 

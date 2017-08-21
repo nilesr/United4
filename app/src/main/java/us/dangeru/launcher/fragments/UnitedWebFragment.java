@@ -4,14 +4,22 @@ import android.annotation.SuppressLint;
 import android.app.Fragment;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.webkit.CookieManager;
+import android.webkit.CookieSyncManager;
 import android.webkit.WebResourceRequest;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 
+import java.net.CookieHandler;
+import java.net.HttpCookie;
+import java.net.URL;
+
 import us.dangeru.launcher.R;
+import us.dangeru.launcher.utils.PropertiesSingleton;
 import us.dangeru.launcher.utils.UnitedPropertiesIf;
 
 /**
@@ -19,7 +27,8 @@ import us.dangeru.launcher.utils.UnitedPropertiesIf;
  */
 
 public class UnitedWebFragment extends Fragment {
-    public static String RESOURCE_FOLDER = "file:///android_res/raw/";
+    public static final String RESOURCE_FOLDER = "file:///android_res/raw/";
+    public static final String TAG = UnitedWebFragment.class.getSimpleName();
     // Url to load in the page on creation of view
     public String starting_url = null;
     @Override
@@ -36,6 +45,20 @@ public class UnitedWebFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         final View res = inflater.inflate(R.layout.main, container, false);
+        CookieManager manager = CookieManager.getInstance();
+        manager.setAcceptCookie(true);
+        String cookie = PropertiesSingleton.get().getProperty("cookie");
+        //HttpCookie parsed = HttpCookie.parse(cookie).get(0);
+        //String testString = parsed.getName() + "=" + parsed.getValue();
+        try {
+            //manager.setCookie("niles.lain.city", cookie);
+            manager.setCookie("192.168.0.3", cookie);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        //manager.setCookie(parsed.getDomain(), testString);
+        Log.i(TAG, cookie);
+        CookieSyncManager.getInstance().sync();
         res.post(new Runnable() {
             @SuppressLint({"SetJavaScriptEnabled", "JavascriptInterface"})
             @Override

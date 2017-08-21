@@ -132,6 +132,13 @@
                     unitedPropertiesIf.launchHTML('file:///android_res/raw/kira.html');
                 }
             }
+            window.dangeru = function() {
+                if (unitedPropertiesIf.getProperty("username") == "") {
+                    unitedPropertiesIf.launchHTML('https://boards.dangeru.us/mobile');
+                } else {
+                    unitedPropertiesIf.launchHTML(unitedPropertiesIf.getProperty("awoo_endpoint"));
+                }
+            }
         </script>
 <style>
     img, .row, #patch_notes_text {
@@ -154,7 +161,7 @@
         <div class="row one_two">
         -->
         <div class="row one_three">
-            <img id="dangeru" onClick="unitedPropertiesIf.launchHTML('https://boards.dangeru.us/mobile')" />
+            <img id="dangeru" onClick="window.dangeru()" />
             <img id="patch_notes" onClick="unitedPropertiesIf.launchHTML('file:///android_res/raw/patch_notes.html')" />
             <div id="patch_notes_text" onClick="unitedPropertiesIf.launchHTML('file:///android_res/raw/patch_notes.html')"></div>
         </div>

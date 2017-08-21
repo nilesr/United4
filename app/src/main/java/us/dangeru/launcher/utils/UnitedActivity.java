@@ -14,4 +14,5 @@ public interface UnitedActivity {
     void closeWindow(boolean refresh);
     Activity asActivity();
     WebView getWebView();
+    void doAction(String componentPackage, String componentKey);
 }

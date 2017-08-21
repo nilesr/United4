@@ -32,6 +32,8 @@ public class United extends Application {
     private static WeakReference<Context> singleton = null;
     private static MediaPlayer player = null;
 
+    // Makes a new sound pool, loads the requested sound and plays it once it's loaded
+    // Could be made a LOT better by reusing the same pool and checking if it's already loaded
     public static void playSound(String file) {
         SoundPool pool = buildPool();
         try {
@@ -48,6 +50,7 @@ public class United extends Application {
         }
     }
 
+    // makes a new sound pool, platform independently
     private static SoundPool buildPool() {
         SoundPool pool;
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
@@ -59,18 +62,23 @@ public class United extends Application {
         return pool;
     }
 
+    // Hold on to ApplicationContext statically so we can always get it
     public static Context getContext() {
         return singleton.get();
     }
 
+    // Set up the application context singleton
     public void onCreate() {
         super.onCreate();
         singleton = new WeakReference<>(getApplicationContext());
     }
 
+    // Plays the given song, by finding its R.raw id in the songs map, stored in properties
+    // If reload iset set to true, will reload the webpage. For more information, see ReloadService's documentation
     public static void playSong(String song, final boolean reload) {
         try {
             Log.i(TAG, "playSong called on " + song);
+            // Find the R.raw id in the map
             String songs = PropertiesSingleton.get().getProperty("songs");
             JsonReader reader = new JsonReader(new StringReader(songs));
             reader.beginObject();
@@ -84,33 +92,25 @@ public class United extends Application {
                     break;
                 }
             }
+            // If we couldn't find it, fucking die
             if (id == -1) {
                 Log.e(TAG, "Song not found");
                 throw new IllegalArgumentException("song not found");
             }
             Log.i(TAG, "Loading sound");
+            // Stop any song in progress
             stop();
+            // Set some properties in case the javascript forgot to set them
             PropertiesSingleton.get().setProperty("is_playing", "true");
             PropertiesSingleton.get().setProperty("current_song", song);
+            // Make a new media player and play the file
             player = MediaPlayer.create(getContext(), id);
             player.start();
             if (reload) {
                 ReloadService.reload();
             }
-            // make methods for these two things so they can be changed from the webkit
-            final MediaPlayer.OnCompletionListener listener = new SongDoneListener();
-            player.setOnCompletionListener(listener);
-            /* DEBUG
-            new Thread(new Runnable() {
-                @Override
-                public void run() {
-                    try {
-                        Thread.sleep(10000);
-                    } catch (InterruptedException ignored) {}
-                    listener.onCompletion(player);
-                }
-            }).start();
-            */
+            // Call onCompletion when the song is done
+            player.setOnCompletionListener(new SongDoneListener());
         } catch (Exception ignored) {
             //
         }
@@ -123,6 +123,7 @@ public class United extends Application {
         public void onCompletion(MediaPlayer player) {
             boolean looping = "true".equalsIgnoreCase(PropertiesSingleton.get().getProperty("looping"));
             boolean shuffling = "true".equalsIgnoreCase(PropertiesSingleton.get().getProperty("shuffle"));
+            // If we're looping, play the song again
             if (looping) {
                 player.seekTo(0);
                 player.start();
@@ -130,18 +131,24 @@ public class United extends Application {
             }
             int idx;
             try {
+                // Get the list of all songs
                 JSONArray parsed = new JSONArray(PropertiesSingleton.get().getProperty("ordered_songs"));
                 List<String> all_songs = new ArrayList<>();
                 for (int i = 0; i < parsed.length(); i++) {
                     all_songs.add(parsed.getString(i));
                 }
+                // If we're shuffling, get a random index
                 if (shuffling) {
                     idx = new Random().nextInt(all_songs.size());
                 } else {
+                    // otherwise, find the current index and add one
                     idx = all_songs.indexOf(PropertiesSingleton.get().getProperty("current_song"));
                     idx = (idx + 1) % all_songs.size();
                 }
+                // Figure out what song we're supposed to play
                 String next_song = all_songs.get(idx);
+                // Play it and reload music.html if it's up. For more information see the documentation for
+                // ReloadService
                 playSong(next_song, true);
             } catch (Exception ignored) {
                 //

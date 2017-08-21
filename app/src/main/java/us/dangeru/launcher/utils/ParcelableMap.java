@@ -4,19 +4,24 @@ import android.os.Bundle;
 import android.os.Parcelable;
 
 import java.util.HashMap;
+import java.util.Map;
 
 /**
- * Created by Niles on 8/19/17.
+ * A map that can be put in a parcelable, used to store session variables in MainActivity
  */
 
-public class ParcelableMap extends HashMap<String, String> {
+public class ParcelableMap {
+    // delegated object
+    private final Map<String, String> map = new HashMap<>();
+    // puts the shit in a bundle
     public Parcelable parcel() {
         Bundle b = new Bundle();
-        for (String i : keySet()) {
+        for (String i : map.keySet()) {
             b.putString(i, get(i));
         }
         return b;
     }
+    // takes the shit out of the bundle
     public static ParcelableMap fromParcel(Parcelable p) {
         ParcelableMap res = new ParcelableMap();
         if (!(p instanceof Bundle)) {
@@ -25,8 +30,18 @@ public class ParcelableMap extends HashMap<String, String> {
         //noinspection TypeMayBeWeakened
         Bundle b = (Bundle) p;
         for (String i : b.keySet()) {
-            res.put(i, b.getString(i));
+            res.map.put(i, b.getString(i));
         }
         return res;
+    }
+
+    // regular hashmap method
+    public String get(String key) {
+        return map.get(key);
+    }
+
+    // regular hashmap method
+    public void put(String key, String value) {
+        map.put(key, value);
     }
 }

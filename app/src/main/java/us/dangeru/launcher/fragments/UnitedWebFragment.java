@@ -20,10 +20,13 @@ import us.dangeru.launcher.utils.UnitedPropertiesIf;
 
 public class UnitedWebFragment extends Fragment {
     public static String RESOURCE_FOLDER = "file:///android_res/raw/";
+    // Url to load in the page on creation of view
     public String starting_url = null;
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        // If we're being created for the first time, pull the URL from or arguments. Otherwise,
+        // pull it from the saved instance state (in case we rotated, something)
         if (savedInstanceState != null && savedInstanceState.containsKey("URL")) {
             starting_url = savedInstanceState.getString("URL");
         } else {
@@ -37,6 +40,7 @@ public class UnitedWebFragment extends Fragment {
             @SuppressLint({"SetJavaScriptEnabled", "JavascriptInterface"})
             @Override
             public void run() {
+                // Set up our web view with a unitedPropertiesIf and the right starting url
                 WebView webview = res.findViewById(R.id.main_webkit);
                 webview.getSettings().setJavaScriptEnabled(true);
                 webview.getSettings().setAllowFileAccess(true);
@@ -51,6 +55,7 @@ public class UnitedWebFragment extends Fragment {
         return res;
     }
 
+    // save url to saved instance state so we can restore after rotation, etc
     @Override
     public void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
@@ -58,6 +63,7 @@ public class UnitedWebFragment extends Fragment {
         outState.putString("URL", ((WebView) getView().findViewById(R.id.main_webkit)).getUrl());
     }
 
+    // Never open the url in chrome, always stay within the web view
     private static class UnitedWebFragmentWebViewClient extends WebViewClient {
         @Override
         public boolean shouldOverrideUrlLoading(WebView view, String url) {

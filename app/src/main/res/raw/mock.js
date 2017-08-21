@@ -80,8 +80,8 @@ if (typeof(window.unitedPropertiesIf) == "undefined") {
 		launchHTML: function(url) {
 			window.open(url.replace("file:///android_res/raw/", ""))
 		},
-		closeWindow: function() {
-			if (typeof(window.opener) != "undefined") {
+		closeWindow: function(bool) {
+			if (bool.toUpperCase() == "TRUE" && typeof(window.opener) != "undefined") {
 				window.opener.location.reload();
 			}
 			window.close();

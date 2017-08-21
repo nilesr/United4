@@ -9,11 +9,11 @@ import java.lang.ref.WeakReference;
 import us.dangeru.launcher.application.United;
 
 /**
- * Created by Niles on 8/18/17.
+ * This is the class exposed to the web views
  */
 
 public class UnitedPropertiesIf {
-    WeakReference<UnitedActivity> activity;
+    private WeakReference<UnitedActivity> activity;
     public UnitedPropertiesIf(Activity activity) {
         this.activity = new WeakReference<>((UnitedActivity) activity);
     }
@@ -35,13 +35,13 @@ public class UnitedPropertiesIf {
     @JavascriptInterface public void closeWindow(String refresh) {
         activity.get().closeWindow("true".equalsIgnoreCase(refresh));
     }
-    @JavascriptInterface public void playSong(String name, String reload) throws Exception {
+    @JavascriptInterface public static void playSong(String name, String reload) throws Exception {
         United.playSong(name, "true".equalsIgnoreCase(reload));
     }
     @JavascriptInterface public static void playSound(String name) {
         United.playSound(name);
     }
-    @JavascriptInterface public static void toast(String text) {
+    @JavascriptInterface public static void toast(@SuppressWarnings("TypeMayBeWeakened") String text) {
         Toast.makeText(United.getContext(), text, Toast.LENGTH_LONG).show();
     }
     @JavascriptInterface public static void stopSong() {

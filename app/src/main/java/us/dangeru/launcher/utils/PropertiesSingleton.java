@@ -20,20 +20,27 @@ import us.dangeru.launcher.R;
 import us.dangeru.launcher.application.United;
 
 /**
- * Created by Niles on 8/18/17.
+ * Stores app-wide properties that should be saved between launches of the app
  */
 
 public final class PropertiesSingleton {
     private static final String TAG = PropertiesSingleton.class.getSimpleName();
+    // used to be "united4_config.json" but it's not called /u/nited anymore
     private static final String CONFIG = "launcher_config.json";
+    // generic singleton
     private static PropertiesSingleton singleton;
-
     static {
         singleton = new PropertiesSingleton();
     }
+    public static PropertiesSingleton get() {
+        return singleton;
+    }
 
+
+    // the actual properties
     private Map<String, String> properties;
 
+    // Reads in all the properties from the json file or some generic default properties if that failed
     private PropertiesSingleton() {
         properties = new HashMap<>();
         try {
@@ -42,8 +49,10 @@ public final class PropertiesSingleton {
             int read = 0;
             while (reader.hasNext()) {
                 read++;
-                Log.i(TAG, "Read a prop");
-                properties.put(reader.nextName(), reader.nextString());
+                String key = reader.nextName();
+                String value = reader.nextString();
+                Log.i(TAG, "Read prop " + key + ": " + value);
+                properties.put(key, value);
             }
             resetForAppStart();
             if (read > 0) {
@@ -52,6 +61,7 @@ public final class PropertiesSingleton {
         } catch (Exception ignored) {
             //
         }
+        // default properties that should only be set on the very first run of the app
         properties.put("starting_music", "true");
         properties.put("theme", "normal");
         properties.put("looping", "false");
@@ -60,14 +70,16 @@ public final class PropertiesSingleton {
         resetForAppStart();
     }
 
-    public static PropertiesSingleton get() {
-        return singleton;
-    }
-
+    // static properties that never change
     private void resetForAppStart() {
         properties.put("version_notes", "Version 4.0.5!\nTap for Patch Notes");
+        // index.html expects is_playing to be false on first load so it can play startup music
+        // if it was told to. It doesn't start the music if `is_playing` is set to true, so if you go
+        // to music.html, change the song, rotate and come back, it won't override the song you just picked
+        // with the startup music again
         properties.put("is_playing", "false");
         //List<String> themes = Arrays.asList("normal", "dotted", "steam", "kira", "meme", "vaporwave");
+        // rip the meme theme, it was my favorite
         List<String> themes = Arrays.asList("normal", "vaporwave");
         String str = new JSONArray(themes).toString();
         properties.put("all_themes", str);
@@ -117,17 +129,20 @@ public final class PropertiesSingleton {
         properties.put("ordered_songs", new JSONArray(ordered_songs).toString());
     }
 
+    // helper function for putting things in both `songs` and `ordered_songs`
     private static void put(Map<String, String> map, @SuppressWarnings("TypeMayBeWeakened") List<String> ordered_songs, int id, String s) {
         map.put(s, Integer.toString(id));
         ordered_songs.add(s);
     }
 
+    // gets a property, or an empty string if it wasn't set
     public String getProperty(String key) {
         String res = properties.get(key);
         if (res == null) return "";
         return res;
     }
 
+    // sets a property, then writes the entire json file out to the disk
     public void setProperty(String key, String value) {
         properties.put(key, value);
         try {

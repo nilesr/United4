@@ -1,56 +1,64 @@
-package us.dangeru.launcher.activities;
+package us.dangeru.launcher.fragments;
 
-import android.app.Activity;
+import android.app.Fragment;
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.EditText;
 
 import java.io.OutputStream;
-import java.io.OutputStreamWriter;
 import java.net.HttpURLConnection;
-import java.net.URI;
 import java.net.URL;
 import java.net.URLEncoder;
 
 import us.dangeru.launcher.R;
-import us.dangeru.launcher.fragments.GenericAlertDialogFragment;
-import us.dangeru.launcher.fragments.GenericProgressDialogFragment;
-import us.dangeru.launcher.utils.ParcelableMap;
+import us.dangeru.launcher.activities.HiddenSettingsActivity;
 import us.dangeru.launcher.utils.PropertiesSingleton;
-import us.dangeru.launcher.utils.UnitedPropertiesIf;
 
 /**
  * Created by Niles on 8/20/17.
  */
 
-public class JanitorLoginActivity extends Activity {
-    private static final String TAG = JanitorLoginActivity.class.getSimpleName();
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.janitor_login_activity);
-        EditText username = findViewById(R.id.username);
-        EditText password = findViewById(R.id.password);
-        username.setText(PropertiesSingleton.get().getProperty("username"));
-        password.setText(PropertiesSingleton.get().getProperty("password"));
-    }
-    public void buttonClicked(final View view) {
-        getPropertiesFromView();
-        GenericProgressDialogFragment.newInstance("Logging in...", getFragmentManager());
-        // can't do network on ui thread
-        view.findViewById(R.id.button).setClickable(false);
-        new Thread(new Runnable() {
+public class JanitorLoginFragment extends Fragment implements  HiddenSettingsFragment {
+    @SuppressWarnings("unused")
+    private static final String TAG = JanitorLoginFragment.class.getSimpleName();
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        final View res = inflater.inflate(R.layout.janitor_login, container, false);
+        res.post(new Runnable() {
             @Override
             public void run() {
-                try {
-                    authenticate();
-                } catch (Exception e) {
-                    GenericAlertDialogFragment.newInstance("Unexpected error " + e, getFragmentManager());
-                }
-                view.findViewById(R.id.button).setClickable(true);
-                GenericProgressDialogFragment.dismiss(getFragmentManager());
+                EditText username = res.findViewById(R.id.username);
+                EditText password = res.findViewById(R.id.password);
+                username.setText(PropertiesSingleton.get().getProperty("username"));
+                password.setText(PropertiesSingleton.get().getProperty("password"));
+                res.findViewById(R.id.button).setOnClickListener(new LoginButtonClickListener());
             }
-        }).start();
+        });
+        return res;
+    }
+    private class LoginButtonClickListener implements Button.OnClickListener {
+        @Override
+        public void onClick(final View view) {
+            getPropertiesFromView();
+            GenericProgressDialogFragment.newInstance("Logging in...", getFragmentManager());
+            view.findViewById(R.id.button).setClickable(false);
+            // can't do network on ui thread
+            new Thread(new Runnable() {
+                @Override
+                public void run() {
+                    try {
+                        authenticate();
+                    } catch (Exception e) {
+                        GenericAlertDialogFragment.newInstance("Unexpected error " + e, getFragmentManager());
+                    }
+                    view.findViewById(R.id.button).setClickable(true);
+                    GenericProgressDialogFragment.dismiss(getFragmentManager());
+                }
+            }).start();
+        }
     }
     private void authenticate() throws Exception {
         String username = PropertiesSingleton.get().getProperty("username");
@@ -76,18 +84,21 @@ public class JanitorLoginActivity extends Activity {
 
     }
     public void getPropertiesFromView() {
-        EditText username = findViewById(R.id.username);
-        EditText password = findViewById(R.id.password);
+        if (getView() == null) return;
+        EditText username = getView().findViewById(R.id.username);
+        EditText password = getView().findViewById(R.id.password);
         PropertiesSingleton.get().setProperty("username", username.getText().toString());
         PropertiesSingleton.get().setProperty("password", password.getText().toString());
     }
+    /*
     @Override public void finish() {
         getPropertiesFromView();
         super.finish();
     }
+    */
 
     @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (requestCode == 10) {
             boolean logged_in = "true".equalsIgnoreCase(PropertiesSingleton.get().getProperty("logged_in"));
             if (logged_in) {
@@ -98,5 +109,9 @@ public class JanitorLoginActivity extends Activity {
         } else {
             super.onActivityResult(requestCode, resultCode, data);
         }
+    }
+    @Override
+    public HiddenSettingsActivity.FragmentType getType() {
+        return HiddenSettingsActivity.FragmentType.JANITOR_LOGIN;
     }
 }

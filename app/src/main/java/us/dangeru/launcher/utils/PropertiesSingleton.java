@@ -1,6 +1,8 @@
 package us.dangeru.launcher.utils;
 
+import android.app.FragmentManager;
 import android.content.Context;
+import android.icu.util.Output;
 import android.util.JsonReader;
 import android.util.JsonWriter;
 import android.util.Log;
@@ -18,6 +20,7 @@ import java.util.Map;
 
 import us.dangeru.launcher.R;
 import us.dangeru.launcher.application.United;
+import us.dangeru.launcher.fragments.GenericAlertDialogFragment;
 
 /**
  * Stores app-wide properties that should be saved between launches of the app
@@ -160,6 +163,18 @@ public final class PropertiesSingleton {
             writer.close();
         } catch (Exception ignored) {
             //
+        }
+    }
+
+    public void resetAllAndExit(FragmentManager fragman) {
+        try {
+            OutputStreamWriter writer = new OutputStreamWriter(United.getContext().openFileOutput(CONFIG, Context.MODE_PRIVATE));
+            writer.write("{}");
+            writer.flush();
+            writer.close();
+            System.exit(0);
+        } catch (Exception e) {
+            GenericAlertDialogFragment.newInstance("Unexpected error - " + e, fragman);
         }
     }
 }

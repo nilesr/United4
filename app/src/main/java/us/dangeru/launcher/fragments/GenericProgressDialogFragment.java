@@ -6,8 +6,6 @@ import android.app.FragmentManager;
 import android.app.ProgressDialog;
 import android.os.Bundle;
 
-import us.dangeru.launcher.activities.JanitorLoginActivity;
-
 /**
  * Created by Niles on 8/20/17.
  */

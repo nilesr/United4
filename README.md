@@ -1,7 +1,7 @@
 # La/u/ncher 4.0.5
 
 ### Try it in your browser!
-Resize your browser to be phone-sized and visit https://niles.xyz/united4
+Resize your browser to be phone-sized and visit https://niles.xyz/united
 
 ### Try it on your phone!
 Releases coming soon

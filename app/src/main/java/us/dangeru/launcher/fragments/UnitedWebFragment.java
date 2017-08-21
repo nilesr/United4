@@ -47,18 +47,6 @@ public class UnitedWebFragment extends Fragment {
         final View res = inflater.inflate(R.layout.main, container, false);
         CookieManager manager = CookieManager.getInstance();
         manager.setAcceptCookie(true);
-        String cookie = PropertiesSingleton.get().getProperty("cookie");
-        //HttpCookie parsed = HttpCookie.parse(cookie).get(0);
-        //String testString = parsed.getName() + "=" + parsed.getValue();
-        try {
-            //manager.setCookie("niles.lain.city", cookie);
-            manager.setCookie("192.168.0.3", cookie);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        //manager.setCookie(parsed.getDomain(), testString);
-        Log.i(TAG, cookie);
-        CookieSyncManager.getInstance().sync();
         res.post(new Runnable() {
             @SuppressLint({"SetJavaScriptEnabled", "JavascriptInterface"})
             @Override

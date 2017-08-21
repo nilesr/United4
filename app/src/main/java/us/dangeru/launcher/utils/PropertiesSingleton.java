@@ -65,7 +65,7 @@ public final class PropertiesSingleton {
             //
         }
         // default properties that should only be set on the very first run of the app
-        properties.put("starting_music", "true");
+        properties.put("startup_music", "true");
         properties.put("theme", "normal");
         properties.put("looping", "false");
         properties.put("shuffle", "false");

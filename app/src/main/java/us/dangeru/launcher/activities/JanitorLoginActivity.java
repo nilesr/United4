@@ -51,7 +51,7 @@ public class JanitorLoginActivity extends Activity {
     private void authenticate() {
         getPropertiesFromView();
         String username = PropertiesSingleton.get().getProperty("username");
-        String password = PropertiesSingleton.get().getProperty("username");
+        String password = PropertiesSingleton.get().getProperty("password");
         Intent i = new Intent(getApplicationContext(), MainActivity.class);
         Bundle extras = new Bundle();
         extras.putString("URL", PropertiesSingleton.get().getProperty("awoo_endpoint") + "/mod");

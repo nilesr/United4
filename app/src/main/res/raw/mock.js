@@ -54,6 +54,7 @@ if (typeof(window.unitedPropertiesIf) == "undefined") {
 			//if (name == "all_themes") return JSON.stringify(["normal", "dotted", "steam", "kira", "meme", "vaporwave"]);
 			if (name == "all_themes") return JSON.stringify(["normal", "vaporwave", "noir"]);
 			if (name == "version_notes") return "Version 4.0.6!\nTap for Patch Notes"
+			if (name == "awoo_endpoint") return "http://boards.lolis.download";
 			var res = localStorage.getItem(name);
 			if (res == null) return "";
 			return res;

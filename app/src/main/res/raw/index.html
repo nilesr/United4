@@ -114,6 +114,8 @@
                 }
                 // vertically center the patch notes text on the button
                 pnt.style.top = (pn.style.top + (pn.clientHeight/2) - (pnt.clientHeight/2)).toString() + "px";
+                // noir theme patch notes button is white, and the white text won't show it. Fix that
+                if (theme == "noir") pnt.style.color = "black";
 
             }
             var kira_counter = 0;

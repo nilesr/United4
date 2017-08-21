@@ -4,6 +4,8 @@
 Resize your browser to be phone-sized and visit https://niles.xyz/united
 
 ### Try it on your phone!
+https://niles.xyz/launcher-4.0.5-beta.apk
+
 Releases coming soon
 
 ## todo list

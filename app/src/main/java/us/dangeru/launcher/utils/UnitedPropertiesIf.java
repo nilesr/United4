@@ -18,6 +18,7 @@ public class UnitedPropertiesIf {
         this.activity = new WeakReference<>((UnitedActivity) activity);
     }
     @JavascriptInterface public static String getProperty(String key) {
+        if ("password".equals(key)) return ""; // just in case
         return PropertiesSingleton.get().getProperty(key);
     }
     @JavascriptInterface public static void setProperty(String key, String value) {

@@ -44,4 +44,8 @@ public class ParcelableMap {
     public void put(String key, String value) {
         map.put(key, value);
     }
+
+    public Map<String, String> asMap() {
+        return map;
+    }
 }

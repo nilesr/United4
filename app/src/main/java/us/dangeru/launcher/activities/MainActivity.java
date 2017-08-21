@@ -48,6 +48,9 @@ public class MainActivity extends Activity implements UnitedActivity {
             } else {
                 args.putString("URL", RESOURCE_FOLDER + "index.html");
             }
+            if (getIntent().hasExtra("headers")) {
+                args.putParcelable("headers", getIntent().getParcelableExtra("headers"));
+            }
             webFragment.setArguments(args);
             FragmentTransaction trans = manager.beginTransaction();
             trans.replace(R.id.activity_main_activity, webFragment, "main_webkit_wrapper");

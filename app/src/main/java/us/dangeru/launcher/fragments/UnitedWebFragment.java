@@ -3,6 +3,8 @@ package us.dangeru.launcher.fragments;
 import android.annotation.SuppressLint;
 import android.app.Fragment;
 import android.os.Bundle;
+import android.os.Parcel;
+import android.os.Parcelable;
 import android.support.annotation.Nullable;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -17,8 +19,11 @@ import android.webkit.WebViewClient;
 import java.net.CookieHandler;
 import java.net.HttpCookie;
 import java.net.URL;
+import java.util.HashMap;
+import java.util.Map;
 
 import us.dangeru.launcher.R;
+import us.dangeru.launcher.utils.ParcelableMap;
 import us.dangeru.launcher.utils.PropertiesSingleton;
 import us.dangeru.launcher.utils.UnitedPropertiesIf;
 
@@ -31,6 +36,7 @@ public class UnitedWebFragment extends Fragment {
     public static final String TAG = UnitedWebFragment.class.getSimpleName();
     // Url to load in the page on creation of view
     public String starting_url = null;
+    Map<String, String> headers = new HashMap<>();
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -40,6 +46,9 @@ public class UnitedWebFragment extends Fragment {
             starting_url = savedInstanceState.getString("URL");
         } else {
             starting_url = getArguments().getString("URL");
+        }
+        if (getArguments() != null && getArguments().containsKey("headers")) {
+            headers = ParcelableMap.fromParcel(getArguments().getParcelable("headers")).asMap();
         }
     }
     @Override
@@ -60,7 +69,7 @@ public class UnitedWebFragment extends Fragment {
                 //webview.getSettings().setAllowUniversalAccessFromFileURLs(true);
                 webview.addJavascriptInterface(new UnitedPropertiesIf(getActivity()), "unitedPropertiesIf");
                 webview.setWebViewClient(new UnitedWebFragmentWebViewClient());
-                webview.loadUrl(starting_url);
+                webview.loadUrl(starting_url, headers);
             }
         });
         return res;

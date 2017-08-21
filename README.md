@@ -1,4 +1,4 @@
-# La/u/ncher 4.0.5
+# La/u/ncher 4.0.6
 
 ### Try it in your browser!
 Resize your browser to be phone-sized and visit https://niles.xyz/united

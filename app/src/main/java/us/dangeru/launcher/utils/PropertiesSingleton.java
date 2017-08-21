@@ -72,7 +72,7 @@ public final class PropertiesSingleton {
 
     // static properties that never change
     private void resetForAppStart() {
-        properties.put("version_notes", "Version 4.0.5!\nTap for Patch Notes");
+        properties.put("version_notes", "Version 4.0.6!\nTap for Patch Notes");
         // index.html expects is_playing to be false on first load so it can play startup music
         // if it was told to. It doesn't start the music if `is_playing` is set to true, so if you go
         // to music.html, change the song, rotate and come back, it won't override the song you just picked
@@ -80,7 +80,7 @@ public final class PropertiesSingleton {
         properties.put("is_playing", "false");
         //List<String> themes = Arrays.asList("normal", "dotted", "steam", "kira", "meme", "vaporwave");
         // rip the meme theme, it was my favorite
-        List<String> themes = Arrays.asList("normal", "vaporwave");
+        List<String> themes = Arrays.asList("normal", "vaporwave", "noir");
         String str = new JSONArray(themes).toString();
         properties.put("all_themes", str);
         HashMap<String, String> map = new HashMap<>();

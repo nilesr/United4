@@ -6,8 +6,16 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.EditText;
 
+import java.io.OutputStream;
+import java.io.OutputStreamWriter;
+import java.net.HttpURLConnection;
+import java.net.URI;
+import java.net.URL;
+import java.net.URLEncoder;
+
 import us.dangeru.launcher.R;
 import us.dangeru.launcher.fragments.GenericAlertDialogFragment;
+import us.dangeru.launcher.fragments.GenericProgressDialogFragment;
 import us.dangeru.launcher.utils.ParcelableMap;
 import us.dangeru.launcher.utils.PropertiesSingleton;
 import us.dangeru.launcher.utils.UnitedPropertiesIf;
@@ -26,9 +34,46 @@ public class JanitorLoginActivity extends Activity {
         username.setText(PropertiesSingleton.get().getProperty("username"));
         password.setText(PropertiesSingleton.get().getProperty("password"));
     }
-    public void buttonClicked(View view) {
+    public void buttonClicked(final View view) {
         getPropertiesFromView();
-        UnitedPropertiesIf.authenticate(this);
+        GenericProgressDialogFragment.newInstance("Logging in...", getFragmentManager());
+        // can't do network on ui thread
+        view.findViewById(R.id.button).setClickable(false);
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    authenticate();
+                } catch (Exception e) {
+                    GenericAlertDialogFragment.newInstance("Unexpected error " + e, getFragmentManager());
+                }
+                view.findViewById(R.id.button).setClickable(true);
+                GenericProgressDialogFragment.dismiss(getFragmentManager());
+            }
+        }).start();
+    }
+    private void authenticate() throws Exception {
+        String username = PropertiesSingleton.get().getProperty("username");
+        URL uri = new URL(PropertiesSingleton.get().getProperty("awoo_endpoint") + "/mod");
+        HttpURLConnection connection = (HttpURLConnection) uri.openConnection();
+        connection.setRequestMethod("POST");
+        connection.setDoOutput(true);
+        OutputStream os = connection.getOutputStream();
+        String data = "username=" + URLEncoder.encode(username, "UTF-8");
+        data += "&password=" + URLEncoder.encode(PropertiesSingleton.get().getProperty("password"), "UTF-8");
+        //data += "&redirect=" + URLEncoder.encode("file:///android_res/success.html", "UTF-8");
+        os.write(data.getBytes());
+        os.flush(); os.close();
+        int responseCode = connection.getResponseCode();
+        PropertiesSingleton.get().setProperty("logged_in", responseCode == 200 ? "true" : "false");
+        if (responseCode == 403) {
+            GenericAlertDialogFragment.newInstance("Error - Check your username and password", getFragmentManager());
+        } else if (responseCode == 200) {
+            GenericAlertDialogFragment.newInstance("Success! You are logged in as " + username, getFragmentManager());
+        } else {
+            GenericAlertDialogFragment.newInstance("Unexpected response code " + responseCode, getFragmentManager());
+        }
+
     }
     public void getPropertiesFromView() {
         EditText username = findViewById(R.id.username);

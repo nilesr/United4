@@ -127,9 +127,9 @@ public final class PropertiesSingleton {
         str = new JSONObject(map).toString();
         properties.put("songs", str);
         properties.put("ordered_songs", new JSONArray(ordered_songs).toString());
-        //properties.put("awoo_endpoint", "http://192.168.0.3:8080");
+        properties.put("awoo_endpoint", "http://192.168.0.3:8080");
         //properties.put("awoo_endpoint", "https://niles.lain.city");
-        properties.put("awoo_endpoint", "http://boards.lolis.download");
+        //properties.put("awoo_endpoint", "http://boards.lolis.download");
     }
 
     // helper function for putting things in both `songs` and `ordered_songs`

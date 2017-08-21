@@ -4,9 +4,6 @@
         <script src="mock.js"></script>
         <script>
             var ol = function ol() {
-                if (unitedPropertiesIf.getSessionVariable("authenticated").toUpperCase() == "TRUE") {
-                    window.dangeru();
-                }
                 // increment for more space between the buttons
                 var spacing = 10;
                 // used for calculations later
@@ -136,16 +133,10 @@
                 }
             }
             window.dangeru = function() {
-                if (unitedPropertiesIf.getProperty("logged_in") == "false") {
-                    unitedPropertiesIf.launchHTML('https://boards.dangeru.us/mobile');
+                if (unitedPropertiesIf.getProperty("logged_in").toUpperCase() == "TRUE") {
+                    unitedPropertiesIf.launchHTML(unitedPropertiesIf.getProperty("awoo_endpoint"));
                 } else {
-                    if (unitedPropertiesIf.getSessionVariable("authenticated").toUpperCase() == "TRUE") {
-                        unitedPropertiesIf.setSessionVariable("authenticated", "false"); // prevent infinite loop
-                        unitedPropertiesIf.launchHTML(unitedPropertiesIf.getProperty("awoo_endpoint"));
-                    } else {
-                        unitedPropertiesIf.setSessionVariable("authenticated", "true");
-                        unitedPropertiesIf.authenticate();
-                    }
+                    unitedPropertiesIf.launchHTML('https://boards.dangeru.us/mobile');
                 }
             }
         </script>

@@ -12,13 +12,16 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.webkit.CookieManager;
 import android.webkit.CookieSyncManager;
+import android.webkit.URLUtil;
 import android.webkit.WebResourceRequest;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 
 import java.net.CookieHandler;
 import java.net.HttpCookie;
+import java.net.MalformedURLException;
 import java.net.URL;
+import java.net.URLEncoder;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -36,7 +39,7 @@ public class UnitedWebFragment extends Fragment {
     public static final String TAG = UnitedWebFragment.class.getSimpleName();
     // Url to load in the page on creation of view
     public String starting_url = null;
-    Map<String, String> headers = new HashMap<>();
+    boolean authenticated = false;
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -47,9 +50,7 @@ public class UnitedWebFragment extends Fragment {
         } else {
             starting_url = getArguments().getString("URL");
         }
-        if (getArguments() != null && getArguments().containsKey("headers")) {
-            headers = ParcelableMap.fromParcel(getArguments().getParcelable("headers")).asMap();
-        }
+        if (savedInstanceState != null && savedInstanceState.containsKey("authenticated")) authenticated = savedInstanceState.getBoolean("authenticated");
     }
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -69,7 +70,20 @@ public class UnitedWebFragment extends Fragment {
                 //webview.getSettings().setAllowUniversalAccessFromFileURLs(true);
                 webview.addJavascriptInterface(new UnitedPropertiesIf(getActivity()), "unitedPropertiesIf");
                 webview.setWebViewClient(new UnitedWebFragmentWebViewClient());
-                webview.loadUrl(starting_url, headers);
+                try {
+                    // If we're logged in, and we're about to connect to the awoo endpoint, and we haven't authenticated in this fragment yet, then authenticate
+                    if ("true".equalsIgnoreCase(PropertiesSingleton.get().getProperty("logged_in")) && new URL(starting_url).getAuthority().equals(new URL(PropertiesSingleton.get().getProperty("awoo_endpoint")).getAuthority()) && !authenticated) {
+                        authenticated = true;
+                        String data = "username=" + URLEncoder.encode(PropertiesSingleton.get().getProperty("username"), "UTF-8");
+                        data += "&password=" + URLEncoder.encode(PropertiesSingleton.get().getProperty("password"), "UTF-8");
+                        data += "&redirect=" + URLEncoder.encode(starting_url, "UTF-8");
+                        webview.postUrl(PropertiesSingleton.get().getProperty("awoo_endpoint") + "/mod", data.getBytes());
+                        return;
+                    }
+                } catch (Exception ignored) {
+                    //
+                }
+                webview.loadUrl(starting_url);
             }
         });
         return res;
@@ -81,6 +95,7 @@ public class UnitedWebFragment extends Fragment {
         super.onSaveInstanceState(outState);
         if (getView() == null) return;
         outState.putString("URL", ((WebView) getView().findViewById(R.id.main_webkit)).getUrl());
+        outState.putBoolean("authenticated", authenticated);
     }
 
     // Never open the url in chrome, always stay within the web view

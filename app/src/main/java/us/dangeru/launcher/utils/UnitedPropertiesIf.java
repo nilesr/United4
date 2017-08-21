@@ -54,21 +54,4 @@ public class UnitedPropertiesIf {
     @JavascriptInterface public static void stopSong() {
         United.stop();
     }
-    @JavascriptInterface public void authenticate() {
-        authenticate(activity.get().asActivity());
-    }
-
-    public static void authenticate(Activity act) {
-        String username = PropertiesSingleton.get().getProperty("username");
-        String password = PropertiesSingleton.get().getProperty("password");
-        Intent i = new Intent(United.getContext(), MainActivity.class);
-        Bundle extras = new Bundle();
-        extras.putString("URL", PropertiesSingleton.get().getProperty("awoo_endpoint") + "/mod");
-        ParcelableMap headers = new ParcelableMap();
-        headers.put("X-Awoo-Username", username);
-        headers.put("X-Awoo-Password", password);
-        extras.putParcelable("headers", headers.parcel());
-        i.putExtras(extras);
-        act.startActivityForResult(i, 10);
-    }
 }

@@ -27,16 +27,8 @@ public class JanitorLoginActivity extends Activity {
         password.setText(PropertiesSingleton.get().getProperty("password"));
     }
     public void buttonClicked(View view) {
-        //GenericAlertDialogFragment.newInstance("Not implemented yet", getFragmentManager());
-        // can't do network work on UI thread
-        // TODO throbber or something
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                //authenticate();
-            }
-        }).start();
-        authenticate();
+        getPropertiesFromView();
+        UnitedPropertiesIf.authenticate(this);
     }
     public void getPropertiesFromView() {
         EditText username = findViewById(R.id.username);
@@ -47,20 +39,6 @@ public class JanitorLoginActivity extends Activity {
     @Override public void finish() {
         getPropertiesFromView();
         super.finish();
-    }
-    private void authenticate() {
-        getPropertiesFromView();
-        String username = PropertiesSingleton.get().getProperty("username");
-        String password = PropertiesSingleton.get().getProperty("password");
-        Intent i = new Intent(getApplicationContext(), MainActivity.class);
-        Bundle extras = new Bundle();
-        extras.putString("URL", PropertiesSingleton.get().getProperty("awoo_endpoint") + "/mod");
-        ParcelableMap headers = new ParcelableMap();
-        headers.put("X-Awoo-Username", username);
-        headers.put("X-Awoo-Password", password);
-        extras.putParcelable("headers", headers.parcel());
-        i.putExtras(extras);
-        startActivityForResult(i, 10);
     }
 
     @Override

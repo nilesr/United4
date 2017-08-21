@@ -5,6 +5,7 @@ import android.app.Fragment;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
 import android.os.Bundle;
+import android.view.Menu;
 
 import us.dangeru.launcher.R;
 import us.dangeru.launcher.fragments.SettingsListFragment;
@@ -62,6 +63,10 @@ public class HiddenSettingsActivity extends Activity {
     public void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
         outState.putString("fragment", type.toString());
+    }
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.hidden_settings_menu, menu);
+        return true;
     }
     public enum FragmentType {
         SETTINGS_LIST,

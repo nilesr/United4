@@ -4,6 +4,7 @@ import android.app.Fragment;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
+import android.view.Menu;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
@@ -25,6 +26,10 @@ import us.dangeru.launcher.utils.PropertiesSingleton;
 public class JanitorLoginFragment extends Fragment implements  HiddenSettingsFragment {
     @SuppressWarnings("unused")
     private static final String TAG = JanitorLoginFragment.class.getSimpleName();
+    @Override public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setHasOptionsMenu(true);
+    }
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         final View res = inflater.inflate(R.layout.janitor_login, container, false);
         res.post(new Runnable() {

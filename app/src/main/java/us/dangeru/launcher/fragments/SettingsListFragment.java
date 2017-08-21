@@ -1,22 +1,16 @@
 package us.dangeru.launcher.fragments;
 
 import android.app.Fragment;
-import android.content.Context;
-import android.database.DataSetObserver;
 import android.os.Bundle;
-import android.support.annotation.LayoutRes;
-import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
-import android.widget.ListAdapter;
 import android.widget.ListView;
-
-import java.util.ArrayList;
-import java.util.List;
 
 import us.dangeru.launcher.R;
 import us.dangeru.launcher.activities.HiddenSettingsActivity;
@@ -27,6 +21,10 @@ import us.dangeru.launcher.utils.PropertiesSingleton;
  */
 
 public class SettingsListFragment extends Fragment implements HiddenSettingsFragment {
+    @Override public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setHasOptionsMenu(true);
+    }
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
@@ -35,7 +33,9 @@ public class SettingsListFragment extends Fragment implements HiddenSettingsFrag
             @Override
             public void run() {
                 ListView list = res.findViewById(R.id.settings_list);
-                final String[] settings = new String[] { "Janitor Login", "Reset all preferences" };
+                String debug = PropertiesSingleton.get().getProperty("debug");
+                if (debug.isEmpty()) debug = "false";
+                final String[] settings = new String[] { "Janitor Login", "Reset all preferences", "Toggle debug button, currently " + debug };
                 list.setAdapter(new ArrayAdapter<>(getActivity(), android.R.layout.simple_list_item_1, settings));
                 list.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                     @Override
@@ -46,6 +46,11 @@ public class SettingsListFragment extends Fragment implements HiddenSettingsFrag
                                 break;
                             case 1:
                                 PropertiesSingleton.get().resetAllAndExit(getFragmentManager());
+                                break;
+                            case 2:
+                                //noinspection CallToNumericToString
+                                PropertiesSingleton.get().setProperty("debug", Boolean.valueOf(!Boolean.valueOf(PropertiesSingleton.get().getProperty("debug"))).toString());
+                                run();
                                 break;
                             default:
                                 GenericAlertDialogFragment.newInstance("Should never happen", getFragmentManager());
@@ -61,5 +66,10 @@ public class SettingsListFragment extends Fragment implements HiddenSettingsFrag
     @Override
     public HiddenSettingsActivity.FragmentType getType() {
         return HiddenSettingsActivity.FragmentType.SETTINGS_LIST;
+    }
+
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        inflater.inflate(R.menu.hidden_settings_menu, menu);
     }
 }

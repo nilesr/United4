@@ -15,6 +15,20 @@
                 // width to get the height
                 var image_height = (total_width - (2 * spacing)) * (102 / 378);
                 // for each row
+                if (unitedPropertiesIf.getProperty("debug").toUpperCase() == "TRUE") {
+                    var r = document.createElement("div");
+                    var i = document.createElement("div");
+                    i.style.backgroundColor = "pink";
+                    i.style.lineHeight = image_height.toString() + "px";
+                    r.classList.add("row");
+                    r.classList.add("one");
+                    i.addEventListener("click", function() { unitedPropertiesIf.doAction("us.dangeru.launcher", "us.dangeru.launcher.activities.HiddenSettingsActivity"); });
+                    r.appendChild(i);
+                    i.style.textAlign = "center";
+                    i.innerText = "Debug options";
+                    i.style.position = "absolute";
+                    document.body.appendChild(r);
+                }
                 Array.prototype.slice.call(document.getElementsByClassName("row"), 0).forEach(function(elem) {
                     // set the top offset of the row to running_height, then increase running_height by the height
                     // of the image we're about to make plus some vertical spacing
@@ -58,7 +72,7 @@
                     // whether or not we've played open_phone.mp3 yet from session variables
                     theme = unitedPropertiesIf.getProperty("theme");
                     playing = unitedPropertiesIf.getProperty("is_playing").toUpperCase() == "TRUE";
-                    var startup_music = unitedPropertiesIf.getProperty("startup_music").toUpperCase() == "TRUE";
+                    var startup_music = unitedPropertiesIf.getProperty("startup_music").toUpperCase() == "TRUE" && unitedPropertiesIf.getSessionVariable("started_startup_music").toUpperCase() != "TRUE";
                     console.log("PropertiesSingleton reports startup_music as " + startup_music);
                     console.log("PropertiesSingleton reports playing as " + playing);
                     var opened = unitedPropertiesIf.getSessionVariable("open_phone_played")
@@ -78,6 +92,7 @@
                         console.log("Playing welcome music")
                         unitedPropertiesIf.playSong("Every Day is Night", false);
                         unitedPropertiesIf.setProperty("current_song", "Every Day is Night");
+                        unitedPropertiesIf.setSessionVariable("started_startup_music", "true");
                     }
                 } catch (e) {
                     // whatever

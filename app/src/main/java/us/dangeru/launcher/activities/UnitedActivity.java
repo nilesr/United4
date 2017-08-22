@@ -1,4 +1,4 @@
-package us.dangeru.launcher.utils;
+package us.dangeru.launcher.activities;
 
 import android.app.Activity;
 import android.webkit.WebView;

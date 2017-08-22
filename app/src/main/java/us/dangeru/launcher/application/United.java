@@ -19,7 +19,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
-import us.dangeru.launcher.utils.PropertiesSingleton;
+import us.dangeru.launcher.utils.P;
 import us.dangeru.launcher.utils.ReloadService;
 
 import static java.lang.Integer.parseInt;
@@ -81,7 +81,7 @@ public class United extends Application {
         try {
             Log.i(TAG, "playSong called on " + song);
             // Find the R.raw id in the map
-            String songs = PropertiesSingleton.get().getProperty("songs");
+            String songs = P.get("songs");
             JsonReader reader = new JsonReader(new StringReader(songs));
             reader.beginObject();
             int id = -1;
@@ -103,8 +103,8 @@ public class United extends Application {
             // Stop any song in progress
             stop();
             // Set some properties in case the javascript forgot to set them
-            PropertiesSingleton.get().setProperty("is_playing", "true");
-            PropertiesSingleton.get().setProperty("current_song", song);
+            P.set("is_playing", "true");
+            P.set("current_song", song);
             // Make a new media player and play the file
             player = MediaPlayer.create(getContext(), id);
             player.start();
@@ -123,8 +123,8 @@ public class United extends Application {
     private static class SongDoneListener implements MediaPlayer.OnCompletionListener {
         @Override
         public void onCompletion(MediaPlayer player) {
-            boolean looping = "true".equalsIgnoreCase(PropertiesSingleton.get().getProperty("looping"));
-            boolean shuffling = "true".equalsIgnoreCase(PropertiesSingleton.get().getProperty("shuffle"));
+            boolean looping = P.getBool("looping");
+            boolean shuffling = P.getBool("shuffle");
             // If we're looping, play the song again
             if (looping) {
                 player.seekTo(0);
@@ -134,7 +134,7 @@ public class United extends Application {
             int idx;
             try {
                 // Get the list of all songs
-                JSONArray parsed = new JSONArray(PropertiesSingleton.get().getProperty("ordered_songs"));
+                JSONArray parsed = new JSONArray(P.get("ordered_songs"));
                 List<String> all_songs = new ArrayList<>();
                 for (int i = 0; i < parsed.length(); i++) {
                     all_songs.add(parsed.getString(i));
@@ -144,7 +144,7 @@ public class United extends Application {
                     idx = new Random().nextInt(all_songs.size());
                 } else {
                     // otherwise, find the current index and add one
-                    idx = all_songs.indexOf(PropertiesSingleton.get().getProperty("current_song"));
+                    idx = all_songs.indexOf(P.get("current_song"));
                     idx = (idx + 1) % all_songs.size();
                 }
                 // Figure out what song we're supposed to play

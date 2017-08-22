@@ -9,6 +9,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 
 import java.io.OutputStream;
 import java.net.HttpURLConnection;
@@ -17,7 +18,7 @@ import java.net.URLEncoder;
 
 import us.dangeru.launcher.R;
 import us.dangeru.launcher.activities.HiddenSettingsActivity;
-import us.dangeru.launcher.utils.PropertiesSingleton;
+import us.dangeru.launcher.utils.P;
 
 /**
  * Created by Niles on 8/20/17.
@@ -37,9 +38,10 @@ public class JanitorLoginFragment extends Fragment implements  HiddenSettingsFra
             public void run() {
                 EditText username = res.findViewById(R.id.username);
                 EditText password = res.findViewById(R.id.password);
-                username.setText(PropertiesSingleton.get().getProperty("username"));
-                password.setText(PropertiesSingleton.get().getProperty("password"));
+                username.setText(P.get("username"));
+                password.setText(P.get("password"));
                 res.findViewById(R.id.button).setOnClickListener(new LoginButtonClickListener());
+                updateLoggedInText();
             }
         });
         return res;
@@ -61,24 +63,31 @@ public class JanitorLoginFragment extends Fragment implements  HiddenSettingsFra
                     }
                     view.findViewById(R.id.button).setClickable(true);
                     GenericProgressDialogFragment.dismiss(getFragmentManager());
+                    updateLoggedInText();
                 }
             }).start();
         }
     }
+
+    private void updateLoggedInText() {
+        if (getView() == null) return;
+        ((TextView) getView().findViewById(R.id.logged_in)).setText("You are " + (P.getBool("logged_in") ? "currently " : "not ") + " logged in" + (P.getBool("logged_in") ? " as " + P.get("username") : ""));
+    }
+
     private void authenticate() throws Exception {
-        String username = PropertiesSingleton.get().getProperty("username");
-        URL uri = new URL(PropertiesSingleton.get().getProperty("awoo_endpoint") + "/mod");
+        String username = P.get("username");
+        URL uri = new URL(P.get("awoo_endpoint") + "/mod");
         HttpURLConnection connection = (HttpURLConnection) uri.openConnection();
         connection.setRequestMethod("POST");
         connection.setDoOutput(true);
         OutputStream os = connection.getOutputStream();
         String data = "username=" + URLEncoder.encode(username, "UTF-8");
-        data += "&password=" + URLEncoder.encode(PropertiesSingleton.get().getProperty("password"), "UTF-8");
+        data += "&password=" + URLEncoder.encode(P.get("password"), "UTF-8");
         //data += "&redirect=" + URLEncoder.encode("file:///android_res/success.html", "UTF-8");
         os.write(data.getBytes());
         os.flush(); os.close();
         int responseCode = connection.getResponseCode();
-        PropertiesSingleton.get().setProperty("logged_in", responseCode == 200 ? "true" : "false");
+        P.set("logged_in", responseCode == 200 ? "true" : "false");
         if (responseCode == 403) {
             GenericAlertDialogFragment.newInstance("Error - Check your username and password", getFragmentManager());
         } else if (responseCode == 200) {
@@ -92,8 +101,8 @@ public class JanitorLoginFragment extends Fragment implements  HiddenSettingsFra
         if (getView() == null) return;
         EditText username = getView().findViewById(R.id.username);
         EditText password = getView().findViewById(R.id.password);
-        PropertiesSingleton.get().setProperty("username", username.getText().toString());
-        PropertiesSingleton.get().setProperty("password", password.getText().toString());
+        P.set("username", username.getText().toString());
+        P.set("password", password.getText().toString());
     }
     /*
     @Override public void finish() {
@@ -102,19 +111,6 @@ public class JanitorLoginFragment extends Fragment implements  HiddenSettingsFra
     }
     */
 
-    @Override
-    public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (requestCode == 10) {
-            boolean logged_in = "true".equalsIgnoreCase(PropertiesSingleton.get().getProperty("logged_in"));
-            if (logged_in) {
-                GenericAlertDialogFragment.newInstance("Success! You are now logged in as " + PropertiesSingleton.get().getProperty("username"), getFragmentManager());
-            } else {
-                GenericAlertDialogFragment.newInstance("Error - Check your username and password?", getFragmentManager());
-            }
-        } else {
-            super.onActivityResult(requestCode, resultCode, data);
-        }
-    }
     @Override
     public HiddenSettingsActivity.FragmentType getType() {
         return HiddenSettingsActivity.FragmentType.JANITOR_LOGIN;

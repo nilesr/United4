@@ -5,7 +5,6 @@ import android.app.FragmentManager;
 import android.app.FragmentTransaction;
 import android.content.ComponentName;
 import android.content.Intent;
-import android.content.pm.ComponentInfo;
 import android.os.Bundle;
 import android.webkit.WebView;
 
@@ -14,7 +13,6 @@ import us.dangeru.launcher.application.United;
 import us.dangeru.launcher.fragments.UnitedWebFragment;
 import us.dangeru.launcher.utils.ParcelableMap;
 import us.dangeru.launcher.utils.ReloadService;
-import us.dangeru.launcher.utils.UnitedActivity;
 
 import static us.dangeru.launcher.fragments.UnitedWebFragment.RESOURCE_FOLDER;
 

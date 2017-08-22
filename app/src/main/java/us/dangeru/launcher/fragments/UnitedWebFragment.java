@@ -3,31 +3,20 @@ package us.dangeru.launcher.fragments;
 import android.annotation.SuppressLint;
 import android.app.Fragment;
 import android.os.Bundle;
-import android.os.Parcel;
-import android.os.Parcelable;
 import android.support.annotation.Nullable;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.webkit.CookieManager;
-import android.webkit.CookieSyncManager;
-import android.webkit.URLUtil;
 import android.webkit.WebResourceRequest;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 
-import java.net.CookieHandler;
-import java.net.HttpCookie;
-import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLEncoder;
-import java.util.HashMap;
-import java.util.Map;
 
 import us.dangeru.launcher.R;
-import us.dangeru.launcher.utils.ParcelableMap;
-import us.dangeru.launcher.utils.PropertiesSingleton;
+import us.dangeru.launcher.utils.P;
 import us.dangeru.launcher.utils.UnitedPropertiesIf;
 
 /**
@@ -72,12 +61,12 @@ public class UnitedWebFragment extends Fragment {
                 webview.setWebViewClient(new UnitedWebFragmentWebViewClient());
                 try {
                     // If we're logged in, and we're about to connect to the awoo endpoint, and we haven't authenticated in this fragment yet, then authenticate
-                    if ("true".equalsIgnoreCase(PropertiesSingleton.get().getProperty("logged_in")) && new URL(starting_url).getAuthority().equals(new URL(PropertiesSingleton.get().getProperty("awoo_endpoint")).getAuthority()) && !authenticated) {
+                    if (P.getBool("logged_in") && new URL(starting_url).getAuthority().equals(new URL(P.get("awoo_endpoint")).getAuthority()) && !authenticated) {
                         authenticated = true;
-                        String data = "username=" + URLEncoder.encode(PropertiesSingleton.get().getProperty("username"), "UTF-8");
-                        data += "&password=" + URLEncoder.encode(PropertiesSingleton.get().getProperty("password"), "UTF-8");
+                        String data = "username=" + URLEncoder.encode(P.get("username"), "UTF-8");
+                        data += "&password=" + URLEncoder.encode(P.get("password"), "UTF-8");
                         data += "&redirect=" + URLEncoder.encode(starting_url, "UTF-8");
-                        webview.postUrl(PropertiesSingleton.get().getProperty("awoo_endpoint") + "/mod", data.getBytes());
+                        webview.postUrl(P.get("awoo_endpoint") + "/mod", data.getBytes());
                         return;
                     }
                 } catch (Exception ignored) {

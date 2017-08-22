@@ -1,14 +1,12 @@
 package us.dangeru.launcher.utils;
 
 import android.app.Activity;
-import android.content.Intent;
-import android.os.Bundle;
 import android.webkit.JavascriptInterface;
 import android.widget.Toast;
 
 import java.lang.ref.WeakReference;
 
-import us.dangeru.launcher.activities.MainActivity;
+import us.dangeru.launcher.activities.UnitedActivity;
 import us.dangeru.launcher.application.United;
 
 /**
@@ -22,10 +20,10 @@ public class UnitedPropertiesIf {
     }
     @JavascriptInterface public static String getProperty(String key) {
         if ("password".equals(key)) return ""; // just in case
-        return PropertiesSingleton.get().getProperty(key);
+        return P.get(key);
     }
     @JavascriptInterface public static void setProperty(String key, String value) {
-        PropertiesSingleton.get().setProperty(key, value);
+        P.set(key, value);
     }
     @JavascriptInterface public String getSessionVariable(String key) {
         return activity.get().getSessionVariable(key);

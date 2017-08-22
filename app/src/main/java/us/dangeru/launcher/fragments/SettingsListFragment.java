@@ -14,6 +14,7 @@ import android.widget.ListView;
 
 import us.dangeru.launcher.R;
 import us.dangeru.launcher.activities.HiddenSettingsActivity;
+import us.dangeru.launcher.utils.P;
 import us.dangeru.launcher.utils.PropertiesSingleton;
 
 /**
@@ -33,10 +34,8 @@ public class SettingsListFragment extends Fragment implements HiddenSettingsFrag
             @Override
             public void run() {
                 ListView list = res.findViewById(R.id.settings_list);
-                String debug = PropertiesSingleton.get().getProperty("debug");
-                if (debug.isEmpty()) debug = "false";
-                String userscript = PropertiesSingleton.get().getProperty("userscript");
-                if (userscript.isEmpty()) userscript = "false";
+                boolean debug = P.getBool("debug");
+                boolean userscript = P.getBool("userscript");
                 final String[] settings = new String[] { "Janitor Login", "Reset all preferences", "Toggle debug button, currently " + debug, "Toggle userscript, currently " + userscript };
                 list.setAdapter(new ArrayAdapter<>(getActivity(), android.R.layout.simple_list_item_1, settings));
                 list.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -51,12 +50,12 @@ public class SettingsListFragment extends Fragment implements HiddenSettingsFrag
                                 break;
                             case 2:
                                 //noinspection CallToNumericToString
-                                PropertiesSingleton.get().setProperty("debug", Boolean.valueOf(!Boolean.valueOf(PropertiesSingleton.get().getProperty("debug"))).toString());
+                                P.toggle("debug");
                                 run();
                                 break;
                             case 3:
                                 //noinspection CallToNumericToString
-                                PropertiesSingleton.get().setProperty("userscript", Boolean.valueOf(!Boolean.valueOf(PropertiesSingleton.get().getProperty("userscript"))).toString());
+                                P.toggle("userscript");
                                 run();
                                 break;
                             default:

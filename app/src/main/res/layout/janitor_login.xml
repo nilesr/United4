@@ -44,4 +44,10 @@
         android:layout_height="wrap_content"
         android:onClick="buttonClicked"
         android:text="Authenticate" />
+
+    <TextView
+        android:id="@+id/logged_in"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textAlignment="center" />
 </LinearLayout>

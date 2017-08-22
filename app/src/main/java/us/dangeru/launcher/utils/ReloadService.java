@@ -5,6 +5,8 @@ import android.webkit.WebView;
 import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 
+import us.dangeru.launcher.activities.UnitedActivity;
+
 /**
  * When music.html changes the song, it redraws everything itself. However, when United reaches the end of a song
  * it will chug along and play the next one. However, music.html won't know that the song was changed because it

@@ -2,7 +2,9 @@ package us.dangeru.launcher.fragments;
 
 import android.app.Fragment;
 import android.os.Bundle;
+import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
@@ -36,6 +38,8 @@ public class JanitorLoginFragment extends Fragment implements  HiddenSettingsFra
                 password.setText(P.get("password"));
                 res.findViewById(R.id.button).setOnClickListener(new LoginButtonClickListener());
                 updateLoggedInText();
+                Toolbar toolbar = getActivity().findViewById(R.id.toolbar);
+                addOptions(toolbar);
             }
         });
         return res;
@@ -103,15 +107,18 @@ public class JanitorLoginFragment extends Fragment implements  HiddenSettingsFra
         P.set("username", username.getText().toString());
         P.set("password", password.getText().toString());
     }
-    /*
-    @Override public void finish() {
-        getPropertiesFromView();
-        super.finish();
-    }
-    */
-
     @Override
     public HiddenSettingsActivity.FragmentType getType() {
         return HiddenSettingsActivity.FragmentType.JANITOR_LOGIN;
+    }
+    public void addOptions(Toolbar toolbar) {
+        toolbar.inflateMenu(R.menu.hidden_settings_menu);
+        toolbar.setOnMenuItemClickListener(new Toolbar.OnMenuItemClickListener() {
+            @Override
+            public boolean onMenuItemClick(MenuItem item) {
+                getActivity().finish();
+                return true;
+            }
+        });
     }
 }

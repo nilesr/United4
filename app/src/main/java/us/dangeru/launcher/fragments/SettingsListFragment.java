@@ -3,13 +3,16 @@ package us.dangeru.launcher.fragments;
 import android.app.Fragment;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
+import us.dangeru.launcher.API.ThreadWatcher;
 import us.dangeru.launcher.R;
 import us.dangeru.launcher.activities.HiddenSettingsActivity;
 import us.dangeru.launcher.utils.P;
@@ -58,6 +61,8 @@ public class SettingsListFragment extends Fragment implements HiddenSettingsFrag
                         }
                     }
                 });
+                Toolbar toolbar = getActivity().findViewById(R.id.toolbar);
+                addOptions(toolbar);
             }
         });
         return res;
@@ -66,5 +71,16 @@ public class SettingsListFragment extends Fragment implements HiddenSettingsFrag
     @Override
     public HiddenSettingsActivity.FragmentType getType() {
         return HiddenSettingsActivity.FragmentType.SETTINGS_LIST;
+    }
+
+    public void addOptions(Toolbar toolbar) {
+        toolbar.inflateMenu(R.menu.hidden_settings_menu);
+        toolbar.setOnMenuItemClickListener(new Toolbar.OnMenuItemClickListener() {
+            @Override
+            public boolean onMenuItemClick(MenuItem item) {
+                getActivity().finish();
+                return true;
+            }
+        });
     }
 }

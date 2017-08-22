@@ -1,5 +1,7 @@
 package us.dangeru.launcher.fragments;
 
+import android.support.v7.widget.Toolbar;
+
 import us.dangeru.launcher.activities.HiddenSettingsActivity;
 
 /**

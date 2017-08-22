@@ -29,16 +29,6 @@ public class HiddenSettingsActivity extends Activity {
             type = FragmentType.valueOf(getIntent().getStringExtra("fragment"));
         }
         swapScreens(type);
-        Toolbar toolbar = findViewById(R.id.toolbar);
-        toolbar.inflateMenu(R.menu.hidden_settings_menu);
-        //toolbar.setSubtitle("Developer Options");
-        toolbar.setOnMenuItemClickListener(new Toolbar.OnMenuItemClickListener() {
-            @Override
-            public boolean onMenuItemClick(MenuItem item) {
-                finish();
-                return true;
-            }
-        });
     }
     @Override public void onBackPressed() {
         FragmentType starting_type = FragmentType.SETTINGS_LIST;
@@ -86,6 +76,7 @@ public class HiddenSettingsActivity extends Activity {
     public enum FragmentType {
         SETTINGS_LIST,
         JANITOR_LOGIN,
-        THREAD_WATCHER
+        THREAD_WATCHER,
+        AWOO_ENDPOINT
     }
 }

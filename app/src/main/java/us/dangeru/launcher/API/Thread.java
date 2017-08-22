@@ -1,5 +1,7 @@
 package us.dangeru.launcher.API;
 
+import android.os.Parcel;
+import android.os.Parcelable;
 import android.util.JsonReader;
 
 import org.json.JSONException;
@@ -68,6 +70,9 @@ public class Thread {
         }
         if (object.has("sticky")) {
             this.sticky = object.getBoolean("sticky");
+        }
+        if (object.has("parent")) {
+            this.parent = object.getInt("parent");
         }
     }
     public static Thread getThreadById(int id) throws Exception {

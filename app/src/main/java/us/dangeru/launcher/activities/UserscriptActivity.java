@@ -1,5 +1,6 @@
 package us.dangeru.launcher.activities;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
@@ -19,6 +20,9 @@ public class UserscriptActivity extends MainActivity {
         toolbar.setOnMenuItemClickListener(new Toolbar.OnMenuItemClickListener() {
             @Override
             public boolean onMenuItemClick(MenuItem item) {
+                Intent i = new Intent(UserscriptActivity.this, HiddenSettingsActivity.class);
+                i.putExtra("fragment", HiddenSettingsActivity.FragmentType.THREAD_WATCHER.toString());
+                startActivity(i);
                 return true;
             }
         });

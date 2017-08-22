@@ -12,6 +12,7 @@ import us.dangeru.launcher.R;
 import us.dangeru.launcher.fragments.SettingsListFragment;
 import us.dangeru.launcher.fragments.HiddenSettingsFragment;
 import us.dangeru.launcher.fragments.JanitorLoginFragment;
+import us.dangeru.launcher.fragments.ThreadWatcherFragment;
 
 /**
  * Created by Niles on 8/21/17.
@@ -40,8 +41,12 @@ public class HiddenSettingsActivity extends Activity {
         });
     }
     @Override public void onBackPressed() {
-        if (type != FragmentType.SETTINGS_LIST) {
-            swapScreens(FragmentType.SETTINGS_LIST);
+        FragmentType starting_type = FragmentType.SETTINGS_LIST;
+        if (getIntent().hasExtra("fragment")) {
+            starting_type = FragmentType.valueOf(getIntent().getStringExtra("fragment"));
+        }
+        if (type != starting_type) {
+            swapScreens(starting_type);
         } else {
             finish();
         }
@@ -65,6 +70,9 @@ public class HiddenSettingsActivity extends Activity {
             case JANITOR_LOGIN:
                 newFragment = new JanitorLoginFragment();
                 break;
+            case THREAD_WATCHER:
+                newFragment = new ThreadWatcherFragment();
+                break;
         }
         //transaction.add(newFragment, "fragment");
         transaction.replace(R.id.userscript_activity_main_fragment, newFragment, "fragment");
@@ -77,6 +85,7 @@ public class HiddenSettingsActivity extends Activity {
     }
     public enum FragmentType {
         SETTINGS_LIST,
-        JANITOR_LOGIN
+        JANITOR_LOGIN,
+        THREAD_WATCHER
     }
 }

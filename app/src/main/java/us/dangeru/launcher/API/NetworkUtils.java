@@ -18,9 +18,9 @@ public final class NetworkUtils {
         connection.setRequestMethod("GET");
         InputStreamReader reader = new InputStreamReader(connection.getInputStream());
         StringBuilder b = new StringBuilder();
-        char buf[] = new char[128];
+        char buf[] = new char[1024];
         int read;
-        while ((read = reader.read(buf, 0, 127)) > 0) {
+        while ((read = reader.read(buf, 0, 1023)) > 0) {
             b.append(buf, 0, read);
         }
         return b.toString();

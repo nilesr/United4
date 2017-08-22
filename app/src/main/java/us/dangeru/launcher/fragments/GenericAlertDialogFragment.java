@@ -28,22 +28,10 @@ public class GenericAlertDialogFragment extends DialogFragment {
     }
 
     public static void newInstance(String s, FragmentManager manager) {
-        // I *could* remove the old fragment because it might have a different message, but whatever
-        /*
-        FragmentTransaction transaction = manager.beginTransaction();
-        if (manager.findFragmentByTag("dialog") != null) {
-            transaction.remove(manager.findFragmentByTag("dialog"));
-        }
-        */
         DialogFragment f = new GenericAlertDialogFragment();
         Bundle args = new Bundle();
         args.putString("text", s);
         f.setArguments(args);
-        /*
-        transaction.add(f, "dialog");
-        transaction.addToBackStack("dialog");
-        transaction.commit();
-        */
         f.show(manager, "dialog");
     }
 }

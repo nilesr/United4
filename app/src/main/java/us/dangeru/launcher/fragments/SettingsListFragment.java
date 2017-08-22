@@ -36,7 +36,7 @@ public class SettingsListFragment extends Fragment implements HiddenSettingsFrag
                 String debug = PropertiesSingleton.get().getProperty("debug");
                 if (debug.isEmpty()) debug = "false";
                 String userscript = PropertiesSingleton.get().getProperty("userscript");
-                if (userscript.isEmpty()) debug = "false";
+                if (userscript.isEmpty()) userscript = "false";
                 final String[] settings = new String[] { "Janitor Login", "Reset all preferences", "Toggle debug button, currently " + debug, "Toggle userscript, currently " + userscript };
                 list.setAdapter(new ArrayAdapter<>(getActivity(), android.R.layout.simple_list_item_1, settings));
                 list.setOnItemClickListener(new AdapterView.OnItemClickListener() {

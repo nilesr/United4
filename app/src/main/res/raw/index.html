@@ -14,21 +14,23 @@
                 // so with a spacing on the left and a spacing on the right, we should be able to multiply that ratio by the whole
                 // width to get the height
                 var image_height = (total_width - (2 * spacing)) * (102 / 378);
-                // for each row
+                // add another row for the debug options
                 if (unitedPropertiesIf.getProperty("debug").toUpperCase() == "TRUE") {
+                    // r is the row, i is a fake image
                     var r = document.createElement("div");
-                    var i = document.createElement("div");
-                    i.style.backgroundColor = "pink";
-                    i.style.lineHeight = image_height.toString() + "px";
                     r.classList.add("row");
                     r.classList.add("one");
+                    var i = document.createElement("div");
+                    i.style.backgroundColor = "pink";
+                    i.style.lineHeight = image_height.toString() + "px"; // poor man's vertical centering
                     i.addEventListener("click", function() { unitedPropertiesIf.doAction("us.dangeru.launcher", "us.dangeru.launcher.activities.HiddenSettingsActivity"); });
-                    r.appendChild(i);
                     i.style.textAlign = "center";
                     i.innerText = "Debug options";
                     i.style.position = "absolute";
+                    r.appendChild(i);
                     document.body.appendChild(r);
                 }
+                // for each row
                 Array.prototype.slice.call(document.getElementsByClassName("row"), 0).forEach(function(elem) {
                     // set the top offset of the row to running_height, then increase running_height by the height
                     // of the image we're about to make plus some vertical spacing

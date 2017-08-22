@@ -84,7 +84,7 @@ public final class PropertiesSingleton {
         properties.put("is_playing", "false");
         //List<String> themes = Arrays.asList("normal", "dotted", "steam", "kira", "meme", "vaporwave");
         // rip the meme theme, it was my favorite
-        List<String> themes = Arrays.asList("normal", "vaporwave", "noir");
+        List<String> themes = Arrays.asList("normal", "vaporwave", "noir", "burg");
         String str = new JSONArray(themes).toString();
         properties.put("all_themes", str);
         HashMap<String, String> map = new HashMap<>();

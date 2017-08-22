@@ -35,7 +35,9 @@ public class SettingsListFragment extends Fragment implements HiddenSettingsFrag
                 ListView list = res.findViewById(R.id.settings_list);
                 String debug = PropertiesSingleton.get().getProperty("debug");
                 if (debug.isEmpty()) debug = "false";
-                final String[] settings = new String[] { "Janitor Login", "Reset all preferences", "Toggle debug button, currently " + debug };
+                String userscript = PropertiesSingleton.get().getProperty("userscript");
+                if (userscript.isEmpty()) debug = "false";
+                final String[] settings = new String[] { "Janitor Login", "Reset all preferences", "Toggle debug button, currently " + debug, "Toggle userscript, currently " + userscript };
                 list.setAdapter(new ArrayAdapter<>(getActivity(), android.R.layout.simple_list_item_1, settings));
                 list.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                     @Override
@@ -50,6 +52,11 @@ public class SettingsListFragment extends Fragment implements HiddenSettingsFrag
                             case 2:
                                 //noinspection CallToNumericToString
                                 PropertiesSingleton.get().setProperty("debug", Boolean.valueOf(!Boolean.valueOf(PropertiesSingleton.get().getProperty("debug"))).toString());
+                                run();
+                                break;
+                            case 3:
+                                //noinspection CallToNumericToString
+                                PropertiesSingleton.get().setProperty("userscript", Boolean.valueOf(!Boolean.valueOf(PropertiesSingleton.get().getProperty("userscript"))).toString());
                                 run();
                                 break;
                             default:

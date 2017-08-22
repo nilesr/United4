@@ -2,9 +2,11 @@ package us.dangeru.launcher.fragments;
 
 import android.app.Fragment;
 import android.os.Bundle;
+import android.support.v7.widget.Toolbar;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Checkable;
@@ -57,6 +59,8 @@ public class AwooEndpointFragment extends Fragment implements HiddenSettingsFrag
                 if (!found) {
                     ((Checkable) res.findViewById(R.id.awoo_other)).setChecked(true);
                 }
+                Toolbar toolbar = getActivity().findViewById(R.id.toolbar);
+                addOptions(toolbar);
             }
         });
         return res;
@@ -83,4 +87,15 @@ public class AwooEndpointFragment extends Fragment implements HiddenSettingsFrag
             }
         }
     };
+    public void addOptions(Toolbar toolbar) {
+        if (!((HiddenSettingsActivity) getActivity()).shouldInflateMenu()) return;
+        toolbar.inflateMenu(R.menu.hidden_settings_menu);
+        toolbar.setOnMenuItemClickListener(new Toolbar.OnMenuItemClickListener() {
+            @Override
+            public boolean onMenuItemClick(MenuItem item) {
+                getActivity().finish();
+                return true;
+            }
+        });
+    }
 }

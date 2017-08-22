@@ -80,7 +80,8 @@ public class ThreadWatcherFragment extends Fragment implements HiddenSettingsFra
         return HiddenSettingsActivity.FragmentType.THREAD_WATCHER;
     }
 
-    public static void addOptions(Toolbar toolbar) {
+    public void addOptions(Toolbar toolbar) {
+        if (!((HiddenSettingsActivity) getActivity()).shouldInflateMenu()) return;
         toolbar.inflateMenu(R.menu.thread_watcher_menu);
         toolbar.setOnMenuItemClickListener(new Toolbar.OnMenuItemClickListener() {
             @Override

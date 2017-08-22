@@ -77,6 +77,7 @@ public class SettingsListFragment extends Fragment implements HiddenSettingsFrag
     }
 
     public void addOptions(Toolbar toolbar) {
+        if (!((HiddenSettingsActivity) getActivity()).shouldInflateMenu()) return;
         toolbar.inflateMenu(R.menu.hidden_settings_menu);
         toolbar.setOnMenuItemClickListener(new Toolbar.OnMenuItemClickListener() {
             @Override

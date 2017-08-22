@@ -18,14 +18,10 @@ import us.dangeru.launcher.fragments.ThreadWatcherFragment;
  */
 
 public class HiddenSettingsActivity extends Activity {
-    private boolean menu_inflated = false;
     FragmentType type = FragmentType.SETTINGS_LIST;
     @Override public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.userscript_activity);
-        if (savedInstanceState != null && savedInstanceState.containsKey("menu_inflated")) {
-            menu_inflated = savedInstanceState.getBoolean("menu_inflated");
-        }
         if (savedInstanceState != null && savedInstanceState.containsKey("fragment")) {
             type = FragmentType.valueOf(savedInstanceState.getString("fragment"));
         } else if (getIntent().hasExtra("fragment")){
@@ -78,13 +74,6 @@ public class HiddenSettingsActivity extends Activity {
     public void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
         outState.putString("fragment", type.toString());
-        outState.putBoolean("menu_inflated", menu_inflated);
-    }
-
-    public boolean shouldInflateMenu() {
-        if (menu_inflated) return false;
-        menu_inflated = true;
-        return true;
     }
 
     public enum FragmentType {

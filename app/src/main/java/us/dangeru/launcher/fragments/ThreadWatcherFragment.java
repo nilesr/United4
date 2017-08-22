@@ -71,6 +71,11 @@ public class ThreadWatcherFragment extends Fragment implements HiddenSettingsFra
                 list.setAdapter(new ArrayAdapter<>(getActivity(), android.R.layout.simple_list_item_1, ThreadWatcher.parallelLabels));
                 list.invalidate();
                 Log.i(TAG, "success, invalidating...");
+                if (ThreadWatcher.updated_threads == 0) {
+                    //((Toolbar) getView().findViewById(R.id.toolbar)
+                } else {
+
+                }
             }
         });
     }
@@ -81,7 +86,8 @@ public class ThreadWatcherFragment extends Fragment implements HiddenSettingsFra
     }
 
     public void addOptions(Toolbar toolbar) {
-        if (!((HiddenSettingsActivity) getActivity()).shouldInflateMenu()) return;
+        toolbar.setTitle("Thread Watcher");
+        toolbar.getMenu().clear();
         toolbar.inflateMenu(R.menu.thread_watcher_menu);
         toolbar.setOnMenuItemClickListener(new Toolbar.OnMenuItemClickListener() {
             @Override

@@ -19,6 +19,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
+import us.dangeru.launcher.API.ThreadWatcher;
 import us.dangeru.launcher.utils.P;
 import us.dangeru.launcher.utils.ReloadService;
 
@@ -71,7 +72,7 @@ public class United extends Application {
     // Set up the application context singleton
     public void onCreate() {
         super.onCreate();
-        CookieSyncManager.createInstance(this);
+        if (P.getBool("userscript")) ThreadWatcher.initialize();
         singleton = new WeakReference<>(getApplicationContext());
     }
 

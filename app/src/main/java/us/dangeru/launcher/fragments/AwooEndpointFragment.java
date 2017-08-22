@@ -88,7 +88,8 @@ public class AwooEndpointFragment extends Fragment implements HiddenSettingsFrag
         }
     };
     public void addOptions(Toolbar toolbar) {
-        if (!((HiddenSettingsActivity) getActivity()).shouldInflateMenu()) return;
+        toolbar.setTitle(R.string.app_name);
+        toolbar.getMenu().clear();
         toolbar.inflateMenu(R.menu.hidden_settings_menu);
         toolbar.setOnMenuItemClickListener(new Toolbar.OnMenuItemClickListener() {
             @Override

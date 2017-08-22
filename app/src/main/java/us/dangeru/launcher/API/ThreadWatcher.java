@@ -17,6 +17,7 @@ public final class ThreadWatcher {
     private static final String TAG = ThreadWatcher.class.getSimpleName();
     public static WatchableThread[] threads;
     public static String[] parallelLabels;
+    public static int updated_threads = 0;
     static {
         refreshAll();
     }
@@ -33,6 +34,7 @@ public final class ThreadWatcher {
         }
         parallelLabels = new String[parallelIds.length];
         threads = new WatchableThread[parallelIds.length];
+        updated_threads = 0;
         for (int i = 0; i < parallelIds.length; i++) {
             parallelLabels[i] = "Thread " + parallelIds[i] + " Loading...";
             final int finalI = i;
@@ -45,6 +47,7 @@ public final class ThreadWatcher {
                         WatchableThread thread = WatchableThread.getThreadById(finalParallelIds[finalI]);
                         threads[finalI] = thread;
                         String label = makeLabel(thread);
+                        if (thread.new_replies > 0) updated_threads++;
                         parallelLabels[finalI] = label;
                         Log.i(TAG, "Label for thread " + finalParallelIds[finalI] + " - " + parallelLabels[finalI]);
                     } catch (Exception e) {
@@ -100,5 +103,9 @@ public final class ThreadWatcher {
     static ArrayList<ThreadWatcherFragment> listeners = new ArrayList<>();
     public static void registerListener(ThreadWatcherFragment listener) {
         listeners.add(listener);
+    }
+    // Called to initialize the static { } block above
+    public static void initialize() {
+
     }
 }

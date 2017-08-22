@@ -112,7 +112,8 @@ public class JanitorLoginFragment extends Fragment implements  HiddenSettingsFra
         return HiddenSettingsActivity.FragmentType.JANITOR_LOGIN;
     }
     public void addOptions(Toolbar toolbar) {
-        if (!((HiddenSettingsActivity) getActivity()).shouldInflateMenu()) return;
+        toolbar.setTitle(R.string.app_name);
+        toolbar.getMenu().clear();
         toolbar.inflateMenu(R.menu.hidden_settings_menu);
         toolbar.setOnMenuItemClickListener(new Toolbar.OnMenuItemClickListener() {
             @Override

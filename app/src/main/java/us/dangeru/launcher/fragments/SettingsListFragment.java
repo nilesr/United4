@@ -33,7 +33,7 @@ public class SettingsListFragment extends Fragment implements HiddenSettingsFrag
                 ListView list = res.findViewById(R.id.settings_list);
                 boolean debug = P.getBool("debug");
                 boolean userscript = P.getBool("userscript");
-                final String[] settings = new String[] { "Janitor Login", "Reset all preferences", "Toggle debug button, currently " + debug, "Toggle userscript, currently " + userscript };
+                final String[] settings = new String[] { "Janitor Login", "Reset all preferences", "Toggle debug button, currently " + debug, "Toggle userscript, currently " + userscript, "Change Awoo Endpoint (currently " + P.get("awoo_endpoint") + ")" };
                 list.setAdapter(new ArrayAdapter<>(getActivity(), android.R.layout.simple_list_item_1, settings));
                 list.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                     @Override
@@ -54,6 +54,9 @@ public class SettingsListFragment extends Fragment implements HiddenSettingsFrag
                                 //noinspection CallToNumericToString
                                 P.toggle("userscript");
                                 run();
+                                break;
+                            case 4:
+                                ((HiddenSettingsActivity) getActivity()).swapScreens(HiddenSettingsActivity.FragmentType.AWOO_ENDPOINT);
                                 break;
                             default:
                                 GenericAlertDialogFragment.newInstance("Should never happen", getFragmentManager());

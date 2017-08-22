@@ -9,6 +9,7 @@ import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 
 import us.dangeru.launcher.R;
+import us.dangeru.launcher.fragments.AwooEndpointFragment;
 import us.dangeru.launcher.fragments.SettingsListFragment;
 import us.dangeru.launcher.fragments.HiddenSettingsFragment;
 import us.dangeru.launcher.fragments.JanitorLoginFragment;
@@ -62,6 +63,9 @@ public class HiddenSettingsActivity extends Activity {
                 break;
             case THREAD_WATCHER:
                 newFragment = new ThreadWatcherFragment();
+                break;
+            case AWOO_ENDPOINT:
+                newFragment = new AwooEndpointFragment();
                 break;
         }
         //transaction.add(newFragment, "fragment");

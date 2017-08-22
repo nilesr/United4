@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <RadioButton
+        android:id="@+id/local_ip"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="http://192.168.0.3:8080" />
+
+    <RadioButton
+        android:id="@+id/lain_city"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="https://niles.lain.city" />
+
+    <RadioButton
+        android:id="@+id/lolis_download"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="http://boards.lolis.download" />
+
+    <RadioButton
+        android:id="@+id/awoo_other"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Other" />
+
+    <EditText
+        android:id="@+id/other_box"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:ems="10" />
+
+</LinearLayout>

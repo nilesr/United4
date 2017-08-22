@@ -1,8 +1,11 @@
 package us.dangeru.launcher.fragments;
 
 import android.app.Fragment;
+import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
@@ -13,6 +16,11 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
+import android.widget.TextView;
+
+import java.lang.reflect.Array;
+import java.util.ArrayList;
+import java.util.Arrays;
 
 import us.dangeru.launcher.API.ThreadWatcher;
 import us.dangeru.launcher.API.WatchableThread;
@@ -68,14 +76,9 @@ public class ThreadWatcherFragment extends Fragment implements HiddenSettingsFra
                 Log.i(TAG, "setAdapter, running on ui thread, ");
                 if (getView() == null) return;
                 ListView list = getView().findViewById(R.id.settings_list);
-                list.setAdapter(new ArrayAdapter<>(getActivity(), android.R.layout.simple_list_item_1, ThreadWatcher.parallelLabels));
+                list.setAdapter(new ThreadWatcherAdapter(getActivity(), ThreadWatcher.threads));
                 list.invalidate();
                 Log.i(TAG, "success, invalidating...");
-                if (ThreadWatcher.updated_threads == 0) {
-                    //((Toolbar) getView().findViewById(R.id.toolbar)
-                } else {
-
-                }
             }
         });
     }
@@ -85,7 +88,7 @@ public class ThreadWatcherFragment extends Fragment implements HiddenSettingsFra
         return HiddenSettingsActivity.FragmentType.THREAD_WATCHER;
     }
 
-    public void addOptions(Toolbar toolbar) {
+    public static void addOptions(Toolbar toolbar) {
         toolbar.setTitle("Thread Watcher");
         toolbar.getMenu().clear();
         toolbar.inflateMenu(R.menu.thread_watcher_menu);
@@ -104,8 +107,50 @@ public class ThreadWatcherFragment extends Fragment implements HiddenSettingsFra
         ThreadWatcher.registerListener(this);
     }
 
+    public static String makeLabel(WatchableThread thread) {
+        if (thread.new_replies <= 0) {
+            return "No new replies to thread " + thread.post_id + " - \"" + thread.title + "\" (" + thread.number_of_replies + " replies in total)";
+        } else {
+            return thread.new_replies + " new " + (thread.new_replies == 1 ? "reply" : "replies") + " to thread " + thread.post_id + " - \"" + thread.title + "\"";
+        }
+    }
     @Override
     public void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
+    }
+    private class ThreadWatcherAdapter extends ArrayAdapter<WatchableThread> {
+        public ThreadWatcherAdapter(Context context, WatchableThread[] list) {
+            super(context, 0, list);
+        }
+        @NonNull
+        @Override public View getView(int position, View convertView, @NonNull ViewGroup parent) {
+            WatchableThread thread = getItem(position);
+            if (convertView == null) {
+                convertView = LayoutInflater.from(getContext()).inflate(R.layout.thread_watcher_list_item, parent, false);
+            }
+            TextView title = convertView.findViewById(R.id.thread_title);
+            TextView subtitle = convertView.findViewById(R.id.new_replies);
+            TextView subtitleContinuation = convertView.findViewById(R.id.subtitle_continuation);
+            if (thread != null) {
+                title.setText(thread.title);
+                if (thread.new_replies == 0) {
+                    subtitle.setText("No");
+                } else {
+                    subtitle.setText(String.valueOf(thread.new_replies));
+                    subtitle.setTextColor(Color.RED);
+                }
+                if (thread.new_replies == 1) {
+                    subtitleContinuation.setText(" new reply");
+                } else {
+                    subtitleContinuation.setText(" new replies");
+                }
+            } else {
+                title.setText("Thread loading...");
+                subtitle.setText("Loading");
+                subtitleContinuation.setText(" new replies");
+            }
+            return convertView;
+        }
+
     }
 }

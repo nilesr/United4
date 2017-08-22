@@ -9,6 +9,8 @@ import java.util.ArrayList;
 import us.dangeru.launcher.fragments.ThreadWatcherFragment;
 import us.dangeru.launcher.utils.P;
 
+import static us.dangeru.launcher.fragments.ThreadWatcherFragment.makeLabel;
+
 /**
  * Created by Niles on 8/22/17.
  */
@@ -16,7 +18,6 @@ import us.dangeru.launcher.utils.P;
 public final class ThreadWatcher {
     private static final String TAG = ThreadWatcher.class.getSimpleName();
     public static WatchableThread[] threads;
-    public static String[] parallelLabels;
     public static int updated_threads = 0;
     static {
         refreshAll();
@@ -32,11 +33,9 @@ public final class ThreadWatcher {
         } catch (Exception e) {
             parallelIds = new int[0];
         }
-        parallelLabels = new String[parallelIds.length];
         threads = new WatchableThread[parallelIds.length];
         updated_threads = 0;
         for (int i = 0; i < parallelIds.length; i++) {
-            parallelLabels[i] = "Thread " + parallelIds[i] + " Loading...";
             final int finalI = i;
             final int[] finalParallelIds = parallelIds;
             new java.lang.Thread(new Runnable() {
@@ -46,13 +45,9 @@ public final class ThreadWatcher {
                         Log.i(TAG, "Fetching thread " + finalParallelIds[finalI]);
                         WatchableThread thread = WatchableThread.getThreadById(finalParallelIds[finalI]);
                         threads[finalI] = thread;
-                        String label = makeLabel(thread);
                         if (thread.new_replies > 0) updated_threads++;
-                        parallelLabels[finalI] = label;
-                        Log.i(TAG, "Label for thread " + finalParallelIds[finalI] + " - " + parallelLabels[finalI]);
                     } catch (Exception e) {
                         e.printStackTrace();
-                        parallelLabels[finalI] = "Error - " + e;
                         Log.e(TAG, "Error on thread " + finalParallelIds[finalI]);
                     }
                     updateView();
@@ -67,17 +62,9 @@ public final class ThreadWatcher {
 
     public static void setRead(int idx) {
         threads[idx].new_replies = 0;
-        parallelLabels[idx] = makeLabel(threads[idx]);
         updateView();
     }
 
-    private static String makeLabel(WatchableThread thread) {
-        if (thread.new_replies <= 0) {
-            return "No new replies to thread " + thread.post_id + " - \"" + thread.title + "\" (" + thread.number_of_replies + " replies in total)";
-        } else {
-            return thread.new_replies + " new " + (thread.new_replies == 1 ? "reply" : "replies") + " to thread " + thread.post_id + " - \"" + thread.title + "\"";
-        }
-    }
 
     private static void updateView() {
         if (listeners == null) return;

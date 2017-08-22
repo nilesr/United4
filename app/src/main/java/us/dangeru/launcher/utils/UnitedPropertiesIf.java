@@ -6,6 +6,7 @@ import android.widget.Toast;
 
 import java.lang.ref.WeakReference;
 
+import us.dangeru.launcher.API.ThreadWatcher;
 import us.dangeru.launcher.activities.UnitedActivity;
 import us.dangeru.launcher.application.United;
 
@@ -51,5 +52,8 @@ public class UnitedPropertiesIf {
     }
     @JavascriptInterface public static void stopSong() {
         United.stop();
+    }
+    @JavascriptInterface public static void threadWatcherRefreshAll() {
+        ThreadWatcher.refreshAll();
     }
 }

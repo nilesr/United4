@@ -13,7 +13,7 @@ import static us.dangeru.launcher.API.NetworkUtils.fetch;
  */
 
 public class WatchableThread extends Thread {
-    int new_replies;
+    public int new_replies;
     public WatchableThread(JSONObject object) throws JSONException {
         super(object);
     }

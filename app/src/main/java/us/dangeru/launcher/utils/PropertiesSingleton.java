@@ -61,8 +61,8 @@ public final class PropertiesSingleton {
             if (read > 0) {
                 return;
             }
-        } catch (Exception ignored) {
-            //
+        } catch (Exception e) {
+            e.printStackTrace();
         }
         // default properties that should only be set on the very first run of the app
         properties.put("startup_music", "true");

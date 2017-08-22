@@ -72,8 +72,8 @@ public class United extends Application {
     // Set up the application context singleton
     public void onCreate() {
         super.onCreate();
-        if (P.getBool("userscript")) ThreadWatcher.initialize();
         singleton = new WeakReference<>(getApplicationContext());
+        if (P.getBool("userscript")) ThreadWatcher.initialize();
     }
 
     // Plays the given song, by finding its R.raw id in the songs map, stored in properties

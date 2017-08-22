@@ -46,13 +46,12 @@ public class SettingsListFragment extends Fragment implements HiddenSettingsFrag
                                 PropertiesSingleton.get().resetAllAndExit(getFragmentManager());
                                 break;
                             case 2:
-                                //noinspection CallToNumericToString
                                 P.toggle("debug");
                                 run();
                                 break;
                             case 3:
-                                //noinspection CallToNumericToString
                                 P.toggle("userscript");
+                                if (P.getBool("userscript")) ThreadWatcher.refreshAll();
                                 run();
                                 break;
                             case 4:

@@ -1,10 +1,8 @@
 package us.dangeru.launcher.fragments;
 
 import android.app.Fragment;
-import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
-import android.view.Menu;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
@@ -27,10 +25,6 @@ import us.dangeru.launcher.utils.P;
 public class JanitorLoginFragment extends Fragment implements  HiddenSettingsFragment {
     @SuppressWarnings("unused")
     private static final String TAG = JanitorLoginFragment.class.getSimpleName();
-    @Override public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setHasOptionsMenu(true);
-    }
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         final View res = inflater.inflate(R.layout.janitor_login, container, false);
         res.post(new Runnable() {
@@ -70,8 +64,13 @@ public class JanitorLoginFragment extends Fragment implements  HiddenSettingsFra
     }
 
     private void updateLoggedInText() {
-        if (getView() == null) return;
-        ((TextView) getView().findViewById(R.id.logged_in)).setText("You are " + (P.getBool("logged_in") ? "currently " : "not ") + " logged in" + (P.getBool("logged_in") ? " as " + P.get("username") : ""));
+        getActivity().runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                if (getView() == null) return;
+                ((TextView) getView().findViewById(R.id.logged_in)).setText("You are " + (P.getBool("logged_in") ? "currently" : "not") + " logged in" + (P.getBool("logged_in") ? " as " + P.get("username") : ""));
+            }
+        });
     }
 
     private void authenticate() throws Exception {

@@ -18,6 +18,7 @@
             </intent-filter>
         </activity>
         <activity android:name=".activities.HiddenSettingsActivity" />
+        <activity android:name=".activities.UserscriptActivity" />
     </application>
 
 </manifest>

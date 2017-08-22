@@ -8,9 +8,12 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.webkit.WebView;
 
+import java.net.URI;
+
 import us.dangeru.launcher.R;
 import us.dangeru.launcher.application.United;
 import us.dangeru.launcher.fragments.UnitedWebFragment;
+import us.dangeru.launcher.utils.P;
 import us.dangeru.launcher.utils.ParcelableMap;
 import us.dangeru.launcher.utils.ReloadService;
 
@@ -25,9 +28,15 @@ public class MainActivity extends Activity implements UnitedActivity {
     private UnitedWebFragment webFragment;
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        if (getClass().equals(MainActivity.class)) {
+            onCreate(savedInstanceState, R.layout.main_activity, R.id.activity_main_activity);
+        }
+    }
+    protected void onCreate(Bundle savedInstanceState, int layout, int id) {
+        super.onCreate(savedInstanceState);
         // Register to receive reloads to music.html later on
         ReloadService.register(this);
-        setContentView(R.layout.main_activity);
+        setContentView(layout);
         // load and retrieve session variables
         if (savedInstanceState != null) {
             session = ParcelableMap.fromParcel(savedInstanceState.getParcelable("session"));
@@ -51,7 +60,7 @@ public class MainActivity extends Activity implements UnitedActivity {
             }
             webFragment.setArguments(args);
             FragmentTransaction trans = manager.beginTransaction();
-            trans.replace(R.id.activity_main_activity, webFragment, "main_webkit_wrapper");
+            trans.replace(id, webFragment, "main_webkit_wrapper");
             trans.addToBackStack("main_webkit_wrapper");
             trans.commit();
         }
@@ -68,6 +77,14 @@ public class MainActivity extends Activity implements UnitedActivity {
     @Override
     public void launchHTML(String resource) {
         Intent i = new Intent(this, MainActivity.class);
+        try {
+            // If we're launching to awoo and the userscript is enabled, use the activity with the menu
+            if (new URI(P.get("awoo_endpoint")).getAuthority().equals(new URI(resource).getAuthority()) && P.getBool("userscript")) {
+                i = new Intent(this, UserscriptActivity.class);
+            }
+        } catch (Exception ignored) {
+
+        }
         Bundle extras = new Bundle();
         extras.putString("URL", resource);
         extras.putBoolean("support_back_button", true);

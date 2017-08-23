@@ -3,6 +3,7 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:id="@+id/rel_layout_1"
+    android:descendantFocusability="blocksDescendants"
     android:layout_height="wrap_content">
 
     <RelativeLayout
@@ -53,6 +54,7 @@
         android:layout_alignParentBottom="false"
         android:layout_alignParentEnd="true"
         android:layout_centerVertical="true"
+        android:focusable="false"
         android:layout_marginRight="10dp"
         android:text="Unwatch" />
 </RelativeLayout>

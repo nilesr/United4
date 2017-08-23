@@ -150,6 +150,12 @@ public class ThreadWatcherFragment extends Fragment implements HiddenSettingsFra
                 subtitle.setText("Loading");
                 subtitleContinuation.setText(" new replies");
             }
+            convertView.findViewById(R.id.button4).setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    GenericAlertDialogFragment.newInstance("Not implemented yet, sorry but you're watching this thread forever", getFragmentManager());
+                }
+            });
             return convertView;
         }
 

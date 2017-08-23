@@ -39,6 +39,8 @@ public final class ThreadWatcher {
     }
     public static void refreshAll() {
         int[] parallelIds = pullParallelIds();
+        threads = new WatchableThread[parallelIds.length];
+        updated_threads = 0;
         if (parallelIds.length == 0) {
             // If you're only watching one thread and you unwatch it, updateView otherwise wouldn't be
             // called because no thread download complete action would ever trigger, so you would still
@@ -47,8 +49,6 @@ public final class ThreadWatcher {
             updateView();
             return;
         }
-        threads = new WatchableThread[parallelIds.length];
-        updated_threads = 0;
         for (int i = 0; i < parallelIds.length; i++) {
             final int finalI = i;
             final int[] finalParallelIds = parallelIds;

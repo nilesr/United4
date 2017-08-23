@@ -155,7 +155,6 @@ public class UserscriptActivity extends MainActivity implements ThreadWatcherLis
             @Override
             public void run() {
                 try {
-                    if (getWebView() == null) return;
                     invalidateToolbar(getWebView().getUrl());
                 } catch (Exception e) {
                     e.printStackTrace();

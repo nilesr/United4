@@ -8,7 +8,7 @@
     <application
         android:name=".application.United"
         android:allowBackup="true"
-        android:icon="@mipmap/ic_launcher"
+        android:icon="@mipmap/ic_launcher_real"
         android:label="@string/app_name"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
@@ -21,8 +21,8 @@
         </activity>
         <activity android:name=".activities.HiddenSettingsActivity">
             <intent-filter>
-                <action android:name="us.dangeru.launcher.intent.action.BOARD" />
-                <category android:name="android.intent.category.THREAD_WATCHER" />
+                <action android:name="us.dangeru.launcher.intent.action.THREAD_WATCHER" />
+                <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity>
         <activity android:name=".activities.UserscriptActivity">
@@ -33,7 +33,7 @@
         </activity>
         <activity
             android:name=".activities.AndroidShortcuts"
-            android:icon="@raw/normal_dangeru"
+            android:icon="@mipmap/ic_launcher"
             android:label="danger/u/ board">
             <intent-filter>
                 <action android:name="android.intent.action.CREATE_SHORTCUT"/>

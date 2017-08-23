@@ -80,6 +80,7 @@ public class AndroidShortcuts extends Activity implements BoardsListListener {
         runOnUiThread(new Runnable() {
             @Override
             public void run() {
+                findViewById(R.id.boards_loading).setVisibility(View.GONE);
                 adapter = new BoardsListAdapter(AndroidShortcuts.this, 0, list);
                 ListView listview = findViewById(R.id.board_list_list_view);
                 listview.setAdapter(adapter);

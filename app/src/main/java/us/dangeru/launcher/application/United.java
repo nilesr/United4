@@ -16,9 +16,12 @@ import org.json.JSONArray;
 import java.io.StringReader;
 import java.lang.ref.WeakReference;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Random;
 
+import us.dangeru.launcher.API.Authorizer;
+import us.dangeru.launcher.API.BoardsList;
 import us.dangeru.launcher.API.ThreadWatcher;
 import us.dangeru.launcher.utils.P;
 import us.dangeru.launcher.utils.ReloadService;
@@ -33,6 +36,8 @@ public class United extends Application {
     private static final String TAG = United.class.getSimpleName();
     private static WeakReference<Context> singleton = null;
     private static MediaPlayer player = null;
+    public static Authorizer authorizer = null;
+    public static List<String> boards = Collections.singletonList("Loading...");
 
     // Makes a new sound pool, loads the requested sound and plays it once it's loaded
     // Could be made a LOT better by reusing the same pool and checking if it's already loaded
@@ -74,6 +79,16 @@ public class United extends Application {
         super.onCreate();
         singleton = new WeakReference<>(getApplicationContext());
         if (P.getBool("userscript")) ThreadWatcher.initialize();
+        if (P.getBool("logged_in")) {
+            authorizer = new Authorizer(P.get("username"), P.get("password"));
+        }
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                boards = BoardsList.getBoardsList(authorizer);
+                Log.i(TAG, String.valueOf(boards));
+            }
+        }).start();
     }
 
     // Plays the given song, by finding its R.raw id in the songs map, stored in properties

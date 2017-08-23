@@ -3,6 +3,7 @@ package us.dangeru.launcher.API;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import us.dangeru.launcher.application.United;
 import us.dangeru.launcher.utils.P;
 
 import static us.dangeru.launcher.API.NetworkUtils.API;
@@ -18,7 +19,7 @@ public class WatchableThread extends Thread {
         super(object);
     }
     public static WatchableThread getThreadById(int id) throws Exception {
-        String result = fetch(P.get("awoo_endpoint") + API + "/thread/" + id + "/metadata");
+        String result = fetch(P.get("awoo_endpoint") + API + "/thread/" + id + "/metadata", United.authorizer);
         WatchableThread thread = new WatchableThread(new JSONObject(result));
         thread.updateNewRepliesCount();
         return thread;

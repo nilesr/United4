@@ -12,13 +12,19 @@ import android.widget.EditText;
 import android.widget.TextView;
 
 import java.io.OutputStream;
+import java.net.HttpCookie;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.net.URLEncoder;
 
+import us.dangeru.launcher.API.Authorizer;
+import us.dangeru.launcher.API.BoardsList;
 import us.dangeru.launcher.R;
 import us.dangeru.launcher.activities.HiddenSettingsActivity;
+import us.dangeru.launcher.application.United;
 import us.dangeru.launcher.utils.P;
+
+import static us.dangeru.launcher.application.United.authorizer;
 
 /**
  * Created by Niles on 8/20/17.
@@ -54,11 +60,7 @@ public class JanitorLoginFragment extends Fragment implements  HiddenSettingsFra
             new Thread(new Runnable() {
                 @Override
                 public void run() {
-                    try {
-                        authenticate();
-                    } catch (Exception e) {
-                        GenericAlertDialogFragment.newInstance("Unexpected error " + e, getFragmentManager());
-                    }
+                    authenticate();
                     view.findViewById(R.id.button).setClickable(true);
                     GenericProgressDialogFragment.dismiss(getFragmentManager());
                     updateLoggedInText();
@@ -77,28 +79,25 @@ public class JanitorLoginFragment extends Fragment implements  HiddenSettingsFra
         });
     }
 
-    private void authenticate() throws Exception {
-        String username = P.get("username");
-        URL uri = new URL(P.get("awoo_endpoint") + "/mod");
-        HttpURLConnection connection = (HttpURLConnection) uri.openConnection();
-        connection.setRequestMethod("POST");
-        connection.setDoOutput(true);
-        OutputStream os = connection.getOutputStream();
-        String data = "username=" + URLEncoder.encode(username, "UTF-8");
-        data += "&password=" + URLEncoder.encode(P.get("password"), "UTF-8");
-        //data += "&redirect=" + URLEncoder.encode("file:///android_res/success.html", "UTF-8");
-        os.write(data.getBytes());
-        os.flush(); os.close();
-        int responseCode = connection.getResponseCode();
-        P.set("logged_in", responseCode == 200 ? "true" : "false");
-        if (responseCode == 403) {
-            GenericAlertDialogFragment.newInstance("Error - Check your username and password", getFragmentManager());
-        } else if (responseCode == 200) {
-            GenericAlertDialogFragment.newInstance("Success! You are logged in as " + username, getFragmentManager());
-        } else {
-            GenericAlertDialogFragment.newInstance("Unexpected response code " + responseCode, getFragmentManager());
+    private void authenticate() {
+        authorizer = new Authorizer(P.get("username"), P.get("password"));
+        try {
+            authorizer.reauthorize();
+            GenericAlertDialogFragment.newInstance("Success! You are logged in as " + authorizer.username, getFragmentManager());
+            United.boards = BoardsList.getBoardsList(authorizer);
+        } catch (Authorizer.AuthorizationFailureException e) {
+            switch (e.type) {
+                case AUTH:
+                    GenericAlertDialogFragment.newInstance("Error - Check your username and password", getFragmentManager());
+                    break;
+                case UNEXPECTED_RESPONSE:
+                    GenericAlertDialogFragment.newInstance("Unexpected response code - " + e.responseCode, getFragmentManager());
+                    break;
+                case OTHER:
+                    GenericAlertDialogFragment.newInstance("Unexpected error - " + e, getFragmentManager());
+                    break;
+            }
         }
-
     }
     public void getPropertiesFromView() {
         if (getView() == null) return;

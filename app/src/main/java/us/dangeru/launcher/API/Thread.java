@@ -1,20 +1,7 @@
 package us.dangeru.launcher.API;
 
-import android.os.Parcel;
-import android.os.Parcelable;
-import android.util.JsonReader;
-
 import org.json.JSONException;
 import org.json.JSONObject;
-
-import java.io.Serializable;
-import java.net.HttpURLConnection;
-import java.net.URL;
-
-import us.dangeru.launcher.utils.P;
-
-import static us.dangeru.launcher.API.NetworkUtils.API;
-import static us.dangeru.launcher.API.NetworkUtils.fetch;
 
 /**
  * Created by Niles on 8/21/17.

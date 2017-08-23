@@ -36,11 +36,20 @@ public class United extends Application {
     private static final String TAG = United.class.getSimpleName();
     private static WeakReference<Context> singleton = null;
     private static MediaPlayer player = null;
+    /**
+     * The object to use to authenticate API requests
+     */
     public static Authorizer authorizer = null;
+    /**
+     * The list of all boards supported by the awoo endpoint, or null if they haven't finished loading yet
+     */
     public static List<String> boards = null;
 
-    // Makes a new sound pool, loads the requested sound and plays it once it's loaded
-    // Could be made a LOT better by reusing the same pool and checking if it's already loaded
+    /**
+     * Makes a new sound pool, loads the requested sound and plays it once it's loaded
+     * Could be made a LOT better by reusing the same pool and checking if it's already loaded
+     * @param file the sound to play
+     */
     public static void playSound(String file) {
         SoundPool pool = buildPool();
         try {

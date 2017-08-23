@@ -13,7 +13,6 @@ import us.dangeru.launcher.utils.P;
  * NetworkUtils::fetch can optionally take an authorizer and will use it to authenticate
  * to the server before sending its request.
  */
-
 public class Authorizer {
     /**
      * The username
@@ -22,7 +21,7 @@ public class Authorizer {
     /**
      * The password
      */
-    private String password;
+    public String password;
     /**
      * The rack session cookie set by the server. This value is cached, and should be accessed using
      * getCookie(). When NetworkUtils::fetch is directed to get a url after authorizing, it will try
@@ -32,6 +31,11 @@ public class Authorizer {
      * without the need for additional requests. In that way, United can make multiple API calls and
      * only ever worry about setting an authorizer once, any API call after the first one will be
      * executed using the saved cookie
+     *
+     * All accesses to this cookie are synchronized, so if one thread is already in the process
+     * of making a post request, another thread that requests the cookie before the request is
+     * finished will block until the request is finished, then return the cookie from the first request
+     * instead of sending off a new one
      */
     private String cookie;
 
@@ -52,7 +56,7 @@ public class Authorizer {
      * @return a cookie that can be set using HttpURLConnection::setRequestProperty
      * @throws AuthorizationFailureException if an error occurred during authorization
      */
-    String getCookie() throws AuthorizationFailureException {
+    synchronized String getCookie() throws AuthorizationFailureException {
         if (this.cookie != null) return this.cookie;
         try {
             URL uri = new URL(P.get("awoo_endpoint") + "/mod");
@@ -95,7 +99,7 @@ public class Authorizer {
      * @return the cookie
      * @throws AuthorizationFailureException if the username and password could not be authorized
      */
-    public String reauthorize() throws AuthorizationFailureException {
+    public synchronized String reauthorize() throws AuthorizationFailureException {
         this.cookie = null;
         return getCookie();
     }
@@ -148,9 +152,7 @@ public class Authorizer {
         /**
          * The three different types of authorization failure exceptions
          */
-        @SuppressWarnings("JavaDoc")
-        enum Type {AUTH, UNEXPECTED_RESPONSE, OTHER}
+        @SuppressWarnings({"JavaDoc", "WeakerAccess" /* JanitorLoginFragment needs this */})
+        public enum Type {AUTH, UNEXPECTED_RESPONSE, OTHER}
     }
-
-    ;
 }

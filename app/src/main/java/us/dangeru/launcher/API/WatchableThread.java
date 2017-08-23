@@ -20,14 +20,18 @@ public class WatchableThread extends Thread {
     public static WatchableThread getThreadById(int id) throws Exception {
         String result = fetch(P.get("awoo_endpoint") + API + "/thread/" + id + "/metadata");
         WatchableThread thread = new WatchableThread(new JSONObject(result));
-        String prev_replies_str = P.get(thread.board + ":" + thread.post_id);
+        thread.updateNewRepliesCount();
+        return thread;
+    }
+
+    public void updateNewRepliesCount() {
+        String prev_replies_str = P.get(board + ":" + post_id);
         int prev_replies;
         if (prev_replies_str.isEmpty()) {
             prev_replies = 0;
         } else {
             prev_replies = Integer.valueOf(prev_replies_str);
         }
-        thread.new_replies = thread.number_of_replies - prev_replies;
-        return thread;
+        new_replies = number_of_replies - prev_replies;
     }
 }

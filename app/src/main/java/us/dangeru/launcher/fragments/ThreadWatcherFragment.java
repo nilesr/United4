@@ -135,6 +135,7 @@ public class ThreadWatcherFragment extends Fragment implements HiddenSettingsFra
                 title.setText(thread.title);
                 if (thread.new_replies == 0) {
                     subtitle.setText("No");
+                    subtitle.setTextColor(Color.parseColor("#AAAAAA"));
                 } else {
                     subtitle.setText(String.valueOf(thread.new_replies));
                     subtitle.setTextColor(Color.RED);

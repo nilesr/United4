@@ -56,12 +56,22 @@ public final class ThreadWatcher {
             updateView(); // to set the Loading... messages
         }
     }
+    public static void updateNewThreadCounts() {
+        updated_threads = 0;
+        for (WatchableThread thread : threads) {
+            thread.updateNewRepliesCount();
+            if (thread.new_replies > 0) updated_threads++;
+        }
+    }
 
     private ThreadWatcher() {
     }
 
     public static void setRead(int idx) {
         threads[idx].new_replies = 0;
+        Thread thread = threads[idx];
+        P.set(thread.board + ":" + thread.post_id, String.valueOf(thread.number_of_replies));
+        updateNewThreadCounts();
         updateView();
     }
 

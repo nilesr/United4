@@ -6,12 +6,21 @@
     android:descendantFocusability="blocksDescendants"
     android:layout_height="wrap_content">
 
-    <RelativeLayout
+    <ProgressBar
+        android:id="@+id/spinner"
+        style="?android:attr/progressBarStyle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_toLeftOf="@+id/button4"
+        android:layout_alignParentStart="true"
+        android:layout_alignTop="@+id/button4" />
+
+    <RelativeLayout
+        android:id="@+id/rel_layout_inner"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:layout_alignParentLeft="true"
         android:layout_marginBottom="5dp"
+        android:layout_toLeftOf="@+id/button4"
         android:orientation="vertical">
 
         <TextView
@@ -28,18 +37,18 @@
 
         <TextView
             android:id="@+id/new_replies"
-            android:layout_below="@+id/thread_title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_below="@+id/thread_title"
             android:layout_marginLeft="10dp"
             android:text="No"
             android:textColor="@android:color/darker_gray" />
 
         <TextView
             android:id="@+id/subtitle_continuation"
-            android:layout_below="@+id/thread_title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_below="@+id/thread_title"
             android:layout_toEndOf="@+id/new_replies"
             android:text=" new replies"
             android:textColor="@android:color/darker_gray" />
@@ -57,5 +66,6 @@
         android:focusable="false"
         android:layout_marginRight="10dp"
         android:text="Unwatch" />
+
 </RelativeLayout>
 

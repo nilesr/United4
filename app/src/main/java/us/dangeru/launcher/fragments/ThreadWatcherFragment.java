@@ -18,10 +18,6 @@ import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
 
-import java.lang.reflect.Array;
-import java.util.ArrayList;
-import java.util.Arrays;
-
 import us.dangeru.launcher.API.ThreadWatcher;
 import us.dangeru.launcher.API.WatchableThread;
 import us.dangeru.launcher.R;
@@ -132,6 +128,8 @@ public class ThreadWatcherFragment extends Fragment implements HiddenSettingsFra
             TextView subtitle = convertView.findViewById(R.id.new_replies);
             TextView subtitleContinuation = convertView.findViewById(R.id.subtitle_continuation);
             if (thread != null) {
+                convertView.findViewById(R.id.rel_layout_inner).setVisibility(View.VISIBLE);
+                convertView.findViewById(R.id.spinner).setVisibility(View.GONE);
                 title.setText(thread.title);
                 if (thread.new_replies == 0) {
                     subtitle.setText("No");
@@ -146,9 +144,8 @@ public class ThreadWatcherFragment extends Fragment implements HiddenSettingsFra
                     subtitleContinuation.setText(" new replies");
                 }
             } else {
-                title.setText("Thread loading...");
-                subtitle.setText("Loading");
-                subtitleContinuation.setText(" new replies");
+                convertView.findViewById(R.id.rel_layout_inner).setVisibility(View.GONE);
+                convertView.findViewById(R.id.spinner).setVisibility(View.VISIBLE);
             }
             convertView.findViewById(R.id.button4).setOnClickListener(new View.OnClickListener() {
                 @Override

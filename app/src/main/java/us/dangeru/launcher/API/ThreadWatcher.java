@@ -5,6 +5,7 @@ import android.util.Log;
 import org.json.JSONArray;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 
 import us.dangeru.launcher.fragments.ThreadWatcherFragment;
 import us.dangeru.launcher.utils.P;
@@ -25,6 +26,7 @@ public final class ThreadWatcher {
         int[] parallelIds;
         try {
             String[] parallelIdsAsStrings = arrayFromJsonArray(P.get("watched_threads"));
+            Log.i(TAG, "parallelIds pulled as " + Arrays.toString(parallelIdsAsStrings));
             parallelIds = new int[parallelIdsAsStrings.length];
             for (int i = 0; i < parallelIdsAsStrings.length; i++) {
                 parallelIds[i] = Integer.valueOf(parallelIdsAsStrings[i]);

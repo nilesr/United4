@@ -139,11 +139,14 @@ public class ThreadWatcherFragment extends Fragment implements HiddenSettingsFra
                     subtitle.setText(String.valueOf(thread.new_replies));
                     subtitle.setTextColor(Color.RED);
                 }
+                String subtitleContinuationText;
                 if (thread.new_replies == 1) {
-                    subtitleContinuation.setText(" new reply");
+                    subtitleContinuationText = " new reply";
                 } else {
-                    subtitleContinuation.setText(" new replies");
+                    subtitleContinuationText = " new replies";
                 }
+                subtitleContinuationText += " (" + thread.number_of_replies + " total)";
+                subtitleContinuation.setText(subtitleContinuationText);
             } else {
                 convertView.findViewById(R.id.rel_layout_inner).setVisibility(View.GONE);
                 convertView.findViewById(R.id.spinner).setVisibility(View.VISIBLE);

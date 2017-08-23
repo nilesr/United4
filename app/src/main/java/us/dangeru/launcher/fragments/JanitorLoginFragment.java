@@ -27,7 +27,7 @@ import us.dangeru.launcher.utils.P;
 import static us.dangeru.launcher.application.United.authorizer;
 
 /**
- * Created by Niles on 8/20/17.
+ * A fragment that a janitor can use to log in
  */
 
 public class JanitorLoginFragment extends Fragment implements  HiddenSettingsFragment {
@@ -50,6 +50,11 @@ public class JanitorLoginFragment extends Fragment implements  HiddenSettingsFra
         });
         return res;
     }
+
+    /**
+     * Pulls the username and password from their text boxes, makes a progress dialog,
+     * tries to authenticate, then dismisses the progress dialog and updates the logged in text
+     */
     private class LoginButtonClickListener implements Button.OnClickListener {
         @Override
         public void onClick(final View view) {
@@ -69,6 +74,10 @@ public class JanitorLoginFragment extends Fragment implements  HiddenSettingsFra
         }
     }
 
+    /**
+     * Sets the logged in text at the bottom to either "You are not logged in" or
+     * "You are currently logged in as :username"
+     */
     private void updateLoggedInText() {
         getActivity().runOnUiThread(new Runnable() {
             @Override
@@ -79,14 +88,20 @@ public class JanitorLoginFragment extends Fragment implements  HiddenSettingsFra
         });
     }
 
+    /**
+     * Attempts authentication and handles errors if they occur
+     * Will update the boards list and set "logged_in" on success
+     */
     private void authenticate() {
         P.set("logged_in", "false");
         United.authorizer = new Authorizer(P.get("username"), P.get("password"));
         try {
             United.authorizer.reauthorize();
             GenericAlertDialogFragment.newInstance("Success! You are logged in as " + authorizer.username, getFragmentManager());
-            United.boards = BoardsList.getBoardsList(authorizer);
             P.set("logged_in", "true");
+            // the /staff/ board will only be shown when you're logged in, so update the boards list in the background
+            // this logic should probably be moved to United
+            United.boards = BoardsList.getBoardsList(authorizer);
         } catch (Authorizer.AuthorizationFailureException e) {
             switch (e.type) {
                 case AUTH:
@@ -101,6 +116,10 @@ public class JanitorLoginFragment extends Fragment implements  HiddenSettingsFra
             }
         }
     }
+
+    /**
+     * Pulls the username and password from their screen values
+     */
     public void getPropertiesFromView() {
         if (getView() == null) return;
         EditText username = getView().findViewById(R.id.username);
@@ -112,6 +131,11 @@ public class JanitorLoginFragment extends Fragment implements  HiddenSettingsFra
     public HiddenSettingsActivity.FragmentType getType() {
         return HiddenSettingsActivity.FragmentType.JANITOR_LOGIN;
     }
+
+    /**
+     * adds a back button to the toolbar
+     * @param toolbar the toolbar
+     */
     public void addOptions(Toolbar toolbar) {
         toolbar.setTitle(R.string.app_name);
         toolbar.getMenu().clear();

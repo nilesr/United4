@@ -12,7 +12,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentStart="true"
-        android:layout_alignTop="@+id/button4" />
+        android:layout_alignTop="@+id/unwatch_button" />
 
     <RelativeLayout
         android:id="@+id/rel_layout_inner"
@@ -20,7 +20,7 @@
         android:layout_height="wrap_content"
         android:layout_alignParentLeft="true"
         android:layout_marginBottom="5dp"
-        android:layout_toLeftOf="@+id/button4"
+        android:layout_toLeftOf="@+id/unwatch_button"
         android:orientation="vertical">
 
         <TextView
@@ -57,7 +57,7 @@
 
 
     <Button
-        android:id="@+id/button4"
+        android:id="@+id/unwatch_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="false"

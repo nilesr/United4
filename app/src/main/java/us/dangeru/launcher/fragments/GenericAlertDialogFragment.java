@@ -10,9 +10,8 @@ import android.content.DialogInterface;
 import android.os.Bundle;
 
 /**
- * Created by Niles on 8/20/17.
+ * Generic alert dialog
  */
-
 public class GenericAlertDialogFragment extends DialogFragment {
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
@@ -27,6 +26,11 @@ public class GenericAlertDialogFragment extends DialogFragment {
         return new AlertDialog.Builder(getActivity()).setTitle(message).setMessage(message).setPositiveButton("OK", listener).create();
     }
 
+    /**
+     * Factory for an alert dialog
+     * @param s the title and message of the new dialog
+     * @param manager the fragment manager used to show the dialog
+     */
     public static void newInstance(String s, FragmentManager manager) {
         DialogFragment f = new GenericAlertDialogFragment();
         Bundle args = new Bundle();

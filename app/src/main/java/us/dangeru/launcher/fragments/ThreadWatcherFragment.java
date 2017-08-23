@@ -27,7 +27,7 @@ import us.dangeru.launcher.activities.UserscriptActivity;
 import us.dangeru.launcher.utils.P;
 
 /**
- * Created by Niles on 8/21/17.
+ * Fragment that lets the user view the threads that they're watching
  */
 
 public class ThreadWatcherFragment extends Fragment implements HiddenSettingsFragment, ThreadWatcherListener {
@@ -40,12 +40,14 @@ public class ThreadWatcherFragment extends Fragment implements HiddenSettingsFra
         final AdapterView.OnItemClickListener listener = new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                // we map 1 to 1 with ThreadWatcher.threads, and if that's null, it's not loaded yet
                 if (ThreadWatcher.threads[i] == null) {
                     GenericAlertDialogFragment.newInstance("That thread hasn't loaded yet, please wait.", getFragmentManager());
                     return;
                 }
-                WatchableThread thread = ThreadWatcher.threads[i];
+                // Set the thread as read and open the thread in a new UserscriptActivity
                 ThreadWatcher.setRead(i);
+                WatchableThread thread = ThreadWatcher.threads[i];
                 String url = P.get("awoo_endpoint") + "/" + thread.board + "/thread/" + thread.post_id;
                 Intent intent = new Intent(getActivity(), UserscriptActivity.class);
                 intent.putExtra("URL", url);
@@ -65,6 +67,10 @@ public class ThreadWatcherFragment extends Fragment implements HiddenSettingsFra
         return res;
     }
 
+    /**
+     * Invalidates the list view, called when the list view changes
+     * Also handles showing the "You are not currently watching any threads" message
+     */
     public void setAdapter() {
         if (getActivity() == null) return;
         getActivity().runOnUiThread(new Runnable() {
@@ -93,6 +99,10 @@ public class ThreadWatcherFragment extends Fragment implements HiddenSettingsFra
         return HiddenSettingsActivity.FragmentType.THREAD_WATCHER;
     }
 
+    /**
+     * Adds the Refresh button to the toolbar
+     * @param toolbar the toolbar to add the item to
+     */
     public static void addOptions(Toolbar toolbar) {
         toolbar.setTitle("Thread Watcher");
         toolbar.getMenu().clear();
@@ -106,23 +116,31 @@ public class ThreadWatcherFragment extends Fragment implements HiddenSettingsFra
         });
     }
 
+    /**
+     * Registers us as a listener for changes in ThreadWatcher (refreshes, etc..)
+     * @param savedInstanceState
+     */
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         ThreadWatcher.registerListener(this);
     }
 
-    @Override
-    public void onSaveInstanceState(Bundle outState) {
-        super.onSaveInstanceState(outState);
-    }
-
+    /**
+     * Invalidates the list view when a thread changes in ThreadWatcher
+     */
     @Override
     public void threadsUpdated() {
         setAdapter();
     }
 
-    private static class ThreadWatcherAdapter extends ArrayAdapter<WatchableThread> {
+    /**
+     * The array adapter for the list view, uses thread_watcher_list_item
+     * If the thread is loading, it shows a spinner and hides everything else
+     * Otherwise it hides the spinner and shows the three text boxes and button
+     * It also sets the click listener for the button and the text in the boxes
+     */
+    private class ThreadWatcherAdapter extends ArrayAdapter<WatchableThread> {
         public ThreadWatcherAdapter(Context context, WatchableThread[] list) {
             super(context, 0, list);
         }
@@ -135,10 +153,20 @@ public class ThreadWatcherFragment extends Fragment implements HiddenSettingsFra
             TextView title = convertView.findViewById(R.id.thread_title);
             TextView subtitle = convertView.findViewById(R.id.new_replies);
             TextView subtitleContinuation = convertView.findViewById(R.id.subtitle_continuation);
+            // If the thread is loading, jump down and make the spinner visible
+            // Otherwise hide the spinner and update the text and colors
             if (thread != null) {
                 convertView.findViewById(R.id.rel_layout_inner).setVisibility(View.VISIBLE);
+                convertView.findViewById(R.id.unwatch_button).setVisibility(View.VISIBLE);
                 convertView.findViewById(R.id.spinner).setVisibility(View.GONE);
                 title.setText(thread.title);
+                // Possible options are:
+                // No new replies
+                //      "No" must be grey
+                // 1 new reply
+                // 3 new replies
+                //      "1", "3" must be red
+                // then we add the total count after
                 if (thread.new_replies == 0) {
                     subtitle.setText("No");
                     subtitle.setTextColor(Color.parseColor("#AAAAAA"));
@@ -156,13 +184,17 @@ public class ThreadWatcherFragment extends Fragment implements HiddenSettingsFra
                 subtitleContinuation.setText(subtitleContinuationText);
             } else {
                 convertView.findViewById(R.id.rel_layout_inner).setVisibility(View.GONE);
+                convertView.findViewById(R.id.unwatch_button).setVisibility(View.GONE);
                 convertView.findViewById(R.id.spinner).setVisibility(View.VISIBLE);
             }
-            convertView.findViewById(R.id.button4).setOnClickListener(new View.OnClickListener() {
+            convertView.findViewById(R.id.unwatch_button).setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    //GenericAlertDialogFragment.newInstance("Not implemented yet, sorry but you're watching this thread forever", getFragmentManager());
-                    ThreadWatcher.unwatchThread(thread.post_id);
+                    if (thread == null) {
+                        GenericAlertDialogFragment.newInstance("This shouldn't happen, user tried to unwatch a thread that was null", getFragmentManager());
+                        return;
+                    }
+                    ThreadWatcher.unwatchThread(thread.post_id); // will invalidate the list view for us
                 }
             });
             return convertView;

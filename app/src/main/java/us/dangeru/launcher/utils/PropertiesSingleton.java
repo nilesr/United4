@@ -2,7 +2,6 @@ package us.dangeru.launcher.utils;
 
 import android.app.FragmentManager;
 import android.content.Context;
-import android.icu.util.Output;
 import android.util.JsonReader;
 import android.util.JsonWriter;
 import android.util.Log;
@@ -28,22 +27,36 @@ import us.dangeru.launcher.fragments.GenericAlertDialogFragment;
 
 public final class PropertiesSingleton {
     private static final String TAG = PropertiesSingleton.class.getSimpleName();
-    // used to be "united4_config.json" but it's not called /u/nited anymore
+    /**
+     * used to be "united4_config.json" but it's not called /u/nited anymore
+     */
     private static final String CONFIG = "launcher_config.json";
-    // generic singleton
+    /**
+     * generic singleton
+     */
     private static PropertiesSingleton singleton;
     static {
         singleton = new PropertiesSingleton();
     }
+
+    /**
+     * gets the singleton
+     * @return the singleton
+     */
     public static PropertiesSingleton get() {
         return singleton;
     }
 
 
-    // the actual properties
+    /**
+     * the actual properties
+     */
     private Map<String, String> properties;
 
-    // Reads in all the properties from the json file or some generic default properties if that failed
+
+    /**
+     * Reads in all the properties from the json file or some generic default properties if that failed
+     */
     private PropertiesSingleton() {
         properties = new HashMap<>();
         try {
@@ -54,7 +67,7 @@ public final class PropertiesSingleton {
                 read++;
                 String key = reader.nextName();
                 String value = reader.nextString();
-                Log.i(TAG, "Read prop " + key);
+                Log.d(TAG, "Read prop " + key);
                 properties.put(key, value);
             }
             resetForAppStart();
@@ -74,7 +87,10 @@ public final class PropertiesSingleton {
         resetForAppStart();
     }
 
-    // static properties that never change
+
+    /**
+     * static properties that never change
+     */
     private void resetForAppStart() {
         properties.put("version_notes", "Version 4.0.7!\nTap for Patch Notes");
         // index.html expects is_playing to be false on first load so it can play startup music
@@ -136,27 +152,43 @@ public final class PropertiesSingleton {
         properties.put("awoo_endpoint", "http://boards.lolis.download");
     }
 
-    // helper function for putting things in both `songs` and `ordered_songs`
+
+    /**
+     * helper function for putting things in both `songs` and `ordered_songs`
+     * @param map a map from song name to resource ID
+     * @param ordered_songs the list of songs
+     * @param id The resource ID
+     * @param s The song name
+     */
     private static void put(Map<String, String> map, @SuppressWarnings("TypeMayBeWeakened") List<String> ordered_songs, int id, String s) {
         map.put(s, Integer.toString(id));
         ordered_songs.add(s);
     }
 
-    // gets a property, or an empty string if it wasn't set
+    /**
+     * Gets a property, or an empty string if it wasn't set
+     * @param key the key for the property
+     * @return the value of that property or an empty string if it isn't set
+     */
     public String getProperty(String key) {
         String res = properties.get(key);
         if (res == null) return "";
         return res;
     }
 
-    // sets a property, then writes the entire json file out to the disk
+
+    /**
+     * sets a property, then writes the entire json file out to the disk
+     * @param key The property to set
+     * @param value the value for that property
+     */
     public void setProperty(String key, String value) {
         properties.put(key, value);
         try {
             JsonWriter writer = new JsonWriter(new OutputStreamWriter(United.getContext().openFileOutput(CONFIG, Context.MODE_PRIVATE)));
             writer.beginObject();
             for (Map.Entry<String, String> i : properties.entrySet()) {
-                Log.i(TAG, "Writing prop " + i.getKey());
+                Log.d(TAG, "Writing prop " + i.getKey());
                 writer.name(i.getKey());
                 writer.value(i.getValue());
             }
@@ -167,7 +199,12 @@ public final class PropertiesSingleton {
         }
     }
 
-    public void resetAllAndExit(FragmentManager fragman) {
+    /**
+     * Resets all properties and forcibly closes the program to prevent them from being rewritten
+     * on the next setProperty call
+     * @param fragman a fragment manager used to show an error message, if applicable
+     */
+    public static void resetAllAndExit(FragmentManager fragman) {
         try {
             OutputStreamWriter writer = new OutputStreamWriter(United.getContext().openFileOutput(CONFIG, Context.MODE_PRIVATE));
             writer.write("{}");

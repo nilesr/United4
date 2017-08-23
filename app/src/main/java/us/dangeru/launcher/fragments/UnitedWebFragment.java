@@ -7,7 +7,6 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.constraint.solver.ArrayLinkedVariables;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -28,14 +27,27 @@ import us.dangeru.launcher.utils.P;
 import us.dangeru.launcher.utils.UnitedPropertiesIf;
 
 /**
- * Created by Niles on 8/18/17.
+ * A web view containing fragment
  */
 
 public class UnitedWebFragment extends Fragment {
+    /**
+     * URI start for accessing app/src/main/res/raw
+     */
     public static final String RESOURCE_FOLDER = "file:///android_res/raw/";
-    public static final String TAG = UnitedWebFragment.class.getSimpleName();
-    // Url to load in the page on creation of view
+    private static final String TAG = UnitedWebFragment.class.getSimpleName();
+    /**
+     * Url to load in the page on creation of view
+     */
     public String starting_url = null;
+    /**
+     * Whether we've authenticated in this fragment yet or not
+     * Unfortunately we can't just call United.authenticator.getCookie() and set that on the webview,
+     * webviews are especially picky about having cookies set on them and it just won't work.
+     * So what we do is POST to /mod IN THE WEB VIEW, and request a redirect to starting_url.
+     * This holds a boolean on whether we've done that or not yet, so we only do it once and
+     * not every time the user rotates the screen
+     */
     boolean authenticated = false;
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -68,10 +80,12 @@ public class UnitedWebFragment extends Fragment {
                 webview.addJavascriptInterface(new UnitedPropertiesIf(getActivity()), "unitedPropertiesIf");
                 UnitedWebFragmentWebViewClient client = new UnitedWebFragmentWebViewClient();
                 webview.setWebViewClient(client);
-                if (client.shouldOverrideUrlLoading(webview, starting_url, false)) {
+                // If it's not safe to view this page, finish() the activity and open the url in a web browser instead
+                if (client.shouldOverrideUrlLoading(starting_url, false)) {
                     Intent i = new Intent(Intent.ACTION_VIEW, Uri.parse(starting_url));
                     getActivity().startActivity(i);
                     getActivity().finish();
+                    return;
                 }
                 try {
                     // If we're logged in, and we're about to connect to the awoo endpoint, and we haven't authenticated in this fragment yet, then authenticate
@@ -86,13 +100,18 @@ public class UnitedWebFragment extends Fragment {
                 } catch (Exception ignored) {
                     //
                 }
+                // If we don't need to authenticate or we've already authenticated, just load the url
                 webview.loadUrl(starting_url);
             }
         });
         return res;
     }
 
-    // save url to saved instance state so we can restore after rotation, etc
+
+    /**
+     * save url to saved instance state so we can restore after rotation, etc
+     * @param outState the state to be saved
+     */
     @Override
     public void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
@@ -104,12 +123,14 @@ public class UnitedWebFragment extends Fragment {
         webview.saveState(outState);
     }
 
-    // Never open the url in chrome, always stay within the web view
+    /**
+     * Do not expose the injected javascript interface to unauthorized websites
+     */
     private class UnitedWebFragmentWebViewClient extends WebViewClient {
         @Override public boolean shouldOverrideUrlLoading(WebView view, String url) {
-            return shouldOverrideUrlLoading(view, url, true);
+            return shouldOverrideUrlLoading(url, true);
         }
-        boolean shouldOverrideUrlLoading(WebView view, String url, boolean alert) {
+        boolean shouldOverrideUrlLoading(String url, boolean alert) {
             Log.i(TAG, "URL: " + url);
             if (P.getBool("override_authorizer")) return false;
             if (url.startsWith(RESOURCE_FOLDER)) return false;
@@ -155,6 +176,10 @@ public class UnitedWebFragment extends Fragment {
         }
     }
 
+    /**
+     * Restore web view state
+     * @param savedInstanceState state to be restored
+     */
     @Override
     public void onViewStateRestored(Bundle savedInstanceState) {
         super.onViewStateRestored(savedInstanceState);

@@ -19,7 +19,7 @@ import us.dangeru.launcher.utils.P;
 import us.dangeru.launcher.utils.PropertiesSingleton;
 
 /**
- * Created by Niles on 8/21/17.
+ * A list of all the debug settings that you can edit
  */
 
 public class SettingsListFragment extends Fragment implements HiddenSettingsFragment {
@@ -43,7 +43,7 @@ public class SettingsListFragment extends Fragment implements HiddenSettingsFrag
                                 ((HiddenSettingsActivity) getActivity()).swapScreens(HiddenSettingsActivity.FragmentType.JANITOR_LOGIN);
                                 break;
                             case 1:
-                                PropertiesSingleton.get().resetAllAndExit(getFragmentManager());
+                                PropertiesSingleton.resetAllAndExit(getFragmentManager());
                                 break;
                             case 2:
                                 P.toggle("debug");
@@ -79,6 +79,10 @@ public class SettingsListFragment extends Fragment implements HiddenSettingsFrag
         return HiddenSettingsActivity.FragmentType.SETTINGS_LIST;
     }
 
+    /**
+     * adds a close button to the menu bar
+     * @param toolbar the toolbar
+     */
     public void addOptions(Toolbar toolbar) {
         toolbar.setTitle(R.string.app_name);
         toolbar.getMenu().clear();

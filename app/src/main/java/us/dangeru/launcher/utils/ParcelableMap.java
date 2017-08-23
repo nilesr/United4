@@ -11,9 +11,15 @@ import java.util.Map;
  */
 
 public class ParcelableMap {
-    // delegated object
+    /**
+     * Delegated object
+     */
     private final Map<String, String> map = new HashMap<>();
-    // puts the shit in a bundle
+
+    /**
+     * Puts the keys and values in a bundle
+     * @return a parcelable representation of the map
+     */
     public Parcelable parcel() {
         Bundle b = new Bundle();
         for (String i : map.keySet()) {
@@ -21,7 +27,11 @@ public class ParcelableMap {
         }
         return b;
     }
-    // takes the shit out of the bundle
+    /**
+     * Factory method to read a ParcelableMap from a bundle
+     * @param p the bundle to read from
+     * @return the reconstructed ParcelableMap object
+     */
     public static ParcelableMap fromParcel(Parcelable p) {
         ParcelableMap res = new ParcelableMap();
         if (!(p instanceof Bundle)) {
@@ -43,9 +53,5 @@ public class ParcelableMap {
     // regular hashmap method
     public void put(String key, String value) {
         map.put(key, value);
-    }
-
-    public Map<String, String> asMap() {
-        return map;
     }
 }

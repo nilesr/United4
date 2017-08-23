@@ -66,7 +66,9 @@ public class United extends Application {
         }
     }
 
-    // makes a new sound pool, platform independently
+    /**
+      * makes a new sound pool, platform independently
+      */
     private static SoundPool buildPool() {
         SoundPool pool;
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
@@ -78,12 +80,19 @@ public class United extends Application {
         return pool;
     }
 
-    // Hold on to ApplicationContext statically so we can always get it
+
+    /**
+     * Hold on to ApplicationContext statically so we can always get it
+     * @return an application context object that can be used to open private files
+     */
     public static Context getContext() {
         return singleton.get();
     }
 
-    // Set up the application context singleton
+
+    /**
+     * Set up the application context singleton, start pulling down updated threads and the list of boards
+     */
     public void onCreate() {
         super.onCreate();
         singleton = new WeakReference<>(getApplicationContext());
@@ -100,8 +109,13 @@ public class United extends Application {
         }).start();
     }
 
-    // Plays the given song, by finding its R.raw id in the songs map, stored in properties
-    // If reload iset set to true, will reload the webpage. For more information, see ReloadService's documentation
+
+    /**
+     * Plays the given song, by finding its R.raw id in the songs map, stored in properties
+     * If reload is set set to true, will reload the webpage. For more information, see ReloadService's documentation
+     * @param song the full name of the song to play
+     * @param reload whether to reload the web page
+     */
     public static void playSong(String song, final boolean reload) {
         try {
             Log.i(TAG, "playSong called on " + song);
@@ -142,9 +156,19 @@ public class United extends Application {
             //
         }
     }
+
+    /**
+     * Stops the currently playing song
+     */
     public static void stop() {
         if (player != null) player.stop();
     }
+
+    /**
+     * Called when a song is done playing. If we're looping, seek to the beginning and start again
+     * If we're shuffling, pick a random song and play it, and reload music.html
+     * Otherwise, go to the next song in the list, play it and reload music.html
+     */
     private static class SongDoneListener implements MediaPlayer.OnCompletionListener {
         @Override
         public void onCompletion(MediaPlayer player) {

@@ -15,9 +15,9 @@ import static us.dangeru.launcher.API.NetworkUtils.fetch;
  * Created by Niles on 8/22/17.
  */
 
-public class WatchableThread extends Thread {
+public final class WatchableThread extends Thread {
     /**
-     *
+     * the number of new replies to this thread since the last time it was viewed
      */
     public int new_replies;
 

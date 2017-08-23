@@ -7,7 +7,7 @@ import android.app.ProgressDialog;
 import android.os.Bundle;
 
 /**
- * Created by Niles on 8/20/17.
+ * Generic progress dialog
  */
 
 public class GenericProgressDialogFragment extends DialogFragment {
@@ -22,6 +22,11 @@ public class GenericProgressDialogFragment extends DialogFragment {
         return dialog;
     }
 
+    /**
+     * Generic factory method for a progress dialog
+     * @param s the title and message of the dialog
+     * @param manager the manager to use to add the dialog
+     */
     public static void newInstance(String s, FragmentManager manager) {
         DialogFragment f = new GenericProgressDialogFragment();
         Bundle args = new Bundle();
@@ -30,6 +35,10 @@ public class GenericProgressDialogFragment extends DialogFragment {
         f.show(manager, "progress_dialog");
     }
 
+    /**
+     * Dismisses the current dialog
+     * @param fragmentManager the manager used to find the fragment to dismiss
+     */
     public static void dismiss(FragmentManager fragmentManager) {
         DialogFragment f = (DialogFragment) fragmentManager.findFragmentByTag("progress_dialog");
         f.dismiss();

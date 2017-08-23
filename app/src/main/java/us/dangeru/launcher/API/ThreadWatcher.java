@@ -23,7 +23,7 @@ public final class ThreadWatcher {
     static {
         refreshAll();
     }
-    public static void refreshAll() {
+    private static int[] pullParallelIds() {
         int[] parallelIds;
         try {
             String[] parallelIdsAsStrings = arrayFromJsonArray(P.get("watched_threads"));
@@ -35,6 +35,10 @@ public final class ThreadWatcher {
         } catch (Exception ignored) {
             parallelIds = new int[0];
         }
+        return parallelIds;
+    }
+    public static void refreshAll() {
+        int[] parallelIds = pullParallelIds();
         threads = new WatchableThread[parallelIds.length];
         updated_threads = 0;
         for (int i = 0; i < parallelIds.length; i++) {
@@ -105,5 +109,22 @@ public final class ThreadWatcher {
     // Called to initialize the static { } block above
     public static void initialize() {
 
+    }
+
+    public static boolean isWatching(Integer id) {
+        for (int other_id : pullParallelIds()) {
+            if (id == other_id) return true;
+        }
+        return false;
+    }
+    public static void watchThread(int id) {
+        int[] old = pullParallelIds();
+        String[] new_string_array = new String[old.length + 1];
+        for (int i = 0; i < old.length; i++) {
+            new_string_array[i] = String.valueOf(old[i]);
+        }
+        new_string_array[old.length] = String.valueOf(id);
+        P.set("watched_threads", new JSONArray(Arrays.asList(new_string_array)).toString());
+        refreshAll();
     }
 }

@@ -26,7 +26,6 @@ public class Authorizer {
     public String getCookie() throws AuthorizationFailureException {
         if (this.cookie != null) return this.cookie;
         try {
-
             URL uri = new URL(P.get("awoo_endpoint") + "/mod");
             HttpURLConnection connection = (HttpURLConnection) uri.openConnection();
             connection.setRequestMethod("POST");

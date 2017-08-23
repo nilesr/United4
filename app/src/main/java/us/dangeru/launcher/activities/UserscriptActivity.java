@@ -37,11 +37,11 @@ public class UserscriptActivity extends MainActivity implements ThreadWatcherLis
         if (United.boards != null) {
             SubMenu submenu = toolbar.getMenu().addSubMenu("Boards");
             for (String board : United.boards) {
-                submenu.add(board).setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
+                submenu.add("/" + board + "/").setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
                     @Override
                     public boolean onMenuItemClick(MenuItem item) {
                         Intent i = new Intent(UserscriptActivity.this, UserscriptActivity.class);
-                        i.putExtra("URL", P.get("awoo_endpoint") + "/" + item.getTitle());
+                        i.putExtra("URL", P.get("awoo_endpoint") + item.getTitle());
                         startActivity(i);
                         return true;
                     }

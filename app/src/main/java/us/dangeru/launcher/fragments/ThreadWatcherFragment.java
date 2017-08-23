@@ -35,7 +35,7 @@ public class ThreadWatcherFragment extends Fragment implements HiddenSettingsFra
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
-        final View res = inflater.inflate(R.layout.hidden_settings_list, container, false);
+        final View res = inflater.inflate(R.layout.thread_watcher_list, container, false);
         final AdapterView.OnItemClickListener listener = new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
@@ -55,7 +55,7 @@ public class ThreadWatcherFragment extends Fragment implements HiddenSettingsFra
             @Override
             public void run() {
                 //noinspection OverlyStrongTypeCast
-                ((ListView) res.findViewById(R.id.settings_list)).setOnItemClickListener(listener);
+                ((ListView) res.findViewById(R.id.thread_list)).setOnItemClickListener(listener);
                 setAdapter();
                 Toolbar toolbar = getActivity().findViewById(R.id.toolbar);
                 addOptions(toolbar);
@@ -71,7 +71,15 @@ public class ThreadWatcherFragment extends Fragment implements HiddenSettingsFra
             public void run() {
                 Log.i(TAG, "setAdapter, running on ui thread, ");
                 if (getView() == null) return;
-                ListView list = getView().findViewById(R.id.settings_list);
+                ListView list = getView().findViewById(R.id.thread_list);
+                TextView message = getView().findViewById(R.id.no_threads_message);
+                if (ThreadWatcher.threads.length == 0) {
+                    message.setVisibility(View.VISIBLE);
+                    list.setVisibility(View.GONE);
+                } else {
+                    message.setVisibility(View.GONE);
+                    list.setVisibility(View.VISIBLE);
+                }
                 list.setAdapter(new ThreadWatcherAdapter(getActivity(), ThreadWatcher.threads));
                 list.invalidate();
                 Log.i(TAG, "success, invalidating...");
@@ -103,13 +111,6 @@ public class ThreadWatcherFragment extends Fragment implements HiddenSettingsFra
         ThreadWatcher.registerListener(this);
     }
 
-    public static String makeLabel(WatchableThread thread) {
-        if (thread.new_replies <= 0) {
-            return "No new replies to thread " + thread.post_id + " - \"" + thread.title + "\" (" + thread.number_of_replies + " replies in total)";
-        } else {
-            return thread.new_replies + " new " + (thread.new_replies == 1 ? "reply" : "replies") + " to thread " + thread.post_id + " - \"" + thread.title + "\"";
-        }
-    }
     @Override
     public void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);

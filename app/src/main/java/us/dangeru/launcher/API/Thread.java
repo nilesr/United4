@@ -75,8 +75,4 @@ public class Thread {
             this.parent = object.getInt("parent");
         }
     }
-    public static Thread getThreadById(int id) throws Exception {
-        String result = fetch(P.get("awoo_endpoint") + API + "/thread/" + id + "/metadata");
-        return new Thread(new JSONObject(result));
-    }
 }

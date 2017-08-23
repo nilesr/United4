@@ -9,7 +9,6 @@ import java.util.ArrayList;
 import us.dangeru.launcher.fragments.ThreadWatcherFragment;
 import us.dangeru.launcher.utils.P;
 
-import static us.dangeru.launcher.fragments.ThreadWatcherFragment.makeLabel;
 
 /**
  * Created by Niles on 8/22/17.
@@ -30,7 +29,7 @@ public final class ThreadWatcher {
             for (int i = 0; i < parallelIdsAsStrings.length; i++) {
                 parallelIds[i] = Integer.valueOf(parallelIdsAsStrings[i]);
             }
-        } catch (Exception e) {
+        } catch (Exception ignored) {
             parallelIds = new int[0];
         }
         threads = new WatchableThread[parallelIds.length];

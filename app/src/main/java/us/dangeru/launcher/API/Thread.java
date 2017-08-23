@@ -4,9 +4,8 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 /**
- * Created by Niles on 8/21/17.
+ * Class representing an awoo thread
  */
-
 public class Thread {
     public int post_id;
     public String board;
@@ -21,6 +20,12 @@ public class Thread {
     public int number_of_replies;
     public boolean sticky;
     public int parent;
+
+    /**
+     * Constructs a new thread from the given JSON object, typically received from the API
+     * @param object the object to deserialize
+     * @throws JSONException if the give object wasn't in the expected format (for example if the object had a "post_id" key but it was a string instead of an integer)
+     */
     public Thread(JSONObject object) throws JSONException {
         if (object.has("post_id")) {
             this.post_id = object.getInt("post_id");

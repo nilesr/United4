@@ -14,11 +14,15 @@ import us.dangeru.launcher.fragments.JanitorLoginFragment;
 import us.dangeru.launcher.fragments.ThreadWatcherFragment;
 
 /**
- * Created by Niles on 8/21/17.
+ * An activity that can display multiple fragments.
+ * It expects a "fragment" to be passed in through the intent, and it will put that fragment
+ * in its frame. That fragment can call swapScreen on this activity to switch to a different fragment
+ * When the user presses the back button, it will swapScreen back to the fragment from the intent if
+ * it wasn't already there, or finish() if it was.
  */
 
 public class HiddenSettingsActivity extends Activity {
-    FragmentType type = FragmentType.SETTINGS_LIST;
+    private FragmentType type = FragmentType.SETTINGS_LIST;
     @Override public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.userscript_activity);
@@ -40,10 +44,19 @@ public class HiddenSettingsActivity extends Activity {
             finish();
         }
     }
+
+    /**
+     * Switches to the passed fragment
+     * If the currently shown fragment has the same type as the argument, does nothing. Otherwise,
+     * removes the current fragment and makes a new fragment of the passed in type and shows it
+     * @param type the fragment to switch to
+     */
     public void swapScreens(FragmentType type) {
         this.type = type;
         FragmentManager manager = getFragmentManager();
         FragmentTransaction transaction = manager.beginTransaction();
+        // if we already have a fragment and that fragment is not the fragment we want to show, remove it
+        // otherwise, it is the fragment we want to show, so we're done, just return and abort the transaction
         if (manager.findFragmentByTag("fragment") != null) {
             if (((HiddenSettingsFragment) manager.findFragmentByTag("fragment")).getType() != type) {
                 transaction.remove(manager.findFragmentByTag("fragment"));
@@ -51,6 +64,7 @@ public class HiddenSettingsActivity extends Activity {
                 return;
             }
         }
+        // Make a new fragment
         Fragment newFragment = null;
         switch (type) {
             case SETTINGS_LIST:
@@ -66,16 +80,25 @@ public class HiddenSettingsActivity extends Activity {
                 newFragment = new AwooEndpointFragment();
                 break;
         }
+        // Put the fragment in our layout
         //transaction.add(newFragment, "fragment");
         transaction.replace(R.id.userscript_activity_main_fragment, newFragment, "fragment");
-        transaction.addToBackStack("fragment");
+        transaction.addToBackStack("fragment"); // TODO is this needed?
         transaction.commit();
     }
+
+    /**
+     * Save the currently shown fragment type to the saved instance state so it can be restored
+     * @param outState state to be saved
+     */
     public void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
         outState.putString("fragment", type.toString());
     }
 
+    /**
+     * Types of fragments that can be embedded in this activity
+     */
     public enum FragmentType {
         SETTINGS_LIST,
         JANITOR_LOGIN,

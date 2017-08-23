@@ -9,10 +9,20 @@ import java.util.List;
 import us.dangeru.launcher.utils.P;
 
 /**
- * Created by Niles on 8/22/17.
+ * A utilities class for getting a list of boards from the awoo endpoint
  */
 
-public class BoardsList {
+public final class BoardsList {
+    private BoardsList() {
+    }
+
+    /**
+     * Returns a list of boards supported by the awoo endpoint. If an authorizer is given, it will use
+     * the authorizer to authenticate beforehand, so the returned boards list will contain hidden
+     * boards like /staff/
+     * @param authorizer The authorizer to use, or null if the request should not be authenticated
+     * @return A list of boards supported by the endpoint, or null if an error occurred
+     */
     public static List<String> getBoardsList(Authorizer authorizer) {
         try {
             List<String> results = new ArrayList<>();
@@ -23,7 +33,8 @@ public class BoardsList {
             }
             return results;
         } catch (Exception e) {
-            return Collections.singletonList(e.toString());
+            //return Collections.singletonList(e.toString());
+            return null;
         }
     }
 }

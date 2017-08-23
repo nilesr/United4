@@ -26,67 +26,85 @@ public class MainActivity extends Activity implements UnitedActivity {
     private ParcelableMap session;
     @SuppressWarnings("FieldCanBeLocal")
     private UnitedWebFragment webFragment;
+
+    /**
+     * Restores session variables from the saved instance state and sets up the view
+     * @param savedInstanceState the previously saved state
+     */
     protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        if (getClass().equals(MainActivity.class)) {
-            onCreate(savedInstanceState, R.layout.main_activity, R.id.activity_main_activity);
-        }
-    }
-    protected void onCreate(Bundle savedInstanceState, int layout, int id) {
         super.onCreate(savedInstanceState);
         // Register to receive reloads to music.html later on
         ReloadService.register(this);
-        setContentView(layout);
         // load and retrieve session variables
         if (savedInstanceState != null) {
             session = ParcelableMap.fromParcel(savedInstanceState.getParcelable("session"));
         } else {
             session = new ParcelableMap();
         }
+        // we wrap this in an if statement because subclasses (like UserscriptActivity) want to inherit
+        // the behavior above (restoring saved session variables), but want to inflate a different layout
+        // by calling setupView themselves.
+        if (getClass().equals(MainActivity.class)) {
+            setupView(R.layout.main_activity, R.id.activity_main_activity);
+        }
+    }
+
+    /**
+     * Inflates the given layout and puts the web fragment in the given ID in that layout
+     * @param layout the layout to inflate
+     * @param id the element in that layout to replace with the web fragment
+     */
+    protected void setupView(int layout, int id) {
+        // blocks until layout is inflated
+        setContentView(layout);
         // put our UnitedWebFragment on there
         FragmentManager manager = getFragmentManager();
         webFragment = (UnitedWebFragment) manager.findFragmentByTag("main_webkit_wrapper");
         if (webFragment == null) {
             webFragment = new UnitedWebFragment();
-            // if we have a URL in the intent, load that, otherwise load index.html
+            // if this is the first-time startup (no web fragment created yet), pull the
+            // URL from the intent. If there was no URL in the intent, load index.html
+            // Give that as the starting URL to the web fragment. The webview fragment will
+            // save its own URL to its state and will only pull from arguments on first startup
             Bundle args = new Bundle();
             if (getIntent() != null && getIntent().hasExtra("URL")) {
                 args.putString("URL", getIntent().getStringExtra("URL"));
             } else {
                 args.putString("URL", RESOURCE_FOLDER + "index.html");
             }
-            if (getIntent().hasExtra("headers")) {
-                args.putParcelable("headers", getIntent().getParcelableExtra("headers"));
-            }
             webFragment.setArguments(args);
             FragmentTransaction trans = manager.beginTransaction();
+            // replace the passed in view ID with the fragment
             trans.replace(id, webFragment, "main_webkit_wrapper");
             trans.addToBackStack("main_webkit_wrapper");
             trans.commit();
         }
     }
 
+    /**
+     * Saves the session variables to our saved instance state
+     * @param outState instance state to save
+     */
     @Override
     protected void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
-        // save session variables to the instance state
         outState.putParcelable("session", session.parcel());
     }
 
-    // launches a HTML page in a new activity
+
     @Override
-    public void launchHTML(String resource) {
+    public void launchHTML(String url) {
         Intent i = new Intent(this, MainActivity.class);
         try {
             // If we're launching to awoo and the userscript is enabled, use the activity with the menu
-            if (new URI(P.get("awoo_endpoint")).getAuthority().equals(new URI(resource).getAuthority()) && P.getBool("userscript")) {
+            if (new URI(P.get("awoo_endpoint")).getAuthority().equals(new URI(url).getAuthority()) && P.getBool("userscript")) {
                 i = new Intent(this, UserscriptActivity.class);
             }
         } catch (Exception ignored) {
 
         }
         Bundle extras = new Bundle();
-        extras.putString("URL", resource);
+        extras.putString("URL", url);
         i.putExtras(extras);
         // get notified when it exits
         startActivityForResult(i, 0);

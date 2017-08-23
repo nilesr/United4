@@ -17,17 +17,50 @@ import us.dangeru.launcher.fragments.GenericAlertDialogFragment;
 import us.dangeru.launcher.utils.P;
 
 /**
- * Created by Niles on 8/21/17.
+ * This is almost exactly the same as MainActivity, but there's a menu bar at the top.
+ * Just about the entire class deals with updating the menu at the top
  */
 
 public class UserscriptActivity extends MainActivity implements ThreadWatcherListener {
+    /**
+     * Sets up the view with the userscript activity layout and puts the web fragment in the main fragment frame
+     * @param savedInstanceState the previously saved state
+     */
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        onCreate(savedInstanceState, R.layout.userscript_activity, R.id.userscript_activity_main_fragment);
+        setupView(R.layout.userscript_activity, R.id.userscript_activity_main_fragment);
         invalidateToolbar(null);
         ThreadWatcher.registerListener(this);
     }
 
+    /**
+     * Clears the toolbar, then adds options to it.
+     *
+     * It will always display a refresh button to reload the webview
+     *
+     * Then, if there are updated threads in the thread watcher, it will display the thread watcher
+     * notification, which will always show as a button and won't be hidden in the menu. If there are
+     * no updated threads, it will instead add a regular thread watcher item which will only be shown
+     * as a button if there's room
+     *
+     * After that, it will parse the URL of the web view if possible, and determine if the user is
+     * on a url like /:board, /:board/thread/:thread, or /ip/:addr. If the user is on /:board, it adds
+     * a rules button to visit /:board/rules in a new activity. If the user is on /:board/thread/:thread
+     * it will detect if the ThreadWatcher is watching :thread. If not, it will display a watch thread (+)
+     * button, if so it will display an unwatch thread (-) button.
+     *
+     * Then, it will see if the United application has pulled down the list of boards, and if so, it
+     * will create a submenu with each of the boards in the list. United.authorizer will be set if
+     * the user is logged in as a janitor, and United and BoardsList should automatically take care
+     * of showing hidden boards like /staff/ if the user is logged in.
+     *
+     * Then, it will check if there are any threads watched in the thread watcher. If so, it will
+     * create a submenu called "Watched Threads", and populate it with the title of each watched
+     * thread. If the watched thread has new replies, it will add (+3) to the end, replacing `3` with
+     * the actual number of new replies
+     *
+     * @param url the URL of the web view (for detecting /:board, /:board/thread/:thread, /ip/:addr, etc...) or null if the web view isn't ready yet
+     */
     private void invalidateToolbar(String url) {
         Toolbar toolbar = findViewById(R.id.toolbar);
         toolbar.getMenu().clear();
@@ -128,6 +161,10 @@ public class UserscriptActivity extends MainActivity implements ThreadWatcherLis
                         startActivity(i2);
                         break;
                     case R.id.watch_thread:
+                        if (url_thread == null) {
+                            GenericAlertDialogFragment.newInstance("This shouldn't be possible", getFragmentManager());
+                            return true;
+                        }
                         if (ThreadWatcher.isWatching(url_thread.second)) {
                             ThreadWatcher.unwatchThread(url_thread.second);
                         } else {
@@ -135,13 +172,20 @@ public class UserscriptActivity extends MainActivity implements ThreadWatcherLis
                         }
                         break;
                     default:
-                        break;
+                        return false;
                 }
                 return true;
             }
         });
     }
 
+    /**
+     * Called when the webview has finished loading a page. Sets the title on the fragment,
+     * but also because the page has changed, and we may have moved from something like `/` to `/:board`
+     * or `/:board` to `/:board/thread/:thread`, we may need to update which buttons are shown in the
+     * toolbar
+     * @param title
+     */
     @Override
     public void setTitle(CharSequence title) {
         super.setTitle(title);
@@ -150,6 +194,9 @@ public class UserscriptActivity extends MainActivity implements ThreadWatcherLis
         invalidateToolbar();
     }
 
+    /**
+     * Tries to update which buttons should be shown in the toolbar, if possible
+     */
     public void invalidateToolbar() {
         runOnUiThread(new Runnable() {
             @Override
@@ -158,11 +205,18 @@ public class UserscriptActivity extends MainActivity implements ThreadWatcherLis
                     invalidateToolbar(getWebView().getUrl());
                 } catch (Exception e) {
                     e.printStackTrace();
+                    // eh it's probably fine
+                    invalidateToolbar(null);
                 }
             }
         });
     }
 
+    /**
+     * When the user clicks the watch thread or unwatch thread button, we need to redraw
+     * the options menu with or without that thread. The ThreadWatcher will instruct us to do that
+     * using this method
+     */
     @Override
     public void threadsUpdated() {
         invalidateToolbar();

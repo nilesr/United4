@@ -3,6 +3,12 @@
     android:orientation="vertical" android:layout_width="match_parent"
     android:layout_height="match_parent">
 
+    <Button
+        android:id="@+id/button_to_launch_to_thread_watcher"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Launch to Thread Watcher" />
+
     <ListView
         android:id="@+id/board_list_list_view"
         android:layout_width="match_parent"

@@ -34,19 +34,12 @@ public class AndroidShortcuts extends Activity implements BoardsListListener {
         public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
             String board = (String) adapterView.getItemAtPosition(i);
             Intent launchIntent = new Intent();
-            //launchIntent.setComponent(new ComponentName(AndroidShortcuts.this.getPackageName(), ".activities.UserscriptActivity"));
             launchIntent.putExtra("URL", P.get("awoo_endpoint") + "/" + board);
-            launchIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-            launchIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-            //launchIntent.addCategory("launcher.intent.category.BOARD");
             launchIntent.setAction("us.dangeru.launcher.intent.action.BOARD");
             Intent result = new Intent();
             result.putExtra(Intent.EXTRA_SHORTCUT_INTENT, launchIntent);
             result.putExtra(Intent.EXTRA_SHORTCUT_NAME, "danger/" + board + "/");
-            Parcelable iconResource = Intent.ShortcutIconResource.fromContext(AndroidShortcuts.this, android.R.drawable.ic_lock_idle_alarm);
-            result.putExtra(Intent.EXTRA_SHORTCUT_ICON_RESOURCE, iconResource);
-            //result.setAction("com.android.launcher.action.INSTALL_SHORTCUT");
-            //sendBroadcast(result);
+            result.putExtra(Intent.EXTRA_SHORTCUT_ICON_RESOURCE, makeIcon());
             setResult(RESULT_OK, result);
             finish();
         }
@@ -56,6 +49,30 @@ public class AndroidShortcuts extends Activity implements BoardsListListener {
         super.onCreate(state);
         setContentView(R.layout.board_list);
         BoardsList.registerListener(this);
+        findViewById(R.id.button_to_launch_to_thread_watcher).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent launchIntent = new Intent();
+                launchIntent.putExtra("fragment", HiddenSettingsActivity.FragmentType.THREAD_WATCHER.toString());
+                launchIntent.setAction("us.dangeru.launcher.intent.action.THREAD_WATCHER");
+                Intent result = new Intent();
+                result.putExtra(Intent.EXTRA_SHORTCUT_INTENT, launchIntent);
+                result.putExtra(Intent.EXTRA_SHORTCUT_NAME, "Thread Watcher");
+                result.putExtra(Intent.EXTRA_SHORTCUT_ICON_RESOURCE, makeIcon());
+                setResult(RESULT_OK, result);
+                finish();
+            }
+        });
+    }
+    private Parcelable makeIcon() {
+        String field_name = P.get("theme") + "_dangeru";
+        try {
+            Integer field = (Integer) R.raw.class.getField(field_name).get(null);
+            return Intent.ShortcutIconResource.fromContext(AndroidShortcuts.this, field);
+        } catch (Throwable e) {
+            e.printStackTrace();
+            return Intent.ShortcutIconResource.fromContext(AndroidShortcuts.this, R.raw.normal_dangeru);
+        }
     }
 
     @Override

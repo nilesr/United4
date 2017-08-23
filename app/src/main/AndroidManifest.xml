@@ -19,7 +19,12 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".activities.HiddenSettingsActivity" />
+        <activity android:name=".activities.HiddenSettingsActivity">
+            <intent-filter>
+                <action android:name="us.dangeru.launcher.intent.action.BOARD" />
+                <category android:name="android.intent.category.THREAD_WATCHER" />
+            </intent-filter>
+        </activity>
         <activity android:name=".activities.UserscriptActivity">
             <intent-filter>
                 <action android:name="us.dangeru.launcher.intent.action.BOARD" />
@@ -28,7 +33,7 @@
         </activity>
         <activity
             android:name=".activities.AndroidShortcuts"
-            android:icon="@mipmap/refresh"
+            android:icon="@raw/normal_dangeru"
             android:label="danger/u/ board">
             <intent-filter>
                 <action android:name="android.intent.action.CREATE_SHORTCUT"/>

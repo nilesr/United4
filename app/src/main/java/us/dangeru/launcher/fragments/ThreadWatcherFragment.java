@@ -19,6 +19,7 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 import us.dangeru.launcher.API.ThreadWatcher;
+import us.dangeru.launcher.API.ThreadWatcherListener;
 import us.dangeru.launcher.API.WatchableThread;
 import us.dangeru.launcher.R;
 import us.dangeru.launcher.activities.HiddenSettingsActivity;
@@ -29,7 +30,7 @@ import us.dangeru.launcher.utils.P;
  * Created by Niles on 8/21/17.
  */
 
-public class ThreadWatcherFragment extends Fragment implements HiddenSettingsFragment {
+public class ThreadWatcherFragment extends Fragment implements HiddenSettingsFragment, ThreadWatcherListener {
     private static final String TAG = ThreadWatcherFragment.class.getSimpleName();
 
     @Nullable
@@ -115,6 +116,12 @@ public class ThreadWatcherFragment extends Fragment implements HiddenSettingsFra
     public void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
     }
+
+    @Override
+    public void threadsUpdated() {
+        setAdapter();
+    }
+
     private class ThreadWatcherAdapter extends ArrayAdapter<WatchableThread> {
         public ThreadWatcherAdapter(Context context, WatchableThread[] list) {
             super(context, 0, list);

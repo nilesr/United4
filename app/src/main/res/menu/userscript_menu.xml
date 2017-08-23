@@ -3,6 +3,7 @@
     xmlns:android="http://schemas.android.com/apk/res/android">
     <item
         android:icon="@mipmap/star_nofill"
+        android:id="@+id/thread_watcher"
         android:title="Thread Watcher"
         app:showAsAction="ifRoom" />
 </menu>

@@ -80,11 +80,13 @@ public class JanitorLoginFragment extends Fragment implements  HiddenSettingsFra
     }
 
     private void authenticate() {
-        authorizer = new Authorizer(P.get("username"), P.get("password"));
+        P.set("logged_in", "false");
+        United.authorizer = new Authorizer(P.get("username"), P.get("password"));
         try {
-            authorizer.reauthorize();
+            United.authorizer.reauthorize();
             GenericAlertDialogFragment.newInstance("Success! You are logged in as " + authorizer.username, getFragmentManager());
             United.boards = BoardsList.getBoardsList(authorizer);
+            P.set("logged_in", "true");
         } catch (Authorizer.AuthorizationFailureException e) {
             switch (e.type) {
                 case AUTH:
@@ -94,7 +96,7 @@ public class JanitorLoginFragment extends Fragment implements  HiddenSettingsFra
                     GenericAlertDialogFragment.newInstance("Unexpected response code - " + e.responseCode, getFragmentManager());
                     break;
                 case OTHER:
-                    GenericAlertDialogFragment.newInstance("Unexpected error - " + e, getFragmentManager());
+                    GenericAlertDialogFragment.newInstance("Unexpected error - " + e.cause, getFragmentManager());
                     break;
             }
         }

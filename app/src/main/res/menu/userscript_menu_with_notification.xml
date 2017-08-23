@@ -3,6 +3,7 @@
     xmlns:android="http://schemas.android.com/apk/res/android">
     <item
         android:icon="@mipmap/star_fill"
+        android:id="@+id/thread_watcher_with_notification"
         android:title="Notification in Thread Watcher"
         app:showAsAction="ifRoom" />
 </menu>

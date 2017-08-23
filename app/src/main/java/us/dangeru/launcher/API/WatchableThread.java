@@ -18,8 +18,8 @@ public class WatchableThread extends Thread {
     public WatchableThread(JSONObject object) throws JSONException {
         super(object);
     }
-    public static WatchableThread getThreadById(int id) throws Exception {
-        String result = fetch(P.get("awoo_endpoint") + API + "/thread/" + id + "/metadata", United.authorizer);
+    public static WatchableThread getThreadById(int id, Authorizer authorizer) throws Exception {
+        String result = fetch(P.get("awoo_endpoint") + API + "/thread/" + id + "/metadata", authorizer);
         WatchableThread thread = new WatchableThread(new JSONObject(result));
         thread.updateNewRepliesCount();
         return thread;

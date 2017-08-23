@@ -110,7 +110,7 @@
       <option name="m_ignorePrimitives" value="false" />
       <option name="annotationNamesString" value="" />
     </inspection_tool>
-    <inspection_tool class="InstanceofInterfaces" enabled="true" level="INFO" enabled_by_default="true">
+    <inspection_tool class="InstanceofInterfaces" enabled="false" level="INFO" enabled_by_default="false">
       <option name="ignoreAbstractClasses" value="true" />
     </inspection_tool>
     <inspection_tool class="IntLiteralMayBeLongLiteral" enabled="true" level="WEAK WARNING" enabled_by_default="true" />

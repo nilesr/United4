@@ -38,19 +38,21 @@ public class Authorizer {
             os.flush();
             os.close();
             int responseCode = connection.getResponseCode();
-            String cookie = connection.getHeaderField("Set-Cookie");
-            HttpCookie parsed = HttpCookie.parse(cookie).get(0);
-            this.cookie = parsed.toString();
-            P.set("logged_in", responseCode == 200 ? "true" : "false");
             if (responseCode == 403) {
-                throw new AuthorizationFailureException(AuthorizationFailureException.Type.AUTH);
+                throw new AuthorizationFailureException();
             } else if (responseCode == 200) {
+                String cookie = connection.getHeaderField("Set-Cookie");
+                HttpCookie parsed = HttpCookie.parse(cookie).get(0);
+                this.cookie = parsed.toString();
                 return this.cookie;
             } else {
                 throw new AuthorizationFailureException(responseCode);
             }
-        } catch (Exception ignored) {
-            throw new AuthorizationFailureException(AuthorizationFailureException.Type.OTHER);
+        } catch (Exception e) {
+            if (e instanceof AuthorizationFailureException) {
+                throw (AuthorizationFailureException) e;
+            }
+            throw new AuthorizationFailureException(e);
         }
     }
 
@@ -62,15 +64,21 @@ public class Authorizer {
     public static class AuthorizationFailureException extends Exception {
         public Type type;
         public int responseCode;
+        public Exception cause;
 
-        public AuthorizationFailureException(Type type) {
+        public AuthorizationFailureException() {
             super();
-            this.type = type;
+            this.type = Type.AUTH;
         }
         public AuthorizationFailureException(int responseCode) {
             super();
             this.type = Type.UNEXPECTED_RESPONSE;
             this.responseCode = responseCode;
+        }
+        public AuthorizationFailureException(Exception e) {
+            super();
+            this.cause = e;
+            this.type = Type.OTHER;
         }
 
         public enum Type {AUTH, UNEXPECTED_RESPONSE, OTHER}

@@ -37,7 +37,7 @@ public class United extends Application {
     private static WeakReference<Context> singleton = null;
     private static MediaPlayer player = null;
     public static Authorizer authorizer = null;
-    public static List<String> boards = Collections.singletonList("Loading...");
+    public static List<String> boards = null;
 
     // Makes a new sound pool, loads the requested sound and plays it once it's loaded
     // Could be made a LOT better by reusing the same pool and checking if it's already loaded

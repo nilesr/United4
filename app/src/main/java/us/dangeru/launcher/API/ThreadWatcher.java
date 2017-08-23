@@ -7,7 +7,7 @@ import org.json.JSONArray;
 import java.util.ArrayList;
 import java.util.Arrays;
 
-import us.dangeru.launcher.fragments.ThreadWatcherFragment;
+import us.dangeru.launcher.application.United;
 import us.dangeru.launcher.utils.P;
 
 
@@ -19,6 +19,7 @@ public final class ThreadWatcher {
     private static final String TAG = ThreadWatcher.class.getSimpleName();
     public static WatchableThread[] threads;
     public static int updated_threads = 0;
+    static ArrayList<ThreadWatcherListener> listeners = new ArrayList<>();
     static {
         refreshAll();
     }
@@ -44,7 +45,7 @@ public final class ThreadWatcher {
                 public void run() {
                     try {
                         Log.i(TAG, "Fetching thread " + finalParallelIds[finalI]);
-                        WatchableThread thread = WatchableThread.getThreadById(finalParallelIds[finalI]);
+                        WatchableThread thread = WatchableThread.getThreadById(finalParallelIds[finalI], United.authorizer);
                         threads[finalI] = thread;
                         if (thread.new_replies > 0) updated_threads++;
                     } catch (Exception e) {
@@ -69,8 +70,8 @@ public final class ThreadWatcher {
     }
 
     public static void setRead(int idx) {
-        threads[idx].new_replies = 0;
-        Thread thread = threads[idx];
+        WatchableThread thread = threads[idx];
+        thread.new_replies = 0;
         P.set(thread.board + ":" + thread.post_id, String.valueOf(thread.number_of_replies));
         updateNewThreadCounts();
         updateView();
@@ -80,9 +81,9 @@ public final class ThreadWatcher {
     private static void updateView() {
         if (listeners == null) return;
         Log.i(TAG, "Updating " + listeners.size() + " listeners");
-        for (ThreadWatcherFragment listener : listeners) {
+        for (ThreadWatcherListener listener : listeners) {
             try {
-                listener.setAdapter();
+                listener.threadsUpdated();
             } catch (Exception e) {
                 e.printStackTrace();
             }
@@ -98,8 +99,7 @@ public final class ThreadWatcher {
         return res;
     }
 
-    static ArrayList<ThreadWatcherFragment> listeners = new ArrayList<>();
-    public static void registerListener(ThreadWatcherFragment listener) {
+    public static void registerListener(ThreadWatcherListener listener) {
         listeners.add(listener);
     }
     // Called to initialize the static { } block above

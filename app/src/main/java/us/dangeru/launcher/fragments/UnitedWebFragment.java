@@ -86,6 +86,9 @@ public class UnitedWebFragment extends Fragment {
         if (getView() == null) return;
         outState.putString("URL", ((WebView) getView().findViewById(R.id.main_webkit)).getUrl());
         outState.putBoolean("authenticated", authenticated);
+        if (getView() == null) return;
+        WebView webview = getView().findViewById(R.id.main_webkit);
+        webview.saveState(outState);
     }
 
     // Never open the url in chrome, always stay within the web view
@@ -97,6 +100,15 @@ public class UnitedWebFragment extends Fragment {
         @Override public void onPageFinished(WebView view, String url) {
             super.onPageFinished(view, url);
             getActivity().setTitle(view.getTitle());
+        }
+    }
+
+    @Override
+    public void onViewStateRestored(Bundle savedInstanceState) {
+        super.onViewStateRestored(savedInstanceState);
+        if (getView() != null && savedInstanceState != null) {
+            WebView webview = getView().findViewById(R.id.main_webkit);
+            webview.restoreState(savedInstanceState);
         }
     }
 }

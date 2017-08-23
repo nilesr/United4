@@ -16,6 +16,7 @@ import java.net.URL;
 import java.net.URLEncoder;
 
 import us.dangeru.launcher.R;
+import us.dangeru.launcher.activities.UnitedActivity;
 import us.dangeru.launcher.utils.P;
 import us.dangeru.launcher.utils.UnitedPropertiesIf;
 
@@ -88,15 +89,14 @@ public class UnitedWebFragment extends Fragment {
     }
 
     // Never open the url in chrome, always stay within the web view
-    private static class UnitedWebFragmentWebViewClient extends WebViewClient {
-        @Override
-        public boolean shouldOverrideUrlLoading(WebView view, String url) {
+    private class UnitedWebFragmentWebViewClient extends WebViewClient {
+        @Override public boolean shouldOverrideUrlLoading(WebView view, String url) {
             return false;
         }
-
-        @Override
-        public boolean shouldOverrideUrlLoading(WebView view, WebResourceRequest request) {
-            return false;
+        @Override public boolean shouldOverrideUrlLoading(WebView view, WebResourceRequest request) { return false; }
+        @Override public void onPageFinished(WebView view, String url) {
+            super.onPageFinished(view, url);
+            getActivity().setTitle(view.getTitle());
         }
     }
 }

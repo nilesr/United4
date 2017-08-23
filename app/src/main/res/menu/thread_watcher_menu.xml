@@ -1,4 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
-<menu xmlns:android="http://schemas.android.com/apk/res/android">
-    <item android:title="Refresh" />
+<menu xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:icon="@mipmap/refresh"
+        android:title="Refresh"
+        android:id="@+id/refresh"
+        app:showAsAction="ifRoom" />
 </menu>

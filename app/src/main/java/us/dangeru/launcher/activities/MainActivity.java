@@ -87,7 +87,6 @@ public class MainActivity extends Activity implements UnitedActivity {
         }
         Bundle extras = new Bundle();
         extras.putString("URL", resource);
-        extras.putBoolean("support_back_button", true);
         i.putExtras(extras);
         // get notified when it exits
         startActivityForResult(i, 0);
@@ -149,17 +148,11 @@ public class MainActivity extends Activity implements UnitedActivity {
         startActivity(i);
     }
 
-    // If support_back_button is unset or false, tries to go back in the webview, and if there's no more history, will finish the activity
-    // if support_back_button is true (it never is), just finish immediately
     @Override
     public void onBackPressed() {
-        if (getIntent() != null && getIntent().hasExtra("support_back_button") && getIntent().getBooleanExtra("support_back_button", false)) {
-            WebView webview = getWebView();
-            if (webview.canGoBack()) {
-                webview.goBack();
-            } else {
-                finish();
-            }
+        WebView webview = getWebView();
+        if (webview.canGoBack()) {
+            webview.goBack();
         } else {
             finish();
         }

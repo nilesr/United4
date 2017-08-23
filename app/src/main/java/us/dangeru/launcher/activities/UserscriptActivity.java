@@ -128,9 +128,8 @@ public class UserscriptActivity extends MainActivity implements ThreadWatcherLis
                         startActivity(i2);
                         break;
                     case R.id.watch_thread:
-                        // TODO watch or unwatch the thread
                         if (ThreadWatcher.isWatching(url_thread.second)) {
-                            GenericAlertDialogFragment.newInstance("Not implemented yet", getFragmentManager());
+                            ThreadWatcher.unwatchThread(url_thread.second);
                         } else {
                             ThreadWatcher.watchThread(url_thread.second);
                         }

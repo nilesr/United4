@@ -122,13 +122,13 @@ public class ThreadWatcherFragment extends Fragment implements HiddenSettingsFra
         setAdapter();
     }
 
-    private class ThreadWatcherAdapter extends ArrayAdapter<WatchableThread> {
+    private static class ThreadWatcherAdapter extends ArrayAdapter<WatchableThread> {
         public ThreadWatcherAdapter(Context context, WatchableThread[] list) {
             super(context, 0, list);
         }
         @NonNull
         @Override public View getView(int position, View convertView, @NonNull ViewGroup parent) {
-            WatchableThread thread = getItem(position);
+            final WatchableThread thread = getItem(position);
             if (convertView == null) {
                 convertView = LayoutInflater.from(getContext()).inflate(R.layout.thread_watcher_list_item, parent, false);
             }
@@ -161,7 +161,8 @@ public class ThreadWatcherFragment extends Fragment implements HiddenSettingsFra
             convertView.findViewById(R.id.button4).setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    GenericAlertDialogFragment.newInstance("Not implemented yet, sorry but you're watching this thread forever", getFragmentManager());
+                    //GenericAlertDialogFragment.newInstance("Not implemented yet, sorry but you're watching this thread forever", getFragmentManager());
+                    ThreadWatcher.unwatchThread(thread.post_id);
                 }
             });
             return convertView;

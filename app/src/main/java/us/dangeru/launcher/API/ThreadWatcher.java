@@ -127,4 +127,15 @@ public final class ThreadWatcher {
         P.set("watched_threads", new JSONArray(Arrays.asList(new_string_array)).toString());
         refreshAll();
     }
+    public static void unwatchThread(int id) {
+        int[] old = pullParallelIds();
+        ArrayList<String> new_string_list = new ArrayList<>();
+        for (int i = 0; i < old.length; i++) {
+            if (old[i] != id) {
+                new_string_list.add(String.valueOf(old[i]));
+            }
+        }
+        P.set("watched_threads", new JSONArray(new_string_list).toString());
+        refreshAll();
+    }
 }

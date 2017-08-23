@@ -1,5 +1,7 @@
 package us.dangeru.launcher.API;
 
+import android.util.Log;
+
 import org.json.JSONArray;
 
 import java.util.ArrayList;
@@ -13,6 +15,12 @@ import us.dangeru.launcher.utils.P;
  */
 
 public final class BoardsList {
+    private static final String TAG = BoardsList.class.getSimpleName();
+    /**
+     * The list of all boards supported by the awoo endpoint, or null if they haven't finished loading yet
+     */
+    public static List<String> boards = null;
+    public static List<BoardsListListener> listeners = new ArrayList<>();
     private BoardsList() {
     }
 
@@ -21,9 +29,8 @@ public final class BoardsList {
      * the authorizer to authenticate beforehand, so the returned boards list will contain hidden
      * boards like /staff/
      * @param authorizer The authorizer to use, or null if the request should not be authenticated
-     * @return A list of boards supported by the endpoint, or null if an error occurred
      */
-    public static List<String> getBoardsList(Authorizer authorizer) {
+    public static void refreshAllBoards(Authorizer authorizer) {
         try {
             List<String> results = new ArrayList<>();
             String jsonText = NetworkUtils.fetch(P.get("awoo_endpoint") + NetworkUtils.API + "/boards", authorizer);
@@ -31,10 +38,30 @@ public final class BoardsList {
             for (int i = 0; i < arr.length(); i++) {
                 results.add(arr.getString(i));
             }
-            return results;
+            BoardsList.boards = results;
         } catch (Exception e) {
-            //return Collections.singletonList(e.toString());
-            return null;
+            BoardsList.boards = Collections.singletonList(e.toString());
+        }
+        notifyListeners();
+    }
+
+    private static void notifyListeners() {
+        for (BoardsListListener listener : listeners) {
+            try {
+                Log.i(TAG, "Boards list population success, calling boardsListReady on " + listener);
+                listener.boardsListReady(boards);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+    public static void registerListener(BoardsListListener listener) {
+        Log.i(TAG, "Listener " + listener + " added");
+        listeners.add(listener);
+        if (boards != null) {
+            Log.i(TAG, "Boards list was already populated, calling boardsListReady on " + listener);
+            listener.boardsListReady(boards);
         }
     }
 }

@@ -11,12 +11,6 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
-import java.io.OutputStream;
-import java.net.HttpCookie;
-import java.net.HttpURLConnection;
-import java.net.URL;
-import java.net.URLEncoder;
-
 import us.dangeru.launcher.API.Authorizer;
 import us.dangeru.launcher.API.BoardsList;
 import us.dangeru.launcher.R;
@@ -100,8 +94,7 @@ public class JanitorLoginFragment extends Fragment implements  HiddenSettingsFra
             GenericAlertDialogFragment.newInstance("Success! You are logged in as " + authorizer.username, getFragmentManager());
             P.set("logged_in", "true");
             // the /staff/ board will only be shown when you're logged in, so update the boards list in the background
-            // this logic should probably be moved to United
-            United.boards = BoardsList.getBoardsList(authorizer);
+            BoardsList.refreshAllBoards(authorizer);
         } catch (Authorizer.AuthorizationFailureException e) {
             switch (e.type) {
                 case AUTH:

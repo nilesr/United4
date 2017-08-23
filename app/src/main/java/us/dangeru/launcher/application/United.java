@@ -9,19 +9,18 @@ import android.media.SoundPool;
 import android.os.Build;
 import android.util.JsonReader;
 import android.util.Log;
-import android.webkit.CookieSyncManager;
 
 import org.json.JSONArray;
 
 import java.io.StringReader;
 import java.lang.ref.WeakReference;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 import java.util.Random;
 
 import us.dangeru.launcher.API.Authorizer;
 import us.dangeru.launcher.API.BoardsList;
+import us.dangeru.launcher.API.BoardsListListener;
 import us.dangeru.launcher.API.ThreadWatcher;
 import us.dangeru.launcher.utils.P;
 import us.dangeru.launcher.utils.ReloadService;
@@ -40,10 +39,6 @@ public class United extends Application {
      * The object to use to authenticate API requests
      */
     public static Authorizer authorizer = null;
-    /**
-     * The list of all boards supported by the awoo endpoint, or null if they haven't finished loading yet
-     */
-    public static List<String> boards = null;
 
     /**
      * Makes a new sound pool, loads the requested sound and plays it once it's loaded
@@ -103,8 +98,7 @@ public class United extends Application {
         new Thread(new Runnable() {
             @Override
             public void run() {
-                boards = BoardsList.getBoardsList(authorizer);
-                Log.i(TAG, String.valueOf(boards));
+                BoardsList.refreshAllBoards(authorizer);
             }
         }).start();
     }

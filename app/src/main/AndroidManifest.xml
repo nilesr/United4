@@ -20,7 +20,22 @@
             </intent-filter>
         </activity>
         <activity android:name=".activities.HiddenSettingsActivity" />
-        <activity android:name=".activities.UserscriptActivity" />
+        <activity android:name=".activities.UserscriptActivity">
+            <intent-filter>
+                <action android:name="us.dangeru.launcher.intent.action.BOARD" />
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name=".activities.AndroidShortcuts"
+            android:icon="@mipmap/refresh"
+            android:label="danger/u/ board">
+            <intent-filter>
+                <action android:name="android.intent.action.CREATE_SHORTCUT"/>
+                <category android:name="android.intent.category.DEFAULT"/>
+            </intent-filter>
+        </activity>
+
     </application>
 
 </manifest>

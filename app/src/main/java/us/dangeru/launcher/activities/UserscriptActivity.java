@@ -7,6 +7,10 @@ import android.util.Pair;
 import android.view.MenuItem;
 import android.view.SubMenu;
 
+import java.util.List;
+
+import us.dangeru.launcher.API.BoardsList;
+import us.dangeru.launcher.API.BoardsListListener;
 import us.dangeru.launcher.API.ThreadWatcher;
 import us.dangeru.launcher.API.ThreadWatcherListener;
 import us.dangeru.launcher.API.URLUtils;
@@ -21,7 +25,7 @@ import us.dangeru.launcher.utils.P;
  * Just about the entire class deals with updating the menu at the top
  */
 
-public class UserscriptActivity extends MainActivity implements ThreadWatcherListener {
+public class UserscriptActivity extends MainActivity implements ThreadWatcherListener, BoardsListListener {
     /**
      * Sets up the view with the userscript activity layout and puts the web fragment in the main fragment frame
      * @param savedInstanceState the previously saved state
@@ -101,9 +105,9 @@ public class UserscriptActivity extends MainActivity implements ThreadWatcherLis
         }
         // boards may not be loaded yet
         // don't show submenu if they aren't
-        if (United.boards != null) {
+        if (BoardsList.boards != null) {
             SubMenu submenu = toolbar.getMenu().addSubMenu("Boards");
-            for (String board : United.boards) {
+            for (String board : BoardsList.boards) {
                 submenu.add("/" + board + "/").setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
                     @Override
                     public boolean onMenuItemClick(MenuItem item) {
@@ -219,6 +223,11 @@ public class UserscriptActivity extends MainActivity implements ThreadWatcherLis
      */
     @Override
     public void threadsUpdated() {
+        invalidateToolbar();
+    }
+
+    @Override
+    public void boardsListReady(List<String> list) {
         invalidateToolbar();
     }
 }

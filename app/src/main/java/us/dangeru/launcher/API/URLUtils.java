@@ -21,8 +21,8 @@ public final class URLUtils {
      */
     public static Pair<String, Integer> isThread(String url) {
         url = url.replace(P.get("awoo_endpoint"), "");
-        if (United.boards == null) return null;
-        for (String board : United.boards) {
+        if (BoardsList.boards == null) return null;
+        for (String board : BoardsList.boards) {
             Pattern pattern = Pattern.compile("^/" + board + "/thread/(\\d+)/?");
             Matcher matcher = pattern.matcher(url);
             if (matcher.matches()) {
@@ -39,8 +39,8 @@ public final class URLUtils {
      */
     public static String isBoard(String url) {
         url = url.replace(P.get("awoo_endpoint"), "");
-        if (United.boards == null) return null;
-        for (String board : United.boards) {
+        if (BoardsList.boards == null) return null;
+        for (String board : BoardsList.boards) {
             if (url.matches("^/" + board + "/?")) {
                 return board;
             }

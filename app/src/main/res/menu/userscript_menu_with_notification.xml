@@ -5,5 +5,5 @@
         android:icon="@mipmap/star_fill"
         android:id="@+id/thread_watcher_with_notification"
         android:title="Notification in Thread Watcher"
-        app:showAsAction="ifRoom" />
+        app:showAsAction="always" />
 </menu>

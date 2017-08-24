@@ -82,8 +82,6 @@ public class UnitedWebFragment extends Fragment {
                 webview.setWebViewClient(client);
                 // If it's not safe to view this page, finish() the activity and open the url in a web browser instead
                 if (client.shouldOverrideUrlLoading(starting_url, false)) {
-                    Intent i = new Intent(Intent.ACTION_VIEW, Uri.parse(starting_url));
-                    getActivity().startActivity(i);
                     getActivity().finish();
                     return;
                 }
@@ -150,7 +148,10 @@ public class UnitedWebFragment extends Fragment {
                     }
                 }
                 if (!allow && alert) {
-                    GenericAlertDialogFragment.newInstance("Refusing page load for unsafe url " + url + " -- Not in list of allowed authorities " + allowed, getFragmentManager());
+                    //GenericAlertDialogFragment.newInstance("Refusing page load for unsafe url " + url + " -- Not in list of allowed authorities " + allowed, getFragmentManager());
+                    Log.w(TAG, "Refusing page load for unsafe url " + url + " -- Not in list of allowed authorities " + allowed);
+                    Intent i = new Intent(Intent.ACTION_VIEW, Uri.parse(starting_url));
+                    getActivity().startActivity(i);
                 }
                 return !allow;
             } catch (Exception e) {

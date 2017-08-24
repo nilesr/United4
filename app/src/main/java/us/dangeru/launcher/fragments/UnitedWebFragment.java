@@ -80,8 +80,8 @@ public class UnitedWebFragment extends Fragment {
                 webview.addJavascriptInterface(new UnitedPropertiesIf(getActivity()), "unitedPropertiesIf");
                 UnitedWebFragmentWebViewClient client = new UnitedWebFragmentWebViewClient();
                 webview.setWebViewClient(client);
-                // If it's not safe to view this page, finish() the activity and open the url in a web browser instead
-                if (client.shouldOverrideUrlLoading(starting_url, false)) {
+                // If it's not safe to view this page, finish() the activity. `client` will open the url in the default web browser
+                if (client.shouldOverrideUrlLoading(starting_url)) {
                     getActivity().finish();
                     return;
                 }
@@ -126,9 +126,9 @@ public class UnitedWebFragment extends Fragment {
      */
     private class UnitedWebFragmentWebViewClient extends WebViewClient {
         @Override public boolean shouldOverrideUrlLoading(WebView view, String url) {
-            return shouldOverrideUrlLoading(url, true);
+            return shouldOverrideUrlLoading(url);
         }
-        boolean shouldOverrideUrlLoading(String url, boolean alert) {
+        boolean shouldOverrideUrlLoading(String url) {
             Log.i(TAG, "URL: " + url);
             if (P.getBool("override_authorizer")) return false;
             if (url.startsWith(RESOURCE_FOLDER)) return false;
@@ -147,10 +147,11 @@ public class UnitedWebFragment extends Fragment {
                         break;
                     }
                 }
-                if (!allow && alert) {
+                if (!allow) {
                     //GenericAlertDialogFragment.newInstance("Refusing page load for unsafe url " + url + " -- Not in list of allowed authorities " + allowed, getFragmentManager());
                     Log.w(TAG, "Refusing page load for unsafe url " + url + " -- Not in list of allowed authorities " + allowed);
-                    Intent i = new Intent(Intent.ACTION_VIEW, Uri.parse(starting_url));
+                    // launch the url in the default web browser, and since we'll return true (we should override the url) it won't get opened in the web view
+                    Intent i = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
                     getActivity().startActivity(i);
                 }
                 return !allow;

@@ -84,7 +84,7 @@ public final class PropertiesSingleton {
         properties.put("shuffle", "false");
         properties.put("current_song", "");
         properties.put("debug", "false");
-        if (P.get("userscript").isEmpty()) properties.put("userscript", "true");
+        if (getProperty("userscript").isEmpty()) properties.put("userscript", "true");
         resetForAppStart();
     }
 

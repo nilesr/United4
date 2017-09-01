@@ -47,7 +47,7 @@ public final class P {
 
     public static int getColor(String prop) {
         String val = get(prop);
-        int _default = R.color.colorPrimary;
+        int _default = 0xFF837D87; // Topaz
         if (val.isEmpty()) return _default;
         try {
             return Integer.valueOf(val);

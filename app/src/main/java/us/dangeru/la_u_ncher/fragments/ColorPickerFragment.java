@@ -102,6 +102,7 @@ public class ColorPickerFragment extends android.app.Fragment implements HiddenS
         l.add(new ThemeColor("Brown", 0xFF3E2723));
         l.add(new ThemeColor("Grey", 0xFF212121));
         l.add(new ThemeColor("Blue Grey", 0xFF263238));
+        l.add(new ThemeColor("Topaz", 0xFF837D87));
         l.add(new ThemeColor("Black", 0xFF000000));
         return l.toArray(new ThemeColor[l.size()]);
     }

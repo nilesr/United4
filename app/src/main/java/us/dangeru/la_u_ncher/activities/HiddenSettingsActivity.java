@@ -4,9 +4,9 @@ import android.app.Activity;
 import android.app.Fragment;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
-import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 
 import us.dangeru.la_u_ncher.R;
 import us.dangeru.la_u_ncher.fragments.AwooEndpointFragment;
@@ -27,12 +27,12 @@ import us.dangeru.la_u_ncher.utils.P;
  */
 
 public class HiddenSettingsActivity extends Activity {
+    private static final String TAG = HiddenSettingsActivity.class.getSimpleName();
     private FragmentType type = FragmentType.DEBUG_SETTINGS_LIST;
     @Override public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.userscript_activity);
-        Toolbar toolbar = findViewById(R.id.toolbar);
-        toolbar.setBackgroundColor(P.getColor("toolbar_color"));
+        invalidateToolbarColor();
         if (savedInstanceState != null && savedInstanceState.containsKey("fragment")) {
             type = FragmentType.valueOf(savedInstanceState.getString("fragment"));
         } else if (getIntent().hasExtra("fragment")){
@@ -109,6 +109,16 @@ public class HiddenSettingsActivity extends Activity {
         outState.putString("fragment", type.toString());
     }
 
+    public void invalidateToolbarColor() {
+        try {
+            Toolbar toolbar = findViewById(R.id.toolbar);
+            Log.i(TAG, String.valueOf(P.getColor("toolbar_color")));
+            toolbar.setBackgroundColor(P.getColor("toolbar_color"));
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
     /**
      * Types of fragments that can be embedded in this activity
      */
@@ -117,6 +127,7 @@ public class HiddenSettingsActivity extends Activity {
         DEBUG_SETTINGS_LIST,
         JANITOR_LOGIN,
         THREAD_WATCHER,
-        COLOR_PICKER, AWOO_ENDPOINT
+        COLOR_PICKER,
+        AWOO_ENDPOINT
     }
 }

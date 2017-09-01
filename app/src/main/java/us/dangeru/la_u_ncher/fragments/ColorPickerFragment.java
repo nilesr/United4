@@ -1,5 +1,6 @@
 package us.dangeru.la_u_ncher.fragments;
 
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -12,6 +13,8 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
+
+import java.util.ArrayList;
 
 import us.dangeru.la_u_ncher.R;
 import us.dangeru.la_u_ncher.activities.HiddenSettingsActivity;
@@ -26,6 +29,15 @@ public class ColorPickerFragment extends android.app.Fragment implements HiddenS
     public HiddenSettingsActivity.FragmentType getType() {
         return HiddenSettingsActivity.FragmentType.COLOR_PICKER;
     }
+    private static class ThemeColor {
+        String name;
+        int color;
+        ThemeColor(String name, int color) {
+            this.name = name;
+            this.color = color;
+        }
+    }
+    private static ThemeColor[] colors = null;
 
     @Nullable
     @Override
@@ -34,10 +46,11 @@ public class ColorPickerFragment extends android.app.Fragment implements HiddenS
         res.post(new Runnable() {
             @Override
             public void run() {
+                if (colors == null) {
+                    colors = makeColors();
+                }
                 ListView list = res.findViewById(R.id.settings_list);
-                final String[] colors = new String[]{"Janitor Login", "Change Toolbar Color"};
-                final int[] colors_as_ints = new int[] {};
-                list.setAdapter(new ArrayAdapter<String>(getActivity(), 0, colors) {
+                list.setAdapter(new ArrayAdapter<ThemeColor>(getActivity(), 0, colors) {
                     @NonNull
                     @Override
                     public View getView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
@@ -45,22 +58,52 @@ public class ColorPickerFragment extends android.app.Fragment implements HiddenS
                             convertView = LayoutInflater.from(getContext()).inflate(android.R.layout.simple_list_item_1, parent, false);
                         }
                         TextView textView = (TextView) convertView;
-                        textView.setBackgroundColor(colors_as_ints[position]);
-                        textView.setText(colors[position]);
+                        ThemeColor item = getItem(position);
+                        textView.setBackgroundColor(item.color);
+                        textView.setTextColor(Color.WHITE);
+                        textView.setText(item.name);
                         return textView;
                     }
                 });
                 list.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                     @Override
                     public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                        P.set("toolbar_color", String.valueOf(colors_as_ints[i]));
+                        P.set("toolbar_color", String.valueOf(colors[i].color));
+                        ((HiddenSettingsActivity) getActivity()).invalidateToolbarColor();
                     }
                 });
                 Toolbar toolbar = getActivity().findViewById(R.id.toolbar);
                 addOptions(toolbar);
             }
+
+
         });
         return res;
+    }
+
+    private static ThemeColor[] makeColors() {
+        ArrayList<ThemeColor> l = new ArrayList<>();
+        l.add(new ThemeColor("Red", 0xFFB71C1C));
+        l.add(new ThemeColor("Pink", 0xFF880E4F));
+        l.add(new ThemeColor("Purple", 0xFF4A148C));
+        l.add(new ThemeColor("Deep Purple", 0xFF311B92));
+        l.add(new ThemeColor("Indigo", 0xFF1A237E));
+        l.add(new ThemeColor("Blue", 0xFF0D47A1));
+        l.add(new ThemeColor("Light Blue", 0xFF01579B));
+        l.add(new ThemeColor("Cyan", 0xFF006064));
+        l.add(new ThemeColor("Teal", 0xFF004D40));
+        l.add(new ThemeColor("Green", 0xFF1B5E20));
+        l.add(new ThemeColor("Light Green", 0xFF33691E));
+        l.add(new ThemeColor("Lime", 0xFF827717));
+        l.add(new ThemeColor("Yellow", 0xFFF57F17));
+        l.add(new ThemeColor("Amber", 0xFFFF6F00));
+        l.add(new ThemeColor("Orange", 0xFFE65100));
+        l.add(new ThemeColor("Deep Orange", 0xFFBF360C));
+        l.add(new ThemeColor("Brown", 0xFF3E2723));
+        l.add(new ThemeColor("Grey", 0xFF212121));
+        l.add(new ThemeColor("Blue Grey", 0xFF263238));
+        l.add(new ThemeColor("Black", 0xFF000000));
+        return l.toArray(new ThemeColor[l.size()]);
     }
 
     /**

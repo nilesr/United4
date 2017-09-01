@@ -21,11 +21,9 @@
         <script>
             var toggle_count = 0;
             var ol = function onLoad() {
-                var startup_music = unitedPropertiesIf.getProperty("startup_music");
-                startup_music = startup_music == null || startup_music == undefined || startup_music.trim().toUpperCase() != "TRUE";
+                var startup_music = unitedPropertiesIf.getProperty("startup_music").trim().toUpperCase() == "TRUE";
                 document.getElementById("startup_music").checked = startup_music;
-                var userscript = unitedPropertiesIf.getProperty("userscript");
-                userscript = userscript == null || userscript == undefined || userscript.trim().toUpperCase() != "TRUE"
+                var userscript = unitedPropertiesIf.getProperty("userscript").trim().toUpperCase() == "TRUE"
                 document.getElementById("userscript").checked = userscript;
             }
             var save_startup_music = function save_startup_music() {

@@ -22,12 +22,11 @@
             var toggle_count = 0;
             var ol = function onLoad() {
                 var startup_music = unitedPropertiesIf.getProperty("startup_music");
-                if (startup_music == null || startup_music == undefined || startup_music.trim().toUpperCase() != "TRUE") {
-                    startup_music = false;
-                } else {
-                    startup_music = true;
-                }
+                startup_music = startup_music == null || startup_music == undefined || startup_music.trim().toUpperCase() != "TRUE";
                 document.getElementById("startup_music").checked = startup_music;
+                var userscript = unitedPropertiesIf.getProperty("userscript");
+                userscript = userscript == null || userscript == undefined || userscript.trim().toUpperCase() != "TRUE"
+                document.getElementById("userscript").checked = userscript;
             }
             var save_startup_music = function save_startup_music() {
                 unitedPropertiesIf.setProperty("startup_music", document.getElementById("startup_music").checked.toString());
@@ -40,9 +39,16 @@
                     unitedPropertiesIf.closeWindow("true");
                 }
             }
+            var save_userscript = function save_userscript() {
+                unitedPropertiesIf.setProperty("userscript", document.getElementById("userscript").checked.toString());
+            }
         </script>
     </head>
     <body onLoad='ol()'>
+        <h3>4.1.1:</h3>
+        - Unity theme added<br />
+        - Default awoo endpoint switched to dangeru.us<br />
+        - Settings menu added with color picker for menu bar
         <h3>4.1.0:</h3>
         - Shortcuts added<br />
         - Thread watcher works properly<br />
@@ -89,6 +95,9 @@
         <br />
         <input type="checkbox" id="startup_music" onChange="save_startup_music()" name="startup_music" />
         <label for="startup_music">Startup Music</label>
+        <br />
+        <input type="checkbox" id="userscript" onChange="save_userscript()" name="userscript" />
+        <label for="userscript">Userscript (new reply count, thread watcher, shortcuts, etc..)</label>
         <h3>CREDIT (Twitter):</h3>
         @TheAnonE - Trying to dox the owner of the site then changing the password to the patreon and google play store account when he got banned. Thanks Anon E
         <br />

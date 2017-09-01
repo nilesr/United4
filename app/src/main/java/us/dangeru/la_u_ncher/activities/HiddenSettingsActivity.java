@@ -41,7 +41,7 @@ public class HiddenSettingsActivity extends Activity {
         swapScreens(type);
     }
     @Override public void onBackPressed() {
-        FragmentType starting_type = FragmentType.SETTINGS_LIST;
+        FragmentType starting_type = FragmentType.DEBUG_SETTINGS_LIST;
         if (getIntent().hasExtra("fragment")) {
             starting_type = FragmentType.valueOf(getIntent().getStringExtra("fragment"));
         }

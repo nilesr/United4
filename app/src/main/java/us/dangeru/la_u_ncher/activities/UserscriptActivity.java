@@ -1,6 +1,7 @@
 package us.dangeru.la_u_ncher.activities;
 
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.util.Pair;
@@ -34,6 +35,8 @@ public class UserscriptActivity extends MainActivity implements ThreadWatcherLis
         setupView(R.layout.userscript_activity, R.id.userscript_activity_main_fragment);
         invalidateToolbar(null);
         ThreadWatcher.registerListener(this);
+        Toolbar toolbar = findViewById(R.id.toolbar);
+        toolbar.setBackgroundColor(P.getColor("toolbar_color"));
     }
 
     /**
@@ -61,6 +64,8 @@ public class UserscriptActivity extends MainActivity implements ThreadWatcherLis
      * create a submenu called "Watched Threads", and populate it with the title of each watched
      * thread. If the watched thread has new replies, it will add (+3) to the end, replacing `3` with
      * the actual number of new replies
+     *
+     * Also adds the settings item
      *
      * @param url the URL of the web view (for detecting /:board, /:board/thread/:thread, /ip/:addr, etc...) or null if the web view isn't ready yet
      */
@@ -128,7 +133,8 @@ public class UserscriptActivity extends MainActivity implements ThreadWatcherLis
                 }
                 String title = thread.title;
                 if (thread.new_replies > 0) {
-                    title += " (+" + thread.new_replies + ")";
+                    // prepend count instead of append because the screen might not be wide enough to show the whole title
+                    title = "(+" + thread.new_replies + ") " + title;
                 }
                 MenuItem item = submenu.add(title);
                 final int finalI = i;
@@ -144,6 +150,7 @@ public class UserscriptActivity extends MainActivity implements ThreadWatcherLis
                 });
             }
         }
+        toolbar.inflateMenu(R.menu.settings_item);
         toolbar.setOnMenuItemClickListener(new Toolbar.OnMenuItemClickListener() {
             @Override
             public boolean onMenuItemClick(MenuItem item) {
@@ -173,6 +180,11 @@ public class UserscriptActivity extends MainActivity implements ThreadWatcherLis
                         } else {
                             ThreadWatcher.watchThread(url_thread.second);
                         }
+                        break;
+                    case R.id.settings:
+                        Intent i3 = new Intent(UserscriptActivity.this, HiddenSettingsActivity.class);
+                        i3.putExtra("fragment", HiddenSettingsActivity.FragmentType.SETTINGS_LIST.toString());
+                        startActivity(i3);
                         break;
                     default:
                         return false;

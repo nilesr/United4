@@ -4,14 +4,19 @@ import android.app.Activity;
 import android.app.Fragment;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
+import android.graphics.Color;
 import android.os.Bundle;
+import android.support.v7.widget.Toolbar;
 
 import us.dangeru.la_u_ncher.R;
 import us.dangeru.la_u_ncher.fragments.AwooEndpointFragment;
+import us.dangeru.la_u_ncher.fragments.ColorPickerFragment;
+import us.dangeru.la_u_ncher.fragments.DebugSettingsListFragment;
 import us.dangeru.la_u_ncher.fragments.SettingsListFragment;
 import us.dangeru.la_u_ncher.fragments.HiddenSettingsFragment;
 import us.dangeru.la_u_ncher.fragments.JanitorLoginFragment;
 import us.dangeru.la_u_ncher.fragments.ThreadWatcherFragment;
+import us.dangeru.la_u_ncher.utils.P;
 
 /**
  * An activity that can display multiple fragments.
@@ -22,10 +27,12 @@ import us.dangeru.la_u_ncher.fragments.ThreadWatcherFragment;
  */
 
 public class HiddenSettingsActivity extends Activity {
-    private FragmentType type = FragmentType.SETTINGS_LIST;
+    private FragmentType type = FragmentType.DEBUG_SETTINGS_LIST;
     @Override public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.userscript_activity);
+        Toolbar toolbar = findViewById(R.id.toolbar);
+        toolbar.setBackgroundColor(P.getColor("toolbar_color"));
         if (savedInstanceState != null && savedInstanceState.containsKey("fragment")) {
             type = FragmentType.valueOf(savedInstanceState.getString("fragment"));
         } else if (getIntent().hasExtra("fragment")){
@@ -79,6 +86,12 @@ public class HiddenSettingsActivity extends Activity {
             case AWOO_ENDPOINT:
                 newFragment = new AwooEndpointFragment();
                 break;
+            case DEBUG_SETTINGS_LIST:
+                newFragment = new DebugSettingsListFragment();
+                break;
+            case COLOR_PICKER:
+                newFragment = new ColorPickerFragment();
+                break;
         }
         // Put the fragment in our layout
         //transaction.add(newFragment, "fragment");
@@ -101,8 +114,9 @@ public class HiddenSettingsActivity extends Activity {
      */
     public enum FragmentType {
         SETTINGS_LIST,
+        DEBUG_SETTINGS_LIST,
         JANITOR_LOGIN,
         THREAD_WATCHER,
-        AWOO_ENDPOINT
+        COLOR_PICKER, AWOO_ENDPOINT
     }
 }

@@ -150,11 +150,7 @@
                 }
             }
             window.dangeru = function() {
-                if (unitedPropertiesIf.getProperty("debug").toUpperCase() == "TRUE" || unitedPropertiesIf.getProperty("userscript").toUpperCase() == "TRUE") {
-                    unitedPropertiesIf.launchHTML(unitedPropertiesIf.getProperty("awoo_endpoint"));
-                } else {
-                    unitedPropertiesIf.launchHTML('https://boards.dangeru.us/mobile');
-                }
+                unitedPropertiesIf.launchHTML(unitedPropertiesIf.getProperty("awoo_endpoint"));
             }
         </script>
 <style>

@@ -19,10 +19,14 @@ import us.dangeru.la_u_ncher.utils.P;
 import us.dangeru.la_u_ncher.utils.PropertiesSingleton;
 
 /**
- * A list of all the debug settings that you can edit
+ * Created by Niles on 9/1/17.
  */
 
-public class SettingsListFragment extends Fragment implements HiddenSettingsFragment {
+public class DebugSettingsListFragment extends Fragment implements HiddenSettingsFragment {
+    @Override
+    public HiddenSettingsActivity.FragmentType getType() {
+        return HiddenSettingsActivity.FragmentType.DEBUG_SETTINGS_LIST;
+    }
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
@@ -31,17 +35,32 @@ public class SettingsListFragment extends Fragment implements HiddenSettingsFrag
             @Override
             public void run() {
                 ListView list = res.findViewById(R.id.settings_list);
-                final String[] settings = new String[] {"Janitor Login", "Change Toolbar Color" };
+                boolean debug = P.getBool("debug");
+                boolean userscript = P.getBool("userscript");
+                final String[] settings = new String[] { "Reset all preferences", "Toggle debug button, currently " + debug, "Toggle userscript, currently " + userscript, "Change Awoo Endpoint (currently " + P.get("awoo_endpoint") + ")", "Override UnitedWebFragmentWebViewAuthorizer, currently " + P.getBool("override_authorizer") };
                 list.setAdapter(new ArrayAdapter<>(getActivity(), android.R.layout.simple_list_item_1, settings));
                 list.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                     @Override
                     public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
                         switch (i) {
                             case 0:
-                                ((HiddenSettingsActivity) getActivity()).swapScreens(HiddenSettingsActivity.FragmentType.JANITOR_LOGIN);
+                                PropertiesSingleton.resetAllAndExit(getFragmentManager());
                                 break;
                             case 1:
-                                ((HiddenSettingsActivity) getActivity()).swapScreens(HiddenSettingsActivity.FragmentType.COLOR_PICKER);
+                                P.toggle("debug");
+                                run();
+                                break;
+                            case 2:
+                                P.toggle("userscript");
+                                if (P.getBool("userscript")) ThreadWatcher.refreshAll();
+                                run();
+                                break;
+                            case 3:
+                                ((HiddenSettingsActivity) getActivity()).swapScreens(HiddenSettingsActivity.FragmentType.AWOO_ENDPOINT);
+                                break;
+                            case 4:
+                                P.toggle("override_authorizer");
+                                run();
                                 break;
                             default:
                                 GenericAlertDialogFragment.newInstance("Should never happen", getFragmentManager());
@@ -55,12 +74,6 @@ public class SettingsListFragment extends Fragment implements HiddenSettingsFrag
         });
         return res;
     }
-
-    @Override
-    public HiddenSettingsActivity.FragmentType getType() {
-        return HiddenSettingsActivity.FragmentType.SETTINGS_LIST;
-    }
-
     /**
      * adds a close button to the menu bar
      * @param toolbar the toolbar

@@ -1,5 +1,7 @@
 package us.dangeru.la_u_ncher.utils;
 
+import us.dangeru.la_u_ncher.R;
+
 /**
  * Shortcuts for accessing PropertiesSingleton
  */
@@ -41,5 +43,17 @@ public final class P {
     public static void toggle(String prop) {
         //noinspection CallToNumericToString
         set(prop, Boolean.valueOf(!getBool(prop)).toString());
+    }
+
+    public static int getColor(String prop) {
+        String val = get(prop);
+        int _default = R.color.colorPrimary;
+        if (val.isEmpty()) return _default;
+        try {
+            return Integer.valueOf(val);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return _default;
+        }
     }
 }

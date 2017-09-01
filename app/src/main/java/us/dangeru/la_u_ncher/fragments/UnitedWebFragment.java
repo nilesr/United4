@@ -136,6 +136,7 @@ public class UnitedWebFragment extends Fragment {
                 String authority = new URL(url).getAuthority();
                 List<String> allowed = new ArrayList<>();
                 allowed.add(new URL(P.get("awoo_endpoint")).getAuthority());
+                allowed.add(new URL("https://dangeru.us").getAuthority());
                 allowed.add(new URL("https://boards.dangeru.us").getAuthority());
                 allowed.add(new URL("http://augmented.dangeru.us").getAuthority());
                 allowed.add(new URL("http://prefetcher.dangeru.us").getAuthority());

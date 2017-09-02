@@ -8,7 +8,7 @@ https://github.com/nilesr/United4/releases/tag/4.1.1
 
 Direct link: https://niles.xyz/launcher-4.1.1.apk
 
-Google play store, sometimes a version behind: https://play.google.com/store/apps/details?id=us.dangeru.la\_u\_ncher
+Google play store, sometimes a version behind: https://play.google.com/store/apps/details?id=us.dangeru.la_u_ncher
 
 ## Known bugs
 

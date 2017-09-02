@@ -8,6 +8,8 @@ https://github.com/nilesr/United4/releases/tag/4.1.1
 
 Direct link: https://niles.xyz/launcher-4.1.1.apk
 
+Google play store, sometimes a version behind: https://play.google.com/store/apps/details?id=us.dangeru.la\_u\_ncher
+
 ## Known bugs
 
 	- On 4.1.1 the "launch to thread watcher" button in the shortcut creator doesn't work, it's been fixed for the next release

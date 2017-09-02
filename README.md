@@ -12,8 +12,8 @@ Google play store, sometimes a version behind: https://play.google.com/store/app
 
 ## Known bugs
 
-	- On 4.1.1 the "launch to thread watcher" button in the shortcut creator doesn't work, it's been fixed for the next release
-	- Changing the bar color won't take full effect until all UserscriptActivity instances are destroyed (i.e. rotating the screen or restarting the app)
+ - On 4.1.1 the "launch to thread watcher" button in the shortcut creator doesn't work, it's been fixed for the next release
+ - Changing the bar color won't take full effect until all UserscriptActivity instances are destroyed (i.e. rotating the screen or restarting the app)
 
 ## todo list
 - music

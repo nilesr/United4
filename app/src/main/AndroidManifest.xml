@@ -21,7 +21,7 @@
         </activity>
         <activity android:name="us.dangeru.la_u_ncher.activities.HiddenSettingsActivity">
             <intent-filter>
-                <action android:name="us.dangeru.lau_n_cher.intent.action.THREAD_WATCHER" />
+                <action android:name="us.dangeru.la_u_ncher.intent.action.THREAD_WATCHER" />
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity>

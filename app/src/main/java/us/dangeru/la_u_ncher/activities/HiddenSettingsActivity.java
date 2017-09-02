@@ -112,7 +112,6 @@ public class HiddenSettingsActivity extends Activity {
     public void invalidateToolbarColor() {
         try {
             Toolbar toolbar = findViewById(R.id.toolbar);
-            Log.i(TAG, String.valueOf(P.getColor("toolbar_color")));
             toolbar.setBackgroundColor(P.getColor("toolbar_color"));
         } catch (Exception e) {
             e.printStackTrace();

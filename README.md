@@ -4,7 +4,7 @@
 Resize your browser to be phone-sized and visit https://niles.xyz/united
 
 ### Try it on your phone!
-https://github.com/nilesr/United4/releases/tag/4.1.1
+https://github.com/nilesr/United4/releases/tag/4.1.1-real
 
 Direct link: https://niles.xyz/launcher-4.1.1.apk
 

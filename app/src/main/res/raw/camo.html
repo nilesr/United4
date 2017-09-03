@@ -6,8 +6,13 @@
                 var i = document.getElementById("img0");
                 i.style.width = document.body.clientWidth.toString() + "px";
                 var height = document.body.clientWidth * (516/394);
-                i.style.top = ((document.body.clientHeight - height)/2).toString() + "px";
+                var top = document.body.clientHeight - height;
+                i.style.top = top.toString() + "px";
                 i.style.height = height.toString() + "px";
+                i = document.getElementById("img2");
+                i.style.top = (top + (height * 0.65)).toString() + "px";
+                i = document.getElementById("img3");
+                i.style.top = (top + (height * 0.80)).toString() + "px";
             }
         </script>
         <style>

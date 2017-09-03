@@ -7,7 +7,7 @@
                 var i = document.getElementById("img0");
                 i.style.width = document.body.clientWidth.toString() + "px";
                 var height = document.body.clientWidth * (516/394);
-                var top = (document.body.clientHeight - height)/2
+                var top = document.body.clientHeight - height
                 i.style.top = top.toString() + "px";
                 i.style.height = height.toString() + "px";
                 i = document.getElementById("img1");
@@ -37,7 +37,7 @@
             #img2 {
                 bottom: 5%;
                 left: 5%;
-                width: 70%;
+                width: 60%;
             }
         </style>
     </head>

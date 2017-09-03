@@ -3,6 +3,7 @@ if (typeof(window.unitedPropertiesIf) == "undefined") {
     var put = function put(map, whatever, filename, song) {
         map[song] = filename;
     }
+    /*
     put(map, ordered_songs, "hopes_and_dreams.mp3", "Hopes and Dreams");
     put(map, ordered_songs, "a_neon_glow_lights_the_way.mp3", "A Neon Glow Lights the Way");
     put(map, ordered_songs, "welcome_to_va_11_hall_a.mp3", "Welcome To VA-11 HALL-A");
@@ -42,6 +43,7 @@ if (typeof(window.unitedPropertiesIf) == "undefined") {
     put(map, ordered_songs, "until_we_meet_again.mp3", "Until We Meet Again");
     put(map, ordered_songs, "digital_drive.mp3", "Digital Drive");
     put(map, ordered_songs, "safe_haven.mp3", "Safe Haven");
+    */
 
 	window.unitedPropertiesIf = {
 		getSessionVariable: function(name) {
@@ -50,10 +52,10 @@ if (typeof(window.unitedPropertiesIf) == "undefined") {
 			return res;
 		},
 		getProperty: function(name) {
-			if (name == "ordered_songs") return JSON.stringify(['Hopes and Dreams', 'A Neon Glow Lights the Way', 'Welcome To VA-11 HALL-A', 'Every Day is Night', 'Commencing Simulation', 'Drive Me Wild', 'Good for Health, Bad for Education', 'Who Was I?', 'Troubling News', 'A Gaze That Invited Disaster', 'Friendly Conversation', "You've Got Me", 'Umemoto', "JC Elton's", 'Go! Go! Streaming-chan!', 'All Systems, Go!', 'Where Do I Go From Here?', 'Will You Remember Me?', 'Everything Will Be Okay', 'March of the White Knights', 'A. Rene', 'Neo Avatar', 'Those Who Dwell in The Shadows', 'Nighttime Manuvers', 'A Star Pierces the Darkness', 'Your Love is a Drug', 'Through the Storm We Will Find a Way', 'Synthestitch', 'Snowfall', 'The Answer Lies Within', 'Dawn Approaches', 'With Renewed Hope, We Continue Forward', 'Last Call', 'Reminiscence', 'Believe in Me Who Believes in You', 'Final Result', 'Until We Meet Again', 'Digital Drive', 'Safe Haven']);
+			if (name == "ordered_songs") return "[]";// JSON.stringify(['Hopes and Dreams', 'A Neon Glow Lights the Way', 'Welcome To VA-11 HALL-A', 'Every Day is Night', 'Commencing Simulation', 'Drive Me Wild', 'Good for Health, Bad for Education', 'Who Was I?', 'Troubling News', 'A Gaze That Invited Disaster', 'Friendly Conversation', "You've Got Me", 'Umemoto', "JC Elton's", 'Go! Go! Streaming-chan!', 'All Systems, Go!', 'Where Do I Go From Here?', 'Will You Remember Me?', 'Everything Will Be Okay', 'March of the White Knights', 'A. Rene', 'Neo Avatar', 'Those Who Dwell in The Shadows', 'Nighttime Manuvers', 'A Star Pierces the Darkness', 'Your Love is a Drug', 'Through the Storm We Will Find a Way', 'Synthestitch', 'Snowfall', 'The Answer Lies Within', 'Dawn Approaches', 'With Renewed Hope, We Continue Forward', 'Last Call', 'Reminiscence', 'Believe in Me Who Believes in You', 'Final Result', 'Until We Meet Again', 'Digital Drive', 'Safe Haven']);
 			//if (name == "all_themes") return JSON.stringify(["normal", "dotted", "steam", "kira", "meme", "vaporwave"]);
 			if (name == "all_themes") return JSON.stringify(["normal", "vaporwave", "noir", "burg", "unity", "empire"]);
-			if (name == "version_notes") return "Version 4.1.2!\nTap for Patch Notes"
+			if (name == "version_notes") return "Version 4.1.3!\nTap for Patch Notes"
 			if (name == "awoo_endpoint") return "https://dangeru.us";
 			var res = localStorage.getItem(name);
 			if (res == null) return "";

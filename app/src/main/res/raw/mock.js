@@ -54,7 +54,7 @@ if (typeof(window.unitedPropertiesIf) == "undefined") {
 			//if (name == "all_themes") return JSON.stringify(["normal", "dotted", "steam", "kira", "meme", "vaporwave"]);
 			if (name == "all_themes") return JSON.stringify(["normal", "vaporwave", "noir", "burg", "unity", "empire"]);
 			if (name == "version_notes") return "Version 4.1.2!\nTap for Patch Notes"
-			if (name == "awoo_endpoint") return "http://boards.lolis.download";
+			if (name == "awoo_endpoint") return "https://dangeru.us";
 			var res = localStorage.getItem(name);
 			if (res == null) return "";
 			return res;

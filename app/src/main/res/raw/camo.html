@@ -3,11 +3,16 @@
     <head>
         <script>
             var ol = function ol() {
+                var i = document.getElementById("img0");
+                i.style.width = document.body.clientWidth.toString() + "px";
+                var height = document.body.clientWidth * (516/394);
+                i.style.top = ((document.body.clientHeight - height)/2).toString() + "px";
+                i.style.height = height.toString() + "px";
             }
         </script>
         <style>
             body {
-                background: url('camo_bg.png') no-repeat center/cover fixed;
+                background-color: #BEEB71;
                 text-align: center;
                 min-height: 100vh;
                 margin: 0;
@@ -15,6 +20,10 @@
             img {
                 position: absolute;
                 display: block;
+            }
+            #img0 {
+                z-index: -10;
+                left: 0;
             }
             #img1 {
                 width: 80%;
@@ -34,6 +43,7 @@
         </style>
     </head>
     <body onLoad='ol()'>
+        <img id="img0" src="camo_bg.png">
         <a href="camo_customize.html">
             <img id="img1" src="customize.png" />
         </a>

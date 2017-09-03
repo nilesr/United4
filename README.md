@@ -4,7 +4,7 @@
 Resize your browser to be phone-sized and visit https://niles.xyz/united
 
 ### Try it on your phone!
-https://github.com/nilesr/United4/releases/tag/4.1.2
+https://github.com/nilesr/United4/releases/tag/4.1.2-real
 
 Direct link: https://niles.xyz/launcher-4.1.2.apk
 
@@ -12,7 +12,6 @@ Google play store, sometimes a version behind: https://play.google.com/store/app
 
 ## Known bugs
 
- - On 4.1.1 the "launch to thread watcher" button in the shortcut creator doesn't work, it's been fixed for the next release
  - Changing the bar color won't take full effect until all UserscriptActivity instances are destroyed (i.e. rotating the screen or restarting the app)
 
 ## todo list

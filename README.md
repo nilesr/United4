@@ -1,14 +1,16 @@
-# La/u/ncher 4.1.2
+# La/u/ncher 4.1.3
 
 ### Try it in your browser!
 Resize your browser to be phone-sized and visit https://niles.xyz/united
 
 ### Try it on your phone!
-https://github.com/nilesr/United4/releases/tag/4.1.2-real
+https://github.com/nilesr/United4/releases/tag/4.1.3
 
-Direct link: https://niles.xyz/launcher-4.1.2.apk
+Direct link: https://niles.xyz/launcher-4.1.3.apk
 
-Google play store, sometimes a version behind: https://play.google.com/store/apps/details?id=us.dangeru.la_u_ncher
+<span style="display: none;">
+Google play store, sometimes a version behind: https://play.google.com/store/apps/details?id=us.dangeru.la_u_ncher413
+</span>
 
 ## Known bugs
 

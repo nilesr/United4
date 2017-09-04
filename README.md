@@ -18,3 +18,7 @@ Google play store, sometimes a version behind: https://play.google.com/store/app
 - music
 	- song select has a sound too
 	- #buttons > img have click sounds too
+
+# License
+
+La/u/ncher is released under the GPLv3

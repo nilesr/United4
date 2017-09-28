@@ -21,11 +21,11 @@ public final class URLUtils {
     public static Pair<String, Integer> isThread(String url) {
         url = url.replace(P.get("awoo_endpoint"), "");
         if (BoardsList.boards == null) return null;
-        for (String board : BoardsList.boards) {
-            Pattern pattern = Pattern.compile("^/" + board + "/thread/(\\d+)/?");
+        for (BoardsList.Board board : BoardsList.boards) {
+            Pattern pattern = Pattern.compile("^/" + board.name + "/thread/(\\d+)/?");
             Matcher matcher = pattern.matcher(url);
             if (matcher.matches()) {
-                return new Pair<>(board, Integer.valueOf(matcher.group(1)));
+                return new Pair<>(board.name, Integer.valueOf(matcher.group(1)));
             }
         }
         return null;
@@ -39,9 +39,9 @@ public final class URLUtils {
     public static String isBoard(String url) {
         url = url.replace(P.get("awoo_endpoint"), "");
         if (BoardsList.boards == null) return null;
-        for (String board : BoardsList.boards) {
-            if (url.matches("^/" + board + "/?")) {
-                return board;
+        for (BoardsList.Board board : BoardsList.boards) {
+            if (url.matches("^/" + board.name + "/?")) {
+                return board.name;
             }
         }
         return null;

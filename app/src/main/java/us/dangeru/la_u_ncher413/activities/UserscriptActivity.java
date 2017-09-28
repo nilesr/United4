@@ -110,8 +110,8 @@ public class UserscriptActivity extends MainActivity implements ThreadWatcherLis
         // don't show submenu if they aren't
         if (BoardsList.boards != null) {
             SubMenu submenu = toolbar.getMenu().addSubMenu("Boards");
-            for (String board : BoardsList.boards) {
-                submenu.add("/" + board + "/").setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
+            for (BoardsList.Board board : BoardsList.boards) {
+                submenu.add("/" + board.name + "/").setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
                     @Override
                     public boolean onMenuItemClick(MenuItem item) {
                         Intent i = new Intent(UserscriptActivity.this, UserscriptActivity.class);
@@ -237,7 +237,7 @@ public class UserscriptActivity extends MainActivity implements ThreadWatcherLis
     }
 
     @Override
-    public void boardsListReady(List<String> list) {
+    public void boardsListReady(List<BoardsList.Board> list) {
         invalidateToolbar();
     }
 }

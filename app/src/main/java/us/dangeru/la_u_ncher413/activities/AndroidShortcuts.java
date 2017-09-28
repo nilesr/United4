@@ -31,13 +31,13 @@ public class AndroidShortcuts extends Activity implements BoardsListListener {
     private ListView.OnItemClickListener listener = new ListView.OnItemClickListener() {
         @Override
         public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-            String board = (String) adapterView.getItemAtPosition(i);
+            BoardsList.Board board = (BoardsList.Board) adapterView.getItemAtPosition(i);
             Intent launchIntent = new Intent();
-            launchIntent.putExtra("URL", P.get("awoo_endpoint") + "/" + board);
+            launchIntent.putExtra("URL", P.get("awoo_endpoint") + "/" + board.name);
             launchIntent.setAction("us.dangeru.la_u_ncher.intent.action.BOARD");
             Intent result = new Intent();
             result.putExtra(Intent.EXTRA_SHORTCUT_INTENT, launchIntent);
-            result.putExtra(Intent.EXTRA_SHORTCUT_NAME, "danger/" + board + "/");
+            result.putExtra(Intent.EXTRA_SHORTCUT_NAME, "danger/" + board.name + "/");
             result.putExtra(Intent.EXTRA_SHORTCUT_ICON_RESOURCE, makeIcon());
             setResult(RESULT_OK, result);
             finish();
@@ -73,32 +73,43 @@ public class AndroidShortcuts extends Activity implements BoardsListListener {
             return Intent.ShortcutIconResource.fromContext(AndroidShortcuts.this, R.raw.normal_dangeru);
         }
     }
-
+    boolean firstReady = true;
     @Override
-    public void boardsListReady(final List<String> list) {
+    public synchronized void boardsListReady(final List<BoardsList.Board> list) {
         runOnUiThread(new Runnable() {
             @Override
             public void run() {
-                findViewById(R.id.boards_loading).setVisibility(View.GONE);
-                adapter = new BoardsListAdapter(AndroidShortcuts.this, 0, list);
                 ListView listview = findViewById(R.id.board_list_list_view);
+                if (firstReady) {
+                    findViewById(R.id.boards_loading).setVisibility(View.GONE);
+                    listview.setOnItemClickListener(listener);
+                    for (BoardsList.Board b : list) {
+                        if (b.description == null) b.getDescription(AndroidShortcuts.this);
+                    }
+                    firstReady = false;
+                }
+                adapter = new BoardsListAdapter(AndroidShortcuts.this, 0, list);
                 listview.setAdapter(adapter);
-                listview.setOnItemClickListener(listener);
             }
         });
     }
 
-    private static class BoardsListAdapter extends ArrayAdapter<String> {
-        public BoardsListAdapter(@NonNull Context context, @LayoutRes int resource, @NonNull List<String> objects) {
+    private static class BoardsListAdapter extends ArrayAdapter<BoardsList.Board> {
+        public BoardsListAdapter(@NonNull Context context, @LayoutRes int unused, @NonNull List<BoardsList.Board> objects) {
             super(context, 0, objects);
         }
         @NonNull
         @Override public View getView(int position, View convertView, @NonNull ViewGroup parent) {
-            String board = getItem(position);
+            BoardsList.Board board = getItem(position);
             if (convertView == null) {
                 convertView = LayoutInflater.from(getContext()).inflate(R.layout.board_list_item, parent, false);
             }
-            ((TextView) convertView.findViewById(R.id.list_item_board_name)).setText(board);
+            if (board != null) {
+                ((TextView) convertView.findViewById(R.id.list_item_board_name)).setText(board.name);
+                if (board.description != null) {
+                    ((TextView) convertView.findViewById(R.id.list_item_board_description)).setText(board.description);
+                }
+            }
             return convertView;
         }
     }

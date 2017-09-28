@@ -7,5 +7,5 @@ import java.util.List;
  */
 
 public interface BoardsListListener {
-    void boardsListReady(List<String> list);
+    void boardsListReady(List<BoardsList.Board> list);
 }

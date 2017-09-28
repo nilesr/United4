@@ -3,11 +3,14 @@ package us.dangeru.la_u_ncher413.API;
 import android.util.Log;
 
 import org.json.JSONArray;
+import org.json.JSONObject;
 
+import java.lang.*;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+import us.dangeru.la_u_ncher413.application.United;
 import us.dangeru.la_u_ncher413.utils.P;
 
 /**
@@ -19,7 +22,7 @@ public final class BoardsList {
     /**
      * The list of all boards supported by the awoo endpoint, or null if they haven't finished loading yet
      */
-    public static List<String> boards = null;
+    public static List<Board> boards = null;
     public static List<BoardsListListener> listeners = new ArrayList<>();
     private BoardsList() {
     }
@@ -32,15 +35,14 @@ public final class BoardsList {
      */
     public static void refreshAllBoards(Authorizer authorizer) {
         try {
-            List<String> results = new ArrayList<>();
             String jsonText = NetworkUtils.fetch(P.get("awoo_endpoint") + NetworkUtils.API + "/boards", authorizer);
             JSONArray arr = new JSONArray(jsonText);
+            BoardsList.boards = new ArrayList<>();
             for (int i = 0; i < arr.length(); i++) {
-                results.add(arr.getString(i));
+                BoardsList.boards.add(new Board(arr.getString(i)));
             }
-            BoardsList.boards = results;
         } catch (Exception e) {
-            BoardsList.boards = Collections.singletonList(e.toString());
+            BoardsList.boards = Collections.singletonList(new Board(e.toString()));
         }
         notifyListeners();
     }
@@ -62,6 +64,30 @@ public final class BoardsList {
         if (boards != null) {
             Log.i(TAG, "Boards list was already populated, calling boardsListReady on " + listener);
             listener.boardsListReady(boards);
+        }
+    }
+    public static class Board {
+        public String name;
+        public String description;
+        public Board(String name) {
+            this.name = name;
+        }
+        public void getDescription(final BoardsListListener listener) {
+            new java.lang.Thread(new Runnable() {
+                @Override
+                public void run() {
+                    if (Board.this.description != null) {
+                        listener.boardsListReady(BoardsList.boards);
+                        return;
+                    }
+                    try {
+                        Board.this.description = new JSONObject(NetworkUtils.fetch(P.get("awoo_endpoint") + NetworkUtils.API + "/board/" + Board.this.name + "/detail", United.authorizer)).getString("desc");
+                        listener.boardsListReady(BoardsList.boards);
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                }
+            }).start();
         }
     }
 }

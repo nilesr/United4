@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    android:versionName="4.1.3"
-    android:versionCode="413"
+    android:versionName="4.1.4"
+    android:versionCode="414"
     package="us.dangeru.la_u_ncher413">
 
     <uses-permission android:name="android.permission.INTERNET" />
@@ -13,6 +13,10 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity android:name="us.dangeru.la_u_ncher413.activities.MainActivity">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
         </activity>
         <activity android:name="us.dangeru.la_u_ncher413.activities.HiddenSettingsActivity">
             <intent-filter>
@@ -21,10 +25,6 @@
             </intent-filter>
         </activity>
         <activity android:name="us.dangeru.la_u_ncher413.activities.UserscriptActivity">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
             <intent-filter>
                 <action android:name="us.dangeru.la_u_ncher.intent.action.BOARD" />
                 <category android:name="android.intent.category.DEFAULT" />

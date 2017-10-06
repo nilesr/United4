@@ -17,6 +17,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import us.dangeru.la_u_ncher413.R;
 import us.dangeru.la_u_ncher413.application.United;
 import us.dangeru.la_u_ncher413.fragments.GenericAlertDialogFragment;
 
@@ -92,7 +93,7 @@ public final class PropertiesSingleton {
      * static properties that never change
      */
     private void resetForAppStart() {
-        properties.put("version_notes", "Version 4.1.3!\nTap for Patch Notes");
+        properties.put("version_notes", "Version 4.1.4!\nTap for Patch Notes");
         // index.html expects is_playing to be false on first load so it can play startup music
         // if it was told to. It doesn't start the music if `is_playing` is set to true, so if you go
         // to music.html, change the song, rotate and come back, it won't override the song you just picked
@@ -105,7 +106,6 @@ public final class PropertiesSingleton {
         properties.put("all_themes", str);
         HashMap<String, String> map = new HashMap<>();
         ArrayList<String> ordered_songs = new ArrayList<>();
-        /*
         put(map, ordered_songs, R.raw.hopes_and_dreams, "Hopes and Dreams");
         put(map, ordered_songs, R.raw.a_neon_glow_lights_the_way, "A Neon Glow Lights the Way");
         put(map, ordered_songs, R.raw.welcome_to_va_11_hall_a, "Welcome To VA-11 HALL-A");
@@ -145,7 +145,6 @@ public final class PropertiesSingleton {
         put(map, ordered_songs, R.raw.until_we_meet_again, "Until We Meet Again");
         put(map, ordered_songs, R.raw.digital_drive, "Digital Drive");
         put(map, ordered_songs, R.raw.safe_haven, "Safe Haven");
-        */
         str = new JSONObject(map).toString();
         properties.put("songs", str);
         properties.put("ordered_songs", new JSONArray(ordered_songs).toString());

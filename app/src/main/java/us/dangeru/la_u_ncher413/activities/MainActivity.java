@@ -17,6 +17,8 @@ import us.dangeru.la_u_ncher413.utils.P;
 import us.dangeru.la_u_ncher413.utils.ParcelableMap;
 import us.dangeru.la_u_ncher413.utils.ReloadService;
 
+import static us.dangeru.la_u_ncher413.fragments.UnitedWebFragment.RESOURCE_FOLDER;
+
 /**
  * Main activity for danger/u/
  */
@@ -68,8 +70,8 @@ public class MainActivity extends Activity implements UnitedActivity {
             if (getIntent() != null && getIntent().hasExtra("URL")) {
                 args.putString("URL", getIntent().getStringExtra("URL"));
             } else {
-                //args.putString("URL", RESOURCE_FOLDER + "index.html");
-                args.putString("URL", P.get("awoo_endpoint"));
+                args.putString("URL", RESOURCE_FOLDER + "index.html");
+                //args.putString("URL", P.get("awoo_endpoint"));
             }
             webFragment.setArguments(args);
             FragmentTransaction trans = manager.beginTransaction();

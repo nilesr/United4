@@ -140,6 +140,7 @@ public class UnitedWebFragment extends Fragment {
                 allowed.add(new URL("https://boards.dangeru.us").getAuthority());
                 allowed.add(new URL("http://augmented.dangeru.us").getAuthority());
                 allowed.add(new URL("http://prefetcher.dangeru.us").getAuthority());
+                allowed.add(new URL("http://kiramiki.dangeru.us").getAuthority());
                 boolean allow = false;
                 // boolean allow = allowed.stream().map((x) -> x.equalsIgnoreCase(authority)).filter(x -> x).findAny().orElse(false);
                 for (String allowed_authority : allowed) {

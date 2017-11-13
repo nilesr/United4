@@ -2,36 +2,36 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     android:versionName="4.1.4"
     android:versionCode="414"
-    package="us.dangeru.la_u_ncher413">
+    package="com.angryburg.uapp">
 
     <uses-permission android:name="android.permission.INTERNET" />
     <application
-        android:name="us.dangeru.la_u_ncher413.application.United"
+        android:name="com.angryburg.uapp.application.United"
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher_real"
         android:label="@string/app_name"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name="us.dangeru.la_u_ncher413.activities.MainActivity">
+        <activity android:name="com.angryburg.uapp.activities.MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name="us.dangeru.la_u_ncher413.activities.HiddenSettingsActivity">
+        <activity android:name="com.angryburg.uapp.activities.HiddenSettingsActivity">
             <intent-filter>
-                <action android:name="us.dangeru.la_u_ncher.intent.action.THREAD_WATCHER" />
+                <action android:name="com.angryburg.la_u_ncher.intent.action.THREAD_WATCHER" />
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity>
-        <activity android:name="us.dangeru.la_u_ncher413.activities.UserscriptActivity">
+        <activity android:name="com.angryburg.uapp.activities.UserscriptActivity">
             <intent-filter>
-                <action android:name="us.dangeru.la_u_ncher.intent.action.BOARD" />
+                <action android:name="com.angryburg.la_u_ncher.intent.action.BOARD" />
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity>
         <activity
-            android:name="us.dangeru.la_u_ncher413.activities.AndroidShortcuts"
+            android:name="com.angryburg.uapp.activities.AndroidShortcuts"
             android:icon="@mipmap/ic_launcher"
             android:label="danger/u/ board">
             <intent-filter>

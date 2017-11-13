@@ -3,7 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="us.dangeru.la_u_ncher413.activities.MainActivity">
+    tools:context="com.angryburg.uapp.activities.MainActivity">
 
     <WebView
         android:id="@+id/main_webkit"

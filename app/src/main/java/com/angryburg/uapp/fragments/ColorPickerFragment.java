@@ -115,7 +115,7 @@ public class ColorPickerFragment extends android.app.Fragment implements HiddenS
     public void addOptions(Toolbar toolbar) {
         toolbar.setTitle(R.string.app_name);
         toolbar.getMenu().clear();
-        toolbar.inflateMenu(R.menu.hidden_settings_menu);
+        toolbar.inflateMenu(R.menu.back_item);
         toolbar.setOnMenuItemClickListener(new Toolbar.OnMenuItemClickListener() {
             @Override
             public boolean onMenuItemClick(MenuItem item) {

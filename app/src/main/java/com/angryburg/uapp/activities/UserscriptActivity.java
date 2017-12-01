@@ -66,6 +66,8 @@ public class UserscriptActivity extends MainActivity implements ThreadWatcherLis
      *
      * Also adds the settings item
      *
+     * Also adds the back item
+     *
      * @param url the URL of the web view (for detecting /:board, /:board/thread/:thread, /ip/:addr, etc...) or null if the web view isn't ready yet
      */
     private void invalidateToolbar(String url) {
@@ -150,6 +152,7 @@ public class UserscriptActivity extends MainActivity implements ThreadWatcherLis
             }
         }
         toolbar.inflateMenu(R.menu.settings_item);
+        toolbar.inflateMenu(R.menu.back_item);
         toolbar.setOnMenuItemClickListener(new Toolbar.OnMenuItemClickListener() {
             @Override
             public boolean onMenuItemClick(MenuItem item) {
@@ -184,6 +187,10 @@ public class UserscriptActivity extends MainActivity implements ThreadWatcherLis
                         Intent i3 = new Intent(UserscriptActivity.this, HiddenSettingsActivity.class);
                         i3.putExtra("fragment", HiddenSettingsActivity.FragmentType.SETTINGS_LIST.toString());
                         startActivity(i3);
+                        break;
+                    case R.id.back_item:
+                        setResult(0);
+                        finish();
                         break;
                     default:
                         return false;

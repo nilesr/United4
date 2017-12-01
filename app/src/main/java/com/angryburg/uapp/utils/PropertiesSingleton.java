@@ -93,7 +93,7 @@ public final class PropertiesSingleton {
      * static properties that never change
      */
     private void resetForAppStart() {
-        properties.put("version_notes", "Version 4.1.4!\nTap for Patch Notes");
+        properties.put("version_notes", "Version 4.1.5!\nTap for Patch Notes");
         // index.html expects is_playing to be false on first load so it can play startup music
         // if it was told to. It doesn't start the music if `is_playing` is set to true, so if you go
         // to music.html, change the song, rotate and come back, it won't override the song you just picked

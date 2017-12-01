@@ -34,7 +34,7 @@ public interface UnitedActivity {
     /**
      * finishes() the activity, optionally reloading the page that launched this activity.
      * For example, the nanocamo "app" changes the theme, and index.html only checks the theme
-     * on page load. So when you change theme in nanocamo, it needs to reload index.html and will set
+     * on page load. So when you change theme in nanocamo, it needs to notify index.html and will set
      * refresh to true.
      * @param refresh true if the page that opened this activity with launchHTML should be refreshed
      */
@@ -59,4 +59,10 @@ public interface UnitedActivity {
      * @param componentKey the full name of the activity to start
      */
     void doAction(String componentPackage, String componentKey);
+
+    /**
+     * Invalidates the toolbar
+     */
+    void invalidateToolbar();
+
 }

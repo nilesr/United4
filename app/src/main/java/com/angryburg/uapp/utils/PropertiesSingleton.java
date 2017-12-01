@@ -85,6 +85,7 @@ public final class PropertiesSingleton {
         properties.put("current_song", "");
         properties.put("debug", "false");
         if (getProperty("userscript").isEmpty()) properties.put("userscript", "true");
+        if (getProperty("force_show_back_btn").isEmpty()) properties.put("force_show_back_btn", "true");
         resetForAppStart();
     }
 

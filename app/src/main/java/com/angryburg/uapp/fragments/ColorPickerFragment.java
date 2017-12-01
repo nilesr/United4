@@ -18,6 +18,7 @@ import java.util.ArrayList;
 
 import com.angryburg.uapp.R;
 import com.angryburg.uapp.activities.HiddenSettingsActivity;
+import com.angryburg.uapp.utils.NotifierService;
 import com.angryburg.uapp.utils.P;
 
 /**
@@ -70,6 +71,7 @@ public class ColorPickerFragment extends android.app.Fragment implements HiddenS
                     public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
                         P.set("toolbar_color", String.valueOf(colors[i].color));
                         ((HiddenSettingsActivity) getActivity()).invalidateToolbarColor();
+                        NotifierService.notify(NotifierService.NotificationType.INVALIDATE_TOOLBAR);
                     }
                 });
                 Toolbar toolbar = getActivity().findViewById(R.id.toolbar);

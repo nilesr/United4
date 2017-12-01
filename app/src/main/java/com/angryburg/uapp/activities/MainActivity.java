@@ -13,9 +13,9 @@ import java.net.URI;
 import com.angryburg.uapp.R;
 import com.angryburg.uapp.application.United;
 import com.angryburg.uapp.fragments.UnitedWebFragment;
+import com.angryburg.uapp.utils.NotifierService;
 import com.angryburg.uapp.utils.P;
 import com.angryburg.uapp.utils.ParcelableMap;
-import com.angryburg.uapp.utils.ReloadService;
 
 import static com.angryburg.uapp.fragments.UnitedWebFragment.RESOURCE_FOLDER;
 
@@ -34,7 +34,7 @@ public class MainActivity extends Activity implements UnitedActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         // Register to receive reloads to music.html later on
-        ReloadService.register(this);
+        NotifierService.register(this);
         // load and retrieve session variables
         if (savedInstanceState != null) {
             session = ParcelableMap.fromParcel(savedInstanceState.getParcelable("session"));
@@ -111,8 +111,8 @@ public class MainActivity extends Activity implements UnitedActivity {
         startActivityForResult(i, 0);
     }
     @Override protected void onActivityResult(int request_code, int result_code, Intent bundle) {
-        // if the page we opened requested that we reload, do so.
-        // currently used by camo_customize.html to reload the home screen because the theme has changed
+        // if the page we opened requested that we notify, do so.
+        // currently used by camo_customize.html to notify the home screen because the theme has changed
         if (result_code == 1) {
             try {
                 getWebView().reload();
@@ -153,7 +153,7 @@ public class MainActivity extends Activity implements UnitedActivity {
         return this;
     }
 
-    // Gets the webview from the view, used in ReloadService for reloading
+    // Gets the webview from the view, used in NotifierService for reloading
     @Override
     public WebView getWebView() {
         return findViewById(R.id.main_webkit);
@@ -165,6 +165,11 @@ public class MainActivity extends Activity implements UnitedActivity {
         Intent i = new Intent();
         i.setComponent(component);
         startActivity(i);
+    }
+
+    @Override
+    public void invalidateToolbar() {
+        // There is no toolbar to invalidate!
     }
 
     @Override

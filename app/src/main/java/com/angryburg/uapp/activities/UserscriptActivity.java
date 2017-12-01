@@ -34,14 +34,12 @@ public class UserscriptActivity extends MainActivity implements ThreadWatcherLis
         setupView(R.layout.userscript_activity, R.id.userscript_activity_main_fragment);
         invalidateToolbar(null);
         ThreadWatcher.registerListener(this);
-        Toolbar toolbar = findViewById(R.id.toolbar);
-        toolbar.setBackgroundColor(P.getColor("toolbar_color"));
     }
 
     /**
      * Clears the toolbar, then adds options to it.
      *
-     * It will always display a refresh button to reload the webview
+     * It will always display a refresh button to notify the webview
      *
      * Then, if there are updated threads in the thread watcher, it will display the thread watcher
      * notification, which will always show as a button and won't be hidden in the menu. If there are
@@ -70,8 +68,9 @@ public class UserscriptActivity extends MainActivity implements ThreadWatcherLis
      *
      * @param url the URL of the web view (for detecting /:board, /:board/thread/:thread, /ip/:addr, etc...) or null if the web view isn't ready yet
      */
-    private void invalidateToolbar(String url) {
+    public void invalidateToolbar(String url) {
         Toolbar toolbar = findViewById(R.id.toolbar);
+        toolbar.setBackgroundColor(P.getColor("toolbar_color"));
         toolbar.getMenu().clear();
         toolbar.inflateMenu(R.menu.thread_watcher_menu);
         if (ThreadWatcher.updated_threads > 0) {
@@ -152,7 +151,11 @@ public class UserscriptActivity extends MainActivity implements ThreadWatcherLis
             }
         }
         toolbar.inflateMenu(R.menu.settings_item);
-        toolbar.inflateMenu(R.menu.back_item);
+        if (P.getBool("force_show_back_btn")) {
+            toolbar.inflateMenu(R.menu.back_item_forced);
+        } else {
+            toolbar.inflateMenu(R.menu.back_item);
+        }
         toolbar.setOnMenuItemClickListener(new Toolbar.OnMenuItemClickListener() {
             @Override
             public boolean onMenuItemClick(MenuItem item) {
@@ -189,6 +192,7 @@ public class UserscriptActivity extends MainActivity implements ThreadWatcherLis
                         startActivity(i3);
                         break;
                     case R.id.back_item:
+                    case R.id.back_item_forced:
                         setResult(0);
                         finish();
                         break;

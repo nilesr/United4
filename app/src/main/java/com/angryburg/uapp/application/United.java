@@ -22,7 +22,7 @@ import com.angryburg.uapp.API.Authorizer;
 import com.angryburg.uapp.API.BoardsList;
 import com.angryburg.uapp.API.ThreadWatcher;
 import com.angryburg.uapp.utils.P;
-import com.angryburg.uapp.utils.ReloadService;
+import com.angryburg.uapp.utils.NotifierService;
 
 import static java.lang.Integer.parseInt;
 
@@ -105,9 +105,9 @@ public class United extends Application {
 
     /**
      * Plays the given song, by finding its R.raw id in the songs map, stored in properties
-     * If reload is set set to true, will reload the webpage. For more information, see ReloadService's documentation
+     * If notify is set set to true, will notify the webpage. For more information, see NotifierService's documentation
      * @param song the full name of the song to play
-     * @param reload whether to reload the web page
+     * @param reload whether to notify the web page
      */
     public static void playSong(String song, final boolean reload) {
         try {
@@ -141,7 +141,7 @@ public class United extends Application {
             player = MediaPlayer.create(getContext(), id);
             player.start();
             if (reload) {
-                ReloadService.reload();
+                NotifierService.notify(NotifierService.NotificationType.RELOAD);
             }
             // Call onCompletion when the song is done
             player.setOnCompletionListener(new SongDoneListener());
@@ -159,8 +159,8 @@ public class United extends Application {
 
     /**
      * Called when a song is done playing. If we're looping, seek to the beginning and start again
-     * If we're shuffling, pick a random song and play it, and reload music.html
-     * Otherwise, go to the next song in the list, play it and reload music.html
+     * If we're shuffling, pick a random song and play it, and notify music.html
+     * Otherwise, go to the next song in the list, play it and notify music.html
      */
     private static class SongDoneListener implements MediaPlayer.OnCompletionListener {
         @Override
@@ -191,8 +191,8 @@ public class United extends Application {
                 }
                 // Figure out what song we're supposed to play
                 String next_song = all_songs.get(idx);
-                // Play it and reload music.html if it's up. For more information see the documentation for
-                // ReloadService
+                // Play it and notify music.html if it's up. For more information see the documentation for
+                // NotifierService
                 playSong(next_song, true);
             } catch (Exception ignored) {
                 //

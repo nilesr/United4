@@ -13,30 +13,38 @@ import com.angryburg.uapp.activities.UnitedActivity;
  * was done on the java side, so it won't redraw, and the text in the currently playing (#song) box won't get
  * updated, and currently playing song won't get turned gold until the user changes the current page or something
  *
- * So this reloads music.html if it exists when you call reload(), fixing the text in the current song box when
+ * So this reloads music.html if it exists when you call notify(), fixing the text in the current song box when
  * United automatically plays the next song
  */
 
-public final class ReloadService {
+public final class NotifierService {
     private static ArrayList<WeakReference<UnitedActivity>> list;
     static {
         list = new ArrayList<>();
     }
-    private ReloadService() {}
+    private NotifierService() {}
     public static void register(UnitedActivity act) {
         list.add(new WeakReference<>(act));
     }
-    public static void reload() {
+    public static void notify(final NotificationType action) {
         for (WeakReference<UnitedActivity> item : list) {
             try {
-                final WebView webview = item.get().getWebView();
+                final UnitedActivity activity = item.get();
                 item.get().asActivity().runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
                         try {
-                            if (webview == null) return;
-                            if (webview.getUrl().contains("music.html")) {
-                                webview.reload();
+                            switch (action) {
+                                case RELOAD:
+                                    final WebView webview = activity.getWebView();
+                                    if (webview == null) return;
+                                    if (webview.getUrl().contains("music.html")) {
+                                        webview.reload();
+                                    }
+                                    break;
+                                case INVALIDATE_TOOLBAR:
+                                    activity.invalidateToolbar();
+                                    break;
                             }
                         } catch (Throwable ignored) {
                             //
@@ -47,5 +55,9 @@ public final class ReloadService {
                 //
             }
         }
+    }
+    public enum NotificationType {
+        RELOAD,
+        INVALIDATE_TOOLBAR
     }
 }

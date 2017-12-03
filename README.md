@@ -14,7 +14,8 @@ Google play store, sometimes a version behind: https://play.google.com/store/app
 
 ## Known bugs
 
- - Changing the bar color won't take full effect until all UserscriptActivity instances are destroyed (i.e. rotating the screen or restarting the app)
+ - ~~Changing the bar color won't take full effect until all UserscriptActivity instances are destroyed (i.e. rotating the screen or restarting the app)~~ Fixed in 4.1.5
+ - Please open an issue if you find a bug
 
 ## todo list
 - music

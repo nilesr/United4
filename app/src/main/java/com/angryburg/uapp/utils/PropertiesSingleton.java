@@ -78,7 +78,7 @@ public final class PropertiesSingleton {
             e.printStackTrace();
         }
         // default properties that should only be set on the very first run of the app
-        properties.put("startup_music", "true");
+        properties.put("startup_music", "false");
         properties.put("theme", "normal");
         properties.put("looping", "false");
         properties.put("shuffle", "false");
@@ -151,13 +151,6 @@ public final class PropertiesSingleton {
         properties.put("songs", str);
         properties.put("ordered_songs", new JSONArray(ordered_songs).toString());
         properties.put("awoo_endpoint", "https://boards.dangeru.us");
-
-        // TEMP
-        /*
-        properties.put("playing", "false");
-        properties.put("startup_music", "false");
-        properties.put("current_song", "");
-        */
     }
 
 

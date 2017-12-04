@@ -5,17 +5,21 @@ import android.graphics.Color;
 import android.os.Build;
 
 /**
- * Created by Niles on 12/3/17.
+ * Android 5+ only, changes the window bar color to match the toolbar color using the window_bar_color parameter
  */
 
 public final class WindowUtils {
     private WindowUtils() {
     }
 
+    @SuppressWarnings("SameParameterValue")
+    private static int min(int a, int b) { return a > b ? b : a; }
+
     /**
      * Sets the window bar color to match the top bar color if applicable
      * @param act the activity to pull the window from
      */
+    @SuppressWarnings("LiteralAsArgToStringEquals")
     public static void updateWindowBarColor(Activity act) {
         if (Build.VERSION.SDK_INT >= 21) {
             if (P.get("window_bar_color").equalsIgnoreCase("false")) {
@@ -32,11 +36,16 @@ public final class WindowUtils {
                 //act.getWindow().setStatusBarColor(P.getColor("toolbar_color"));
                 int color = P.getColor("toolbar_color");
                 int r = color & 0xFF;
-                int g = (color >> 8) & 0xFF;
-                int b = (color >> 16) & 0xFF;
-                r = (int) (r * factor);
-                g = (int) (g * factor);
-                b = (int) (b * factor);
+                //noinspection UnnecessaryParentheses
+                int g =(color >> 8) & 0xFF;
+                //noinspection UnnecessaryParentheses
+                int b =(color >> 16) & 0xFF;
+                //noinspection NumericCastThatLosesPrecision
+                r = min((int) (r * factor), 0xFF);
+                //noinspection AssignmentReplaceableWithOperatorAssignment,NumericCastThatLosesPrecision
+                g = min((int) (g * factor), 0xFF);
+                //noinspection AssignmentReplaceableWithOperatorAssignment,NumericCastThatLosesPrecision
+                b = min((int) (b * factor), 0xFF);
                 color = 0xFF000000 + r + (g << 8) + (b << 16);
                 act.getWindow().setStatusBarColor(color);
             }

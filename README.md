@@ -6,7 +6,7 @@ Resize your browser to be phone-sized and visit https://niles.xyz/united
 ### Try it on your phone!
 https://github.com/nilesr/United4/releases/tag/4.1.6
 
-Direct link: https://niles.xyz/launcher-4.1.6.apk
+Direct link: https://niles.xyz/uapp-4.1.6.apk
 
 <span style="display: none;">
 Google play store, sometimes a version behind: https://play.google.com/store/apps/details?id=com.angryburg.uapp

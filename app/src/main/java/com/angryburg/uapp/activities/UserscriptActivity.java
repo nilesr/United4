@@ -1,11 +1,14 @@
 package com.angryburg.uapp.activities;
 
 import android.content.Intent;
+import android.graphics.Color;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.util.Pair;
 import android.view.MenuItem;
 import android.view.SubMenu;
+import android.view.Window;
 
 import java.util.List;
 
@@ -18,6 +21,7 @@ import com.angryburg.uapp.API.WatchableThread;
 import com.angryburg.uapp.R;
 import com.angryburg.uapp.fragments.GenericAlertDialogFragment;
 import com.angryburg.uapp.utils.P;
+import com.angryburg.uapp.utils.WindowUtils;
 
 /**
  * This is almost exactly the same as MainActivity, but there's a menu bar at the top.
@@ -71,6 +75,7 @@ public class UserscriptActivity extends MainActivity implements ThreadWatcherLis
     public void invalidateToolbar(String url) {
         Toolbar toolbar = findViewById(R.id.toolbar);
         toolbar.setBackgroundColor(P.getColor("toolbar_color"));
+        WindowUtils.updateWindowBarColor(this);
         toolbar.getMenu().clear();
         toolbar.inflateMenu(R.menu.thread_watcher_menu);
         if (ThreadWatcher.updated_threads > 0) {

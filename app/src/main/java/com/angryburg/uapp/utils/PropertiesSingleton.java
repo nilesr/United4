@@ -84,8 +84,6 @@ public final class PropertiesSingleton {
         properties.put("shuffle", "false");
         properties.put("current_song", "");
         properties.put("debug", "false");
-        if (getProperty("userscript").isEmpty()) properties.put("userscript", "true");
-        if (getProperty("force_show_back_btn").isEmpty()) properties.put("force_show_back_btn", "true");
         resetForAppStart();
     }
 
@@ -94,6 +92,9 @@ public final class PropertiesSingleton {
      * static properties that never change
      */
     private void resetForAppStart() {
+        if (getProperty("userscript").isEmpty()) properties.put("userscript", "true");
+        if (getProperty("force_show_back_btn").isEmpty()) properties.put("force_show_back_btn", "true");
+        if (getProperty("window_bar_color").isEmpty()) properties.put("window_bar_color", "-25");
         properties.put("version_notes", "Version 4.1.5!\nTap for Patch Notes");
         // index.html expects is_playing to be false on first load so it can play startup music
         // if it was told to. It doesn't start the music if `is_playing` is set to true, so if you go
@@ -152,9 +153,11 @@ public final class PropertiesSingleton {
         properties.put("awoo_endpoint", "https://boards.dangeru.us");
 
         // TEMP
+        /*
         properties.put("playing", "false");
         properties.put("startup_music", "false");
         properties.put("current_song", "");
+        */
     }
 
 

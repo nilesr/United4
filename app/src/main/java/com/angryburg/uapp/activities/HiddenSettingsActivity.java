@@ -16,6 +16,7 @@ import com.angryburg.uapp.fragments.HiddenSettingsFragment;
 import com.angryburg.uapp.fragments.JanitorLoginFragment;
 import com.angryburg.uapp.fragments.ThreadWatcherFragment;
 import com.angryburg.uapp.utils.P;
+import com.angryburg.uapp.utils.WindowUtils;
 
 /**
  * An activity that can display multiple fragments.
@@ -112,6 +113,7 @@ public class HiddenSettingsActivity extends Activity {
         try {
             Toolbar toolbar = findViewById(R.id.toolbar);
             toolbar.setBackgroundColor(P.getColor("toolbar_color"));
+            WindowUtils.updateWindowBarColor(this);
         } catch (Exception e) {
             e.printStackTrace();
         }

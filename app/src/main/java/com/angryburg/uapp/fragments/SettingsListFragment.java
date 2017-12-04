@@ -17,6 +17,8 @@ import com.angryburg.uapp.activities.HiddenSettingsActivity;
 import com.angryburg.uapp.utils.NotifierService;
 import com.angryburg.uapp.utils.P;
 
+import java.util.Arrays;
+
 /**
  * A list of all the debug settings that you can edit
  */
@@ -30,7 +32,12 @@ public class SettingsListFragment extends Fragment implements HiddenSettingsFrag
             @Override
             public void run() {
                 ListView list = res.findViewById(R.id.settings_list);
-                final String[] settings = new String[] {"Janitor Login", "Change Toolbar Color", "Always show activity back button in menu - Currently " + P.getBool("force_show_back_btn")};
+                final String[] settings = new String[] {
+                        "Janitor Login",
+                        "Change Toolbar Color",
+                        "Always show activity back button in toolbar - Currently " + (P.getBool("force_show_back_btn") ? "on" : "off"),
+                        "Update window bar color to match toolbar (Android 5+) - Currently " + P.get("window_bar_color"),
+                };
                 list.setAdapter(new ArrayAdapter<>(getActivity(), android.R.layout.simple_list_item_1, settings));
                 list.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                     @Override
@@ -44,6 +51,14 @@ public class SettingsListFragment extends Fragment implements HiddenSettingsFrag
                                 break;
                             case 2:
                                 P.toggle("force_show_back_btn");
+                                NotifierService.notify(NotifierService.NotificationType.INVALIDATE_TOOLBAR);
+                                run();
+                                break;
+                            case 3:
+                                String[] values = {"false", "-25", "match", "+25"};
+                                String new_value = values[(Arrays.asList(values).indexOf(P.get("window_bar_color")) + 1) % values.length];
+                                P.set("window_bar_color", new_value);
+                                ((HiddenSettingsActivity) getActivity()).invalidateToolbarColor();
                                 NotifierService.notify(NotifierService.NotificationType.INVALIDATE_TOOLBAR);
                                 run();
                                 break;

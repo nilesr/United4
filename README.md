@@ -1,12 +1,12 @@
-# La/u/ncher 4.1.5
+# La/u/ncher 4.1.6
 
 ### Try it in your browser!
 Resize your browser to be phone-sized and visit https://niles.xyz/united
 
 ### Try it on your phone!
-https://github.com/nilesr/United4/releases/tag/4.1.5
+https://github.com/nilesr/United4/releases/tag/4.1.6
 
-Direct link: https://niles.xyz/launcher-4.1.5.apk
+Direct link: https://niles.xyz/launcher-4.1.6.apk
 
 <span style="display: none;">
 Google play store, sometimes a version behind: https://play.google.com/store/apps/details?id=com.angryburg.uapp

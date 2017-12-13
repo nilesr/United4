@@ -95,7 +95,7 @@ public final class PropertiesSingleton {
         if (getProperty("userscript").isEmpty()) properties.put("userscript", "true");
         if (getProperty("force_show_back_btn").isEmpty()) properties.put("force_show_back_btn", "true");
         if (getProperty("window_bar_color").isEmpty()) properties.put("window_bar_color", "-25");
-        properties.put("version_notes", "Version 4.1.6!\nTap for Patch Notes");
+        properties.put("version_notes", "Version 4.1.7!\nTap for Patch Notes");
         // index.html expects is_playing to be false on first load so it can play startup music
         // if it was told to. It doesn't start the music if `is_playing` is set to true, so if you go
         // to music.html, change the song, rotate and come back, it won't override the song you just picked
@@ -184,6 +184,14 @@ public final class PropertiesSingleton {
      * @param value the value for that property
      */
     public void setProperty(String key, String value) {
+        // If we're playing or pausing the music, reload index.html
+        //noinspection EqualsReplaceableByObjectsCall
+        if (key.equals("is_playing")) {
+            if (!getProperty(key).equalsIgnoreCase(value)) {
+                //Thread.dumpStack();
+                NotifierService.notify(NotifierService.NotificationType.RELOAD_INDEX);
+            }
+        }
         properties.put(key, value);
         try {
             JsonWriter writer = new JsonWriter(new OutputStreamWriter(United.getContext().openFileOutput(CONFIG, Context.MODE_PRIVATE)));

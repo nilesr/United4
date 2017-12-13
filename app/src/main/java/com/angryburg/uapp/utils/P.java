@@ -35,6 +35,15 @@ public final class P {
     }
 
     /**
+     * Gets the property as a string value, defaulting to false
+     * @param prop the property to read
+     * @return the value of that property as a human-readable boolean
+     */
+    public static String getReadable(String prop) {
+        return getBool(prop) ? "enabled" : "disabled";
+    }
+
+    /**
      * Toggles a boolean property
      * @param prop the property to toggle
      */

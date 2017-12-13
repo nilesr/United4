@@ -9,6 +9,7 @@ import android.os.Bundle;
 import android.webkit.WebView;
 
 import java.net.URI;
+import java.util.Iterator;
 
 import com.angryburg.uapp.R;
 import com.angryburg.uapp.application.United;
@@ -16,6 +17,9 @@ import com.angryburg.uapp.fragments.UnitedWebFragment;
 import com.angryburg.uapp.utils.NotifierService;
 import com.angryburg.uapp.utils.P;
 import com.angryburg.uapp.utils.ParcelableMap;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import static com.angryburg.uapp.fragments.UnitedWebFragment.RESOURCE_FOLDER;
 
@@ -160,9 +164,20 @@ public class MainActivity extends Activity implements UnitedActivity {
     }
 
     @Override
-    public void doAction(String componentPackage, String componentKey) {
+    public void doAction(String componentPackage, String componentKey, JSONObject extras) {
         ComponentName component = new ComponentName(componentPackage, componentKey);
         Intent i = new Intent();
+        if (extras != null) {
+            Iterator<String> it = extras.keys();
+            while (it.hasNext()) {
+                String key = it.next();
+                try {
+                    i.putExtra(key, extras.getString(key));
+                } catch (JSONException ignored) {
+                    //
+                }
+            }
+        }
         i.setComponent(component);
         startActivity(i);
     }

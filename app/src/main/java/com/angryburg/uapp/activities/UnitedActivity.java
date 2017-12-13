@@ -3,6 +3,8 @@ package com.angryburg.uapp.activities;
 import android.app.Activity;
 import android.webkit.WebView;
 
+import org.json.JSONObject;
+
 /**
  * Created by Niles on 8/18/17.
  */
@@ -58,7 +60,7 @@ public interface UnitedActivity {
      * @param componentPackage the package of the activity to start
      * @param componentKey the full name of the activity to start
      */
-    void doAction(String componentPackage, String componentKey);
+    void doAction(String componentPackage, String componentKey, JSONObject extras);
 
     /**
      * Invalidates the toolbar

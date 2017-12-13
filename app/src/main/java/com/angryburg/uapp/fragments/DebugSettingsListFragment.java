@@ -15,6 +15,7 @@ import android.widget.ListView;
 import com.angryburg.uapp.API.ThreadWatcher;
 import com.angryburg.uapp.R;
 import com.angryburg.uapp.activities.HiddenSettingsActivity;
+import com.angryburg.uapp.utils.NotifierService;
 import com.angryburg.uapp.utils.P;
 import com.angryburg.uapp.utils.PropertiesSingleton;
 
@@ -35,9 +36,13 @@ public class DebugSettingsListFragment extends Fragment implements HiddenSetting
             @Override
             public void run() {
                 ListView list = res.findViewById(R.id.settings_list);
-                boolean debug = P.getBool("debug");
-                boolean userscript = P.getBool("userscript");
-                final String[] settings = new String[] { "Reset all preferences", "Toggle debug button, currently " + debug, "Toggle userscript, currently " + userscript, "Change Awoo Endpoint (currently " + P.get("awoo_endpoint") + ")", "Override UnitedWebFragmentWebViewAuthorizer, currently " + P.getBool("override_authorizer") };
+                final String[] settings = new String[] {
+                    "Reset all preferences",
+                    "Toggle debug button, currently " + P.getReadable("debug"),
+                    "Toggle userscript, currently " + P.getReadable("userscript"),
+                    "Change Awoo Endpoint (currently " + P.get("awoo_endpoint") + ")",
+                    "Override UnitedWebFragmentWebViewAuthorizer, currently " + P.getReadable("override_authorizer")
+                };
                 list.setAdapter(new ArrayAdapter<>(getActivity(), android.R.layout.simple_list_item_1, settings));
                 list.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                     @Override
@@ -48,6 +53,7 @@ public class DebugSettingsListFragment extends Fragment implements HiddenSetting
                                 break;
                             case 1:
                                 P.toggle("debug");
+                                NotifierService.notify(NotifierService.NotificationType.RELOAD_INDEX);
                                 run();
                                 break;
                             case 2:

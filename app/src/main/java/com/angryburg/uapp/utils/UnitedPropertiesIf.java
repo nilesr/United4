@@ -10,6 +10,9 @@ import com.angryburg.uapp.API.ThreadWatcher;
 import com.angryburg.uapp.activities.UnitedActivity;
 import com.angryburg.uapp.application.United;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 /**
  * This is the class exposed to the web views
  */
@@ -38,8 +41,14 @@ public class UnitedPropertiesIf {
     @JavascriptInterface public void closeWindow(String refresh) {
         activity.get().closeWindow("true".equalsIgnoreCase(refresh));
     }
-    @JavascriptInterface public void doAction(String componentPackage, String componentKey) {
-        activity.get().doAction(componentPackage, componentKey);
+    @JavascriptInterface public void doAction(String componentPackage, String componentKey, String encodedExtras) {
+        JSONObject extras = null;
+        try {
+            if (encodedExtras != null) extras = new JSONObject(encodedExtras);
+        } catch (JSONException ignored) {
+            //
+        }
+        activity.get().doAction(componentPackage, componentKey, extras);
     }
     @JavascriptInterface public static void playSong(String name, String reload) throws Exception {
         United.playSong(name, "true".equalsIgnoreCase(reload));

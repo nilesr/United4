@@ -11,38 +11,35 @@
                 */
                 font-family: monospace;
             }
-            input[type='checkbox'] {
-                width: 30px;
-                height: 30px;
+            button {
+                line-height: 40px;
+                width: 100%;
+                margin: 0 0 0 0;
                 border: 3px solid black;
                 background-color: lightgrey;
+                font-size: 25px;
             }
         </style>
         <script>
-            var toggle_count = 0;
             var ol = function onLoad() {
-                var startup_music = unitedPropertiesIf.getProperty("startup_music").trim().toUpperCase() == "TRUE";
-                document.getElementById("startup_music").checked = startup_music;
-                var userscript = unitedPropertiesIf.getProperty("userscript").trim().toUpperCase() == "TRUE"
-                document.getElementById("userscript").checked = userscript;
+                //
             }
-            var save_startup_music = function save_startup_music() {
-                unitedPropertiesIf.setProperty("startup_music", document.getElementById("startup_music").checked.toString());
-                toggle_count++;
-                if (toggle_count > 5) {
-                    unitedPropertiesIf.setProperty("testing", "true");
-                    unitedPropertiesIf.setProperty("debug", "true");
-                    //unitedPropertiesIf.doAction("com.angryburg.launcher", "us.dangeru.launcher.activities.HiddenSettingsActivity");
-                    //unitedPropertiesIf.launchHTML(unitedPropertiesIf.getProperty("awoo_endpoint") + "/mod");
-                    unitedPropertiesIf.closeWindow("true");
-                }
+            var makeExtras = function makeExtras(obj) {
+                // ""Abstraction""
+                return JSON.stringify(obj);
             }
-            var save_userscript = function save_userscript() {
-                unitedPropertiesIf.setProperty("userscript", document.getElementById("userscript").checked.toString());
+            var settings = function settings() {
+                unitedPropertiesIf.doAction("com.angryburg.uapp", "com.angryburg.uapp.activities.HiddenSettingsActivity", makeExtras({"fragment": "SETTINGS_LIST"}));
             }
         </script>
     </head>
     <body onLoad='ol()'>
+        <button onClick="settings()">Open Settings</button>
+        <h3>4.1.7:</h3>
+        - Move userscript and startup music toggles into the main settings pane<br />
+        - Correct the startup music song from Every Day is Night to Safe Haven, thanks to user 5c0371 of /test/62399.<br />
+        - Fixed a bug where turning the music on or off would not update the icon on the home screen if "Do Not Keep Activities" was turned off, thanks to user de4ff5 of /test/63702<br />
+        - Add an option to mute sound effects (does not affect music), thanks to user b3dd2f of /u/53096
         <h3>4.1.6:</h3>
         - Fix a bug where new properties were not being set to their default values in patch updates<br />
         - Add a property to allow the window bar color to match (or approximate) the toolbar color on Android 5+.<br />
@@ -110,11 +107,6 @@
         We really need your help to keep /u/ alive.
         <br />
         <br />
-        <input type="checkbox" id="startup_music" onChange="save_startup_music()" name="startup_music" />
-        <label for="startup_music">Startup Music</label>
-        <br />
-        <input type="checkbox" id="userscript" onChange="save_userscript()" name="userscript" />
-        <label for="userscript">Userscript (new reply count, thread watcher, shortcuts, etc..)</label>
         <h3>CREDIT (Twitter):</h3>
         @TheAnonE - Trying to dox the owner of the site then changing the password to the patreon and google play store account when he got banned. Thanks Anon E
         <br />

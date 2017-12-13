@@ -11,6 +11,7 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import com.angryburg.uapp.R;
 import com.angryburg.uapp.activities.HiddenSettingsActivity;
@@ -24,6 +25,7 @@ import java.util.Arrays;
  */
 
 public class SettingsListFragment extends Fragment implements HiddenSettingsFragment {
+    static int startup_toggle_count = 0;
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
@@ -33,10 +35,13 @@ public class SettingsListFragment extends Fragment implements HiddenSettingsFrag
             public void run() {
                 ListView list = res.findViewById(R.id.settings_list);
                 final String[] settings = new String[] {
+                        "Userscript - Currently " + P.getReadable("userscript"),
+                        "Startup music - Currently " + P.getReadable("startup_music"),
                         "Janitor Login",
                         "Change Toolbar Color",
-                        "Always show activity back button in toolbar - Currently " + (P.getBool("force_show_back_btn") ? "on" : "off"),
+                        "Always show activity back button in toolbar - Currently " + P.getReadable("force_show_back_btn"),
                         "Update window bar color to match toolbar (Android 5+) - Currently " + P.get("window_bar_color"),
+                        "Mute sound effects (no effect on music) - Currently " + P.getReadable("mute_sounds"),
                 };
                 list.setAdapter(new ArrayAdapter<>(getActivity(), android.R.layout.simple_list_item_1, settings));
                 list.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -44,22 +49,44 @@ public class SettingsListFragment extends Fragment implements HiddenSettingsFrag
                     public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
                         switch (i) {
                             case 0:
-                                ((HiddenSettingsActivity) getActivity()).swapScreens(HiddenSettingsActivity.FragmentType.JANITOR_LOGIN);
+                                P.toggle("userscript");
+                                run();
                                 break;
                             case 1:
-                                ((HiddenSettingsActivity) getActivity()).swapScreens(HiddenSettingsActivity.FragmentType.COLOR_PICKER);
+                                P.toggle("startup_music");
+                                startup_toggle_count++;
+                                if (startup_toggle_count >= 5) {
+                                    P.set("debug", "true");
+                                    P.set("testing", "true");
+                                    Toast.makeText(getActivity(), "You are now a developer", Toast.LENGTH_LONG).show();
+                                    NotifierService.notify(NotifierService.NotificationType.RELOAD_INDEX);
+                                    getActivity().setResult(1); // 1 for reload, see MainActivity
+                                    getActivity().finish();
+                                } else {
+                                    run();
+                                }
                                 break;
                             case 2:
+                                ((HiddenSettingsActivity) getActivity()).swapScreens(HiddenSettingsActivity.FragmentType.JANITOR_LOGIN);
+                                break;
+                            case 3:
+                                ((HiddenSettingsActivity) getActivity()).swapScreens(HiddenSettingsActivity.FragmentType.COLOR_PICKER);
+                                break;
+                            case 4:
                                 P.toggle("force_show_back_btn");
                                 NotifierService.notify(NotifierService.NotificationType.INVALIDATE_TOOLBAR);
                                 run();
                                 break;
-                            case 3:
+                            case 5:
                                 String[] values = {"false", "-25", "match", "+25"};
                                 String new_value = values[(Arrays.asList(values).indexOf(P.get("window_bar_color")) + 1) % values.length];
                                 P.set("window_bar_color", new_value);
                                 ((HiddenSettingsActivity) getActivity()).invalidateToolbarColor();
                                 NotifierService.notify(NotifierService.NotificationType.INVALIDATE_TOOLBAR);
+                                run();
+                                break;
+                            case 6:
+                                P.toggle("mute_sounds");
                                 run();
                                 break;
                             default:

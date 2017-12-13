@@ -45,6 +45,7 @@ public class United extends Application {
      * @param file the sound to play
      */
     public static void playSound(String file) {
+        if (P.getBool("mute_sounds")) return;
         SoundPool pool = buildPool();
         try {
             AssetFileDescriptor fd = getContext().getAssets().openFd(file);
@@ -141,7 +142,7 @@ public class United extends Application {
             player = MediaPlayer.create(getContext(), id);
             player.start();
             if (reload) {
-                NotifierService.notify(NotifierService.NotificationType.RELOAD);
+                NotifierService.notify(NotifierService.NotificationType.RELOAD_MUSIC);
             }
             // Call onCompletion when the song is done
             player.setOnCompletionListener(new SongDoneListener());

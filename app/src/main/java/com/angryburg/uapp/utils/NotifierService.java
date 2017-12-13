@@ -1,5 +1,6 @@
 package com.angryburg.uapp.utils;
 
+import android.util.Log;
 import android.webkit.WebView;
 
 import java.lang.ref.WeakReference;
@@ -19,6 +20,7 @@ import com.angryburg.uapp.activities.UnitedActivity;
 
 public final class NotifierService {
     private static ArrayList<WeakReference<UnitedActivity>> list;
+    private static final String TAG = NotifierService.class.getSimpleName();
     static {
         list = new ArrayList<>();
     }
@@ -27,6 +29,7 @@ public final class NotifierService {
         list.add(new WeakReference<>(act));
     }
     public static void notify(final NotificationType action) {
+        Log.i(TAG, action.toString());
         for (WeakReference<UnitedActivity> item : list) {
             try {
                 final UnitedActivity activity = item.get();
@@ -34,11 +37,17 @@ public final class NotifierService {
                     @Override
                     public void run() {
                         try {
+                            final WebView webview = activity.getWebView();
                             switch (action) {
-                                case RELOAD:
-                                    final WebView webview = activity.getWebView();
+                                case RELOAD_MUSIC:
                                     if (webview == null) return;
                                     if (webview.getUrl().contains("music.html")) {
+                                        webview.reload();
+                                    }
+                                    break;
+                                case RELOAD_INDEX:
+                                    if (webview == null) return;
+                                    if (webview.getUrl().contains("index.html")) {
                                         webview.reload();
                                     }
                                     break;
@@ -57,7 +66,8 @@ public final class NotifierService {
         }
     }
     public enum NotificationType {
-        RELOAD,
+        RELOAD_MUSIC,
+        RELOAD_INDEX,
         INVALIDATE_TOOLBAR
     }
 }

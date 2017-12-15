@@ -62,7 +62,13 @@ public class UnitedPropertiesIf {
     @JavascriptInterface public static void stopSong() {
         United.stop();
     }
-    @JavascriptInterface public static void threadWatcherRefreshAll() {
-        ThreadWatcher.refreshAll();
+    @JavascriptInterface public static void watchThread(String id) {
+        int iid;
+        try {
+            iid = Integer.valueOf(id);
+            ThreadWatcher.watchThread(iid);
+        } catch (Exception ignored) {
+            //
+        }
     }
 }

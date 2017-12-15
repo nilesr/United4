@@ -95,7 +95,8 @@ public final class PropertiesSingleton {
         if (getProperty("userscript").isEmpty()) properties.put("userscript", "true");
         if (getProperty("force_show_back_btn").isEmpty()) properties.put("force_show_back_btn", "true");
         if (getProperty("window_bar_color").isEmpty()) properties.put("window_bar_color", "-25");
-        properties.put("version_notes", "Version 4.1.7!\nTap for Patch Notes");
+        if (getProperty("watch_on_reply").isEmpty()) properties.put("watch_on_reply", "true");
+        properties.put("version_notes", "Version 4.1.8!\nTap for Patch Notes");
         // index.html expects is_playing to be false on first load so it can play startup music
         // if it was told to. It doesn't start the music if `is_playing` is set to true, so if you go
         // to music.html, change the song, rotate and come back, it won't override the song you just picked

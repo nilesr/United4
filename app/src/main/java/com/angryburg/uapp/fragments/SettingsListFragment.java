@@ -42,6 +42,7 @@ public class SettingsListFragment extends Fragment implements HiddenSettingsFrag
                         "Always show activity back button in toolbar - Currently " + P.getReadable("force_show_back_btn"),
                         "Update window bar color to match toolbar (Android 5+) - Currently " + P.get("window_bar_color"),
                         "Mute sound effects (no effect on music) - Currently " + P.getReadable("mute_sounds"),
+                        "Watch thread on reply - Currently " + P.getReadable("watch_on_reply"),
                 };
                 list.setAdapter(new ArrayAdapter<>(getActivity(), android.R.layout.simple_list_item_1, settings));
                 list.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -87,6 +88,10 @@ public class SettingsListFragment extends Fragment implements HiddenSettingsFrag
                                 break;
                             case 6:
                                 P.toggle("mute_sounds");
+                                run();
+                                break;
+                            case 7:
+                                P.toggle("watch_on_reply");
                                 run();
                                 break;
                             default:

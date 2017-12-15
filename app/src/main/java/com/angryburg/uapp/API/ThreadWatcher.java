@@ -185,6 +185,7 @@ public final class ThreadWatcher {
      */
     public static void watchThread(int id) {
         int[] old = pullParallelIds();
+        for (int oldid : old) if (oldid == id) return; // we are already watching this thread
         String[] new_string_array = new String[old.length + 1];
         for (int i = 0; i < old.length; i++) {
             new_string_array[i] = String.valueOf(old[i]);

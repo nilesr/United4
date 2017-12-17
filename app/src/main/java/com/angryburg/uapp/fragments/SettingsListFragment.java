@@ -101,10 +101,12 @@ public class SettingsListFragment extends Fragment implements HiddenSettingsFrag
                                 break;
                             case 8:
                                 P.toggle("infscroll");
+                                NotifierService.notify(NotifierService.NotificationType.RELOAD_ALL);
                                 run();
                                 break;
                             case 9:
                                 P.toggle("invert");
+                                NotifierService.notify(NotifierService.NotificationType.RELOAD_ALL);
                                 run();
                                 break;
                             default:

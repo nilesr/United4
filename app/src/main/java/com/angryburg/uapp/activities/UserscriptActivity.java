@@ -94,6 +94,7 @@ public class UserscriptActivity extends MainActivity implements ThreadWatcherLis
                 toolbar.inflateMenu(R.menu.userscript_board_menu);
             }
             if (url_thread != null) {
+                toolbar.inflateMenu(R.menu.share_button);
                 toolbar.inflateMenu(R.menu.userscript_thread_menu);
                 MenuItem item = toolbar.getMenu().findItem(R.id.watch_thread);
                 if (ThreadWatcher.isWatching(url_thread.second)) {
@@ -200,6 +201,14 @@ public class UserscriptActivity extends MainActivity implements ThreadWatcherLis
                     case R.id.back_item_forced:
                         setResult(0);
                         finish();
+                        break;
+                    case R.id.share:
+                        Intent i4 = new Intent(Intent.ACTION_SEND);
+                        i4.setType("text/plain");
+                        //i4.addFlags(Intent.FLAG_ACTIVITY_CLEAR_WHEN_TASK_RESET);
+                        i4.putExtra(Intent.EXTRA_SUBJECT, getTitle());
+                        i4.putExtra(Intent.EXTRA_TEXT, getWebView().getUrl());
+                        startActivity(Intent.createChooser(i4, "Share"));
                         break;
                     default:
                         return false;

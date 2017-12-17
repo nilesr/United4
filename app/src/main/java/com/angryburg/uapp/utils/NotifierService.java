@@ -38,18 +38,20 @@ public final class NotifierService {
                     public void run() {
                         try {
                             final WebView webview = activity.getWebView();
+                            if (action != NotificationType.INVALIDATE_TOOLBAR && webview == null) return;
                             switch (action) {
                                 case RELOAD_MUSIC:
-                                    if (webview == null) return;
                                     if (webview.getUrl().contains("music.html")) {
                                         webview.reload();
                                     }
                                     break;
                                 case RELOAD_INDEX:
-                                    if (webview == null) return;
                                     if (webview.getUrl().contains("index.html")) {
                                         webview.reload();
                                     }
+                                    break;
+                                case RELOAD_ALL:
+                                    webview.reload();
                                     break;
                                 case INVALIDATE_TOOLBAR:
                                     activity.invalidateToolbar();
@@ -68,6 +70,7 @@ public final class NotifierService {
     public enum NotificationType {
         RELOAD_MUSIC,
         RELOAD_INDEX,
+        RELOAD_ALL,
         INVALIDATE_TOOLBAR
     }
 }

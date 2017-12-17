@@ -2,6 +2,7 @@ package com.angryburg.uapp.utils;
 
 import android.app.FragmentManager;
 import android.content.Context;
+import android.content.pm.PackageInfo;
 import android.util.JsonReader;
 import android.util.JsonWriter;
 import android.util.Log;
@@ -92,11 +93,20 @@ public final class PropertiesSingleton {
      * static properties that never change
      */
     private void resetForAppStart() {
+        // the default value for infinite scrolling is set by the userscript, so it doesn't need to be included here
         if (getProperty("userscript").isEmpty()) properties.put("userscript", "true");
         if (getProperty("force_show_back_btn").isEmpty()) properties.put("force_show_back_btn", "true");
         if (getProperty("window_bar_color").isEmpty()) properties.put("window_bar_color", "-25");
         if (getProperty("watch_on_reply").isEmpty()) properties.put("watch_on_reply", "true");
-        properties.put("version_notes", "Version 4.1.8!\nTap for Patch Notes");
+        // Pull the current version and put it in the main screen
+        String version = "error";
+        try {
+            PackageInfo packageInfo = United.getContext().getPackageManager().getPackageInfo(United.getContext().getPackageName(), 0);
+            version = String.valueOf(packageInfo.versionName);
+        } catch (Exception ignored) {
+            //
+        }
+        properties.put("version_notes", "Version " + version + "!\nTap for Patch Notes");
         // index.html expects is_playing to be false on first load so it can play startup music
         // if it was told to. It doesn't start the music if `is_playing` is set to true, so if you go
         // to music.html, change the song, rotate and come back, it won't override the song you just picked

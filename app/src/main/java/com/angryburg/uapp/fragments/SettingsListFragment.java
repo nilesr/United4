@@ -25,6 +25,9 @@ import java.util.Arrays;
  */
 
 public class SettingsListFragment extends Fragment implements HiddenSettingsFragment {
+    /**
+     * Holds the number of times that the user has toggled startup music. At 5 it enables developer settings
+     */
     static int startup_toggle_count = 0;
     @Nullable
     @Override
@@ -43,6 +46,8 @@ public class SettingsListFragment extends Fragment implements HiddenSettingsFrag
                         "Update window bar color to match toolbar (Android 5+) - Currently " + P.get("window_bar_color"),
                         "Mute sound effects (no effect on music) - Currently " + P.getReadable("mute_sounds"),
                         "Watch thread on reply - Currently " + P.getReadable("watch_on_reply"),
+                        "Infinite scrolling (requires userscript) - Currently " + P.getReadable("infscroll"),
+                        "Invert Colors (requires userscript) - Currently " + P.getReadable("invert"),
                 };
                 list.setAdapter(new ArrayAdapter<>(getActivity(), android.R.layout.simple_list_item_1, settings));
                 list.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -92,6 +97,14 @@ public class SettingsListFragment extends Fragment implements HiddenSettingsFrag
                                 break;
                             case 7:
                                 P.toggle("watch_on_reply");
+                                run();
+                                break;
+                            case 8:
+                                P.toggle("infscroll");
+                                run();
+                                break;
+                            case 9:
+                                P.toggle("invert");
                                 run();
                                 break;
                             default:

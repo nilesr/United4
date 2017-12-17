@@ -1,6 +1,7 @@
 package com.angryburg.uapp.utils;
 
 import android.app.Activity;
+import android.content.pm.PackageInfo;
 import android.webkit.JavascriptInterface;
 import android.widget.Toast;
 
@@ -9,6 +10,7 @@ import java.lang.ref.WeakReference;
 import com.angryburg.uapp.API.ThreadWatcher;
 import com.angryburg.uapp.activities.UnitedActivity;
 import com.angryburg.uapp.application.United;
+import com.angryburg.uapp.fragments.GenericAlertDialogFragment;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -69,6 +71,15 @@ public class UnitedPropertiesIf {
             ThreadWatcher.watchThread(iid);
         } catch (Exception ignored) {
             //
+        }
+    }
+    @JavascriptInterface public String getVersionCode() {
+        try {
+            PackageInfo packageInfo = activity.get().asActivity().getPackageManager().getPackageInfo(activity.get().asActivity().getPackageName(), 0);
+            return String.valueOf(packageInfo.versionCode);
+        } catch (Exception ignored) {
+            GenericAlertDialogFragment.newInstance("Unexpected error getting app version", activity.get().asActivity().getFragmentManager());
+            return "0";
         }
     }
 }

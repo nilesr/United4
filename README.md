@@ -16,7 +16,7 @@ Google play store, sometimes a version behind: https://play.google.com/store/app
 
  - ~~Changing the bar color won't take full effect until all UserscriptActivity instances are destroyed (i.e. rotating the screen or restarting the app)~~ Fixed in 4.1.5
  - Creating a new thread, then going to the thread watcher and unwatching it, then replying to the thread with "Watch thread on reply disabled" will watch the thread again because ?watch is still in the URL
- - Please open an issue if you find a bug
+ - Creating a new thread sometimes leads to negative "new post" values in the thread watcher
 
 ## todo list
 - music

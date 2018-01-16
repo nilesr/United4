@@ -20,6 +20,7 @@ Google play store, sometimes a version behind: https://play.google.com/store/app
  - Reportedly cannot be uninstalled on a zenfone max first series
 
 ## todo list
+- add an option to remove patch notes text, /test/113577 user 59186a
 - music
 	- song select has a sound too
 	- #buttons > img have click sounds too

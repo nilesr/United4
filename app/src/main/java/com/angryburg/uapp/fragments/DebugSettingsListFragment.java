@@ -63,14 +63,14 @@ public class DebugSettingsListFragment extends Fragment implements HiddenSetting
                                 run();
                                 break;
                             case 3:
-                                ((HiddenSettingsActivity) getActivity()).swapScreens(HiddenSettingsActivity.FragmentType.AWOO_ENDPOINT);
+                                ((HiddenSettingsActivity) getActivity()).push(HiddenSettingsActivity.FragmentType.AWOO_ENDPOINT);
                                 break;
                             case 4:
                                 P.toggle("override_authorizer");
                                 run();
                                 break;
                             case 5:
-                                ((HiddenSettingsActivity) getActivity()).swapScreens(HiddenSettingsActivity.FragmentType.PROPERTIES_LIST);
+                                ((HiddenSettingsActivity) getActivity()).push(HiddenSettingsActivity.FragmentType.PROPERTIES_LIST);
                                 break;
                             default:
                                 GenericAlertDialogFragment.newInstance("Should never happen", getFragmentManager());

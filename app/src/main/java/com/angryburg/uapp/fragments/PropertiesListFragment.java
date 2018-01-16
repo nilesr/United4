@@ -43,7 +43,7 @@ public class PropertiesListFragment extends Fragment implements HiddenSettingsFr
                     public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
                         Bundle args = new Bundle();
                         args.putString("key", settings[i]);
-                        ((HiddenSettingsActivity) getActivity()).swapScreens(HiddenSettingsActivity.FragmentType.PROPERTY_EDITOR, args);
+                        ((HiddenSettingsActivity) getActivity()).push(HiddenSettingsActivity.FragmentType.PROPERTY_EDITOR, args);
                     }
                 });
                 Toolbar toolbar = getActivity().findViewById(R.id.toolbar);
@@ -73,7 +73,7 @@ public class PropertiesListFragment extends Fragment implements HiddenSettingsFr
                 if (item.getItemId() == R.id.add_property) {
                     Bundle args = new Bundle();
                     args.putString("create", "true");
-                    ((HiddenSettingsActivity) getActivity()).swapScreens(HiddenSettingsActivity.FragmentType.PROPERTY_EDITOR_NEW, args);
+                    ((HiddenSettingsActivity) getActivity()).push(HiddenSettingsActivity.FragmentType.PROPERTY_EDITOR_NEW, args);
                 } else {
                     getActivity().finish();
                 }

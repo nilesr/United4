@@ -22,6 +22,8 @@ import com.angryburg.uapp.fragments.ThreadWatcherFragment;
 import com.angryburg.uapp.utils.P;
 import com.angryburg.uapp.utils.WindowUtils;
 
+import java.util.Stack;
+
 /**
  * An activity that can display multiple fragments.
  * It expects a "fragment" to be passed in through the intent, and it will put that fragment
@@ -32,19 +34,26 @@ import com.angryburg.uapp.utils.WindowUtils;
 
 public class HiddenSettingsActivity extends Activity {
     private static final String TAG = HiddenSettingsActivity.class.getSimpleName();
-    private FragmentType type = FragmentType.DEBUG_SETTINGS_LIST;
+    private Stack<FragmentType> windowStack;
     @Override public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.userscript_activity);
         invalidateToolbarColor();
-        if (savedInstanceState != null && savedInstanceState.containsKey("fragment")) {
-            type = FragmentType.valueOf(savedInstanceState.getString("fragment"));
-        } else if (getIntent().hasExtra("fragment")){
+        FragmentType type = FragmentType.DEBUG_SETTINGS_LIST;
+        windowStack = new Stack<>();
+        if (savedInstanceState != null && savedInstanceState.containsKey("stack")) {
+            //noinspection unchecked
+            windowStack = (Stack<FragmentType>) savedInstanceState.getSerializable("stack");
+            type = windowStack.peek();
+        }
+        if (getIntent().hasExtra("fragment") && savedInstanceState == null){
             type = FragmentType.valueOf(getIntent().getStringExtra("fragment"));
         }
+        windowStack.push(type);
         swapScreens(type);
     }
     @Override public void onBackPressed() {
+        /*
         FragmentType starting_type = FragmentType.DEBUG_SETTINGS_LIST;
         if (getIntent().hasExtra("fragment")) {
             starting_type = FragmentType.valueOf(getIntent().getStringExtra("fragment"));
@@ -54,9 +63,34 @@ public class HiddenSettingsActivity extends Activity {
         } else {
             finish();
         }
+        */
+        if (windowStack.empty() || windowStack.size() == 1) {
+            finish();
+            return;
+        }
+        pop();
     }
 
-    public void swapScreens(FragmentType type) {
+    public void replace(FragmentType type, Bundle args) {
+        windowStack.pop();
+        windowStack.push(type);
+        swapScreens(type, args);
+    }
+    public void replace(FragmentType type) {
+        replace(type, null);
+    }
+    public void push(FragmentType type, Bundle args) {
+        windowStack.push(type);
+        swapScreens(type, args);
+    }
+    public void push(FragmentType type) {
+        push(type, null);
+    }
+    public void pop() {
+        windowStack.pop();
+        swapScreens(windowStack.peek());
+    }
+    private void swapScreens(FragmentType type) {
         swapScreens(type, null);
     }
     /**
@@ -66,8 +100,7 @@ public class HiddenSettingsActivity extends Activity {
      * @param type the fragment to switch to
      * @param arguments arguments to give to the fragment
      */
-    public void swapScreens(FragmentType type, @Nullable Bundle arguments) {
-        this.type = type;
+    private void swapScreens(FragmentType type, @Nullable Bundle arguments) {
         FragmentManager manager = getFragmentManager();
         FragmentTransaction transaction = manager.beginTransaction();
         // if we already have a fragment and that fragment is not the fragment we want to show, remove it
@@ -124,7 +157,7 @@ public class HiddenSettingsActivity extends Activity {
      */
     public void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
-        outState.putString("fragment", type.toString());
+        outState.putSerializable("stack", windowStack);
     }
 
     public void invalidateToolbarColor() {

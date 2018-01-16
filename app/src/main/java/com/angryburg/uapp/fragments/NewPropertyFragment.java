@@ -43,7 +43,7 @@ public class NewPropertyFragment extends Fragment implements HiddenSettingsFragm
                 scrapeKey();
                 Bundle args = new Bundle();
                 args.putString("key", key);
-                ((HiddenSettingsActivity) getActivity()).swapScreens(HiddenSettingsActivity.FragmentType.PROPERTY_EDITOR, args);
+                ((HiddenSettingsActivity) getActivity()).replace(HiddenSettingsActivity.FragmentType.PROPERTY_EDITOR, args);
             }
         };
         res.post(new Runnable() {

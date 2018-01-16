@@ -57,7 +57,7 @@ public class PropertyEditorFragment extends Fragment implements HiddenSettingsFr
                     @Override
                     public void onClick(View view) {
                         listener.onClick(null);
-                        ((HiddenSettingsActivity) getActivity()).swapScreens(HiddenSettingsActivity.FragmentType.PROPERTIES_LIST);
+                        ((HiddenSettingsActivity) getActivity()).pop();
                     }
                 });
             }

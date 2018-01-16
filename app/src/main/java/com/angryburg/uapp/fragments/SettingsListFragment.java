@@ -75,10 +75,10 @@ public class SettingsListFragment extends Fragment implements HiddenSettingsFrag
                                 }
                                 break;
                             case 2:
-                                ((HiddenSettingsActivity) getActivity()).swapScreens(HiddenSettingsActivity.FragmentType.JANITOR_LOGIN);
+                                ((HiddenSettingsActivity) getActivity()).push(HiddenSettingsActivity.FragmentType.JANITOR_LOGIN);
                                 break;
                             case 3:
-                                ((HiddenSettingsActivity) getActivity()).swapScreens(HiddenSettingsActivity.FragmentType.COLOR_PICKER);
+                                ((HiddenSettingsActivity) getActivity()).push(HiddenSettingsActivity.FragmentType.COLOR_PICKER);
                                 break;
                             case 4:
                                 P.toggle("force_show_back_btn");
@@ -109,6 +109,14 @@ public class SettingsListFragment extends Fragment implements HiddenSettingsFrag
                             case 9:
                                 P.toggle("invert");
                                 NotifierService.notify(NotifierService.NotificationType.RELOAD_ALL);
+                                run();
+                                break;
+                            case 10:
+                                P.toggle("bar");
+                                run();
+                                break;
+                            case 11:
+                                P.toggle("scroll_to_bar");
                                 run();
                                 break;
                             default:

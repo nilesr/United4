@@ -12,6 +12,7 @@ import com.angryburg.uapp.R;
 import com.angryburg.uapp.fragments.AwooEndpointFragment;
 import com.angryburg.uapp.fragments.ColorPickerFragment;
 import com.angryburg.uapp.fragments.DebugSettingsListFragment;
+import com.angryburg.uapp.fragments.NewPropertyFragment;
 import com.angryburg.uapp.fragments.PropertiesListFragment;
 import com.angryburg.uapp.fragments.PropertyEditorFragment;
 import com.angryburg.uapp.fragments.SettingsListFragment;
@@ -102,6 +103,9 @@ public class HiddenSettingsActivity extends Activity {
             case PROPERTY_EDITOR:
                 newFragment = new PropertyEditorFragment();
                 break;
+            case PROPERTY_EDITOR_NEW:
+                newFragment = new NewPropertyFragment();
+                break;
             case PROPERTIES_LIST:
                 newFragment = new PropertiesListFragment();
                 break;
@@ -144,6 +148,7 @@ public class HiddenSettingsActivity extends Activity {
         COLOR_PICKER,
         AWOO_ENDPOINT,
         PROPERTY_EDITOR,
+        PROPERTY_EDITOR_NEW,
         PROPERTIES_LIST
     }
 }

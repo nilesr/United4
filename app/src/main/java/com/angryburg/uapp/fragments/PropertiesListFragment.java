@@ -66,10 +66,17 @@ public class PropertiesListFragment extends Fragment implements HiddenSettingsFr
         toolbar.setTitle(R.string.app_name);
         toolbar.getMenu().clear();
         toolbar.inflateMenu(R.menu.back_item);
+        toolbar.inflateMenu(R.menu.add_property);
         toolbar.setOnMenuItemClickListener(new Toolbar.OnMenuItemClickListener() {
             @Override
             public boolean onMenuItemClick(MenuItem item) {
-                getActivity().finish();
+                if (item.getItemId() == R.id.add_property) {
+                    Bundle args = new Bundle();
+                    args.putString("create", "true");
+                    ((HiddenSettingsActivity) getActivity()).swapScreens(HiddenSettingsActivity.FragmentType.PROPERTY_EDITOR_NEW, args);
+                } else {
+                    getActivity().finish();
+                }
                 return true;
             }
         });

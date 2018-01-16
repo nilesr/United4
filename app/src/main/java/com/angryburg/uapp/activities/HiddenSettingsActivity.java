@@ -33,6 +33,7 @@ import java.util.Stack;
  */
 
 public class HiddenSettingsActivity extends Activity {
+    @SuppressWarnings("unused")
     private static final String TAG = HiddenSettingsActivity.class.getSimpleName();
     private Stack<FragmentType> windowStack;
     @Override public void onCreate(Bundle savedInstanceState) {
@@ -44,7 +45,11 @@ public class HiddenSettingsActivity extends Activity {
         if (savedInstanceState != null && savedInstanceState.containsKey("stack")) {
             //noinspection unchecked
             windowStack = (Stack<FragmentType>) savedInstanceState.getSerializable("stack");
-            type = windowStack.peek();
+            if (windowStack == null) {
+                windowStack = new Stack<>();
+            } else {
+                type = windowStack.peek();
+            }
         }
         if (getIntent().hasExtra("fragment") && savedInstanceState == null){
             type = FragmentType.valueOf(getIntent().getStringExtra("fragment"));
@@ -64,30 +69,51 @@ public class HiddenSettingsActivity extends Activity {
             finish();
         }
         */
-        if (windowStack.empty() || windowStack.size() == 1) {
+        if (windowStack.isEmpty() || windowStack.size() == 1) {
             finish();
             return;
         }
         pop();
     }
 
+    /**
+     * Replaces the top of the fragment stack with the given fragment type
+     * @param type The fragment to replace
+     * @param args The arguments to pass to that fragment
+     */
     public void replace(FragmentType type, Bundle args) {
         windowStack.pop();
         windowStack.push(type);
         swapScreens(type, args);
     }
-    public void replace(FragmentType type) {
-        replace(type, null);
-    }
+
+    /**
+     * Pushes another fragment onto the fragment stack
+     * @param type the type of fragment to put on the stack
+     * @param args optional arguments to pass to the fragment
+     */
     public void push(FragmentType type, Bundle args) {
         windowStack.push(type);
         swapScreens(type, args);
     }
+
+    /**
+     * Pushes another fragment onto the fragment stack
+     * @param type the type of fragment to put on the stack
+     */
     public void push(FragmentType type) {
         push(type, null);
     }
+
+    /**
+     * Pops the top fragment off the stack.
+     */
     public void pop() {
         windowStack.pop();
+        if (windowStack.isEmpty()) {
+            finish();
+            return;
+        }
         swapScreens(windowStack.peek());
     }
     private void swapScreens(FragmentType type) {
@@ -160,6 +186,9 @@ public class HiddenSettingsActivity extends Activity {
         outState.putSerializable("stack", windowStack);
     }
 
+    /**
+     * Refreshes the toolbar color from the properties.
+     */
     public void invalidateToolbarColor() {
         try {
             Toolbar toolbar = findViewById(R.id.toolbar);
@@ -173,6 +202,7 @@ public class HiddenSettingsActivity extends Activity {
     /**
      * Types of fragments that can be embedded in this activity
      */
+    @SuppressWarnings("JavaDoc")
     public enum FragmentType {
         SETTINGS_LIST,
         DEBUG_SETTINGS_LIST,

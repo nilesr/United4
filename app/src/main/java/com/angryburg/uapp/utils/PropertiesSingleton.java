@@ -221,6 +221,10 @@ public final class PropertiesSingleton {
         }
     }
 
+    public String[] getKeys() {
+        return properties.keySet().toArray(new String[properties.keySet().size()]);
+    }
+
     /**
      * Resets all properties and forcibly closes the program to prevent them from being rewritten
      * on the next setProperty call

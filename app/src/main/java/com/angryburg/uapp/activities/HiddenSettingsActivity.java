@@ -5,12 +5,15 @@ import android.app.Fragment;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.support.v7.widget.Toolbar;
 
 import com.angryburg.uapp.R;
 import com.angryburg.uapp.fragments.AwooEndpointFragment;
 import com.angryburg.uapp.fragments.ColorPickerFragment;
 import com.angryburg.uapp.fragments.DebugSettingsListFragment;
+import com.angryburg.uapp.fragments.PropertiesListFragment;
+import com.angryburg.uapp.fragments.PropertyEditorFragment;
 import com.angryburg.uapp.fragments.SettingsListFragment;
 import com.angryburg.uapp.fragments.HiddenSettingsFragment;
 import com.angryburg.uapp.fragments.JanitorLoginFragment;
@@ -52,13 +55,17 @@ public class HiddenSettingsActivity extends Activity {
         }
     }
 
+    public void swapScreens(FragmentType type) {
+        swapScreens(type, null);
+    }
     /**
      * Switches to the passed fragment
      * If the currently shown fragment has the same type as the argument, does nothing. Otherwise,
      * removes the current fragment and makes a new fragment of the passed in type and shows it
      * @param type the fragment to switch to
+     * @param arguments arguments to give to the fragment
      */
-    public void swapScreens(FragmentType type) {
+    public void swapScreens(FragmentType type, @Nullable Bundle arguments) {
         this.type = type;
         FragmentManager manager = getFragmentManager();
         FragmentTransaction transaction = manager.beginTransaction();
@@ -92,7 +99,14 @@ public class HiddenSettingsActivity extends Activity {
             case COLOR_PICKER:
                 newFragment = new ColorPickerFragment();
                 break;
+            case PROPERTY_EDITOR:
+                newFragment = new PropertyEditorFragment();
+                break;
+            case PROPERTIES_LIST:
+                newFragment = new PropertiesListFragment();
+                break;
         }
+        newFragment.setArguments(arguments);
         // Put the fragment in our layout
         //transaction.add(newFragment, "fragment");
         transaction.replace(R.id.userscript_activity_main_fragment, newFragment, "fragment");
@@ -128,6 +142,8 @@ public class HiddenSettingsActivity extends Activity {
         JANITOR_LOGIN,
         THREAD_WATCHER,
         COLOR_PICKER,
-        AWOO_ENDPOINT
+        AWOO_ENDPOINT,
+        PROPERTY_EDITOR,
+        PROPERTIES_LIST
     }
 }

@@ -41,7 +41,8 @@ public class DebugSettingsListFragment extends Fragment implements HiddenSetting
                     "Toggle debug button, currently " + P.getReadable("debug"),
                     "Toggle userscript, currently " + P.getReadable("userscript"),
                     "Change Awoo Endpoint (currently " + P.get("awoo_endpoint") + ")",
-                    "Override UnitedWebFragmentWebViewAuthorizer, currently " + P.getReadable("override_authorizer")
+                    "Override UnitedWebFragmentWebViewAuthorizer, currently " + P.getReadable("override_authorizer"),
+                    "Edit Properties",
                 };
                 list.setAdapter(new ArrayAdapter<>(getActivity(), android.R.layout.simple_list_item_1, settings));
                 list.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -67,6 +68,9 @@ public class DebugSettingsListFragment extends Fragment implements HiddenSetting
                             case 4:
                                 P.toggle("override_authorizer");
                                 run();
+                                break;
+                            case 5:
+                                ((HiddenSettingsActivity) getActivity()).swapScreens(HiddenSettingsActivity.FragmentType.PROPERTIES_LIST);
                                 break;
                             default:
                                 GenericAlertDialogFragment.newInstance("Should never happen", getFragmentManager());

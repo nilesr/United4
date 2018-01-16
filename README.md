@@ -1,12 +1,12 @@
-# La/u/ncher 4.1.9
+# La/u/ncher 4.2.0
 
 ### Try it in your browser!
 Resize your browser to be phone-sized and visit https://niles.xyz/united
 
 ### Try it on your phone!
-https://github.com/nilesr/United4/releases/tag/4.1.9
+https://github.com/nilesr/United4/releases/tag/4.2.0
 
-Direct link: https://niles.xyz/uapp-4.1.9.apk
+Direct link: https://niles.xyz/uapp-4.2.0.apk
 
 <span style="display: none;">
 Google play store, sometimes a version behind: https://play.google.com/store/apps/details?id=com.angryburg.uapp
@@ -20,7 +20,6 @@ Google play store, sometimes a version behind: https://play.google.com/store/app
  - Reportedly cannot be uninstalled on a zenfone max first series
 
 ## todo list
-- add an option to remove patch notes text, /test/113577 user 59186a
 - music
 	- song select has a sound too
 	- #buttons > img have click sounds too

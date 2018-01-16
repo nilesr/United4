@@ -118,19 +118,27 @@
                 pnt.style.left = pn.style.left;
                 pnt.style.width = pn.style.width;
                 // set its text
-                pnt.innerText = unitedPropertiesIf.getProperty("version_notes");
-                // give it some padding on the top and bottom
-                pnt.style.paddingTop = pnt.style.paddingBottom = (pn.clientHeight / 8).toString() + "px";
-                // try out a font size, and if it's going to overflow, reduce the font size one pixel at a time until it all fits
-                var font_size = pn.clientHeight / 4;
-                pnt.style.fontSize = font_size.toString() + "px";
-                pnt.style.lineHeight = "1.5";
-                while (pnt.clientHeight > pn.clientHeight) {
-                    font_size -= 1;
-                    pnt.style.fontSize = font_size.toString() + "px";
+                var set_version_text = false;
+                try {
+                    set_version_text = unitedPropertiesIf.getProperty("hide_version").toUpperCase() != "TRUE";
+                } catch (e) {
+                    //
                 }
-                // vertically center the patch notes text on the button
-                pnt.style.top = (pn.style.top + (pn.clientHeight/2) - (pnt.clientHeight/2)).toString() + "px";
+                if (set_version_text) {
+                    pnt.innerText = unitedPropertiesIf.getProperty("version_notes");
+                    // give it some padding on the top and bottom
+                    pnt.style.paddingTop = pnt.style.paddingBottom = (pn.clientHeight / 8).toString() + "px";
+                    // try out a font size, and if it's going to overflow, reduce the font size one pixel at a time until it all fits
+                    var font_size = pn.clientHeight / 4;
+                    pnt.style.fontSize = font_size.toString() + "px";
+                    pnt.style.lineHeight = "1.5";
+                    while (pnt.clientHeight > pn.clientHeight) {
+                        font_size -= 1;
+                        pnt.style.fontSize = font_size.toString() + "px";
+                    }
+                    // vertically center the patch notes text on the button
+                    pnt.style.top = (pn.style.top + (pn.clientHeight/2) - (pnt.clientHeight/2)).toString() + "px";
+                }
                 // noir theme patch notes button is white, and the white text won't show it. Fix that
                 if (theme == "noir") pnt.style.color = "black";
 

@@ -50,6 +50,7 @@ public class SettingsListFragment extends Fragment implements HiddenSettingsFrag
                         "Invert Colors (requires userscript) - Currently " + P.getReadable("invert"),
                         "Draw bar at beginning of new replies (requires userscript) - Currently " + P.getReadable("bar"),
                         "Jump to bar on load (requires userscript) - Currently " + P.getReadable("scroll_to_bar"),
+                        "Hide version text on homescreen - Currently " + P.getReadable("hide_version"),
                 };
                 list.setAdapter(new ArrayAdapter<>(getActivity(), android.R.layout.simple_list_item_1, settings));
                 list.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -117,6 +118,11 @@ public class SettingsListFragment extends Fragment implements HiddenSettingsFrag
                                 break;
                             case 11:
                                 P.toggle("scroll_to_bar");
+                                run();
+                                break;
+                            case 12:
+                                P.toggle("hide_version");
+                                NotifierService.notify(NotifierService.NotificationType.RELOAD_INDEX);
                                 run();
                                 break;
                             default:

@@ -87,6 +87,7 @@ public final class PropertiesSingleton {
         properties.put("debug", "false");
         properties.put("bar", "false");
         properties.put("scroll_to_bar", "false");
+        properties.put("hide_version", "false");
         resetForAppStart();
     }
 

@@ -91,12 +91,30 @@ public class DebugSettingsListFragment extends Fragment implements HiddenSetting
     public void addOptions(Toolbar toolbar) {
         toolbar.setTitle(R.string.app_name);
         toolbar.getMenu().clear();
+        toolbar.inflateMenu(R.menu.debug_menu);
         toolbar.inflateMenu(R.menu.back_item);
         toolbar.setOnMenuItemClickListener(new Toolbar.OnMenuItemClickListener() {
             @Override
             public boolean onMenuItemClick(MenuItem item) {
-                getActivity().finish();
-                return true;
+                switch (item.getItemId()) {
+                    case R.id.back_item:
+                        getActivity().finish();
+                        return true;
+                    case R.id.reload_all:
+                        NotifierService.notify(NotifierService.NotificationType.RELOAD_ALL);
+                        return true;
+                    case R.id.reload_index:
+                        NotifierService.notify(NotifierService.NotificationType.RELOAD_INDEX);
+                        return true;
+                    case R.id.reload_music:
+                        NotifierService.notify(NotifierService.NotificationType.RELOAD_MUSIC);
+                        return true;
+                    case R.id.invalidate_toolbar:
+                        ((HiddenSettingsActivity) getActivity()).invalidateToolbarColor();
+                        NotifierService.notify(NotifierService.NotificationType.INVALIDATE_TOOLBAR);
+                        return true;
+                }
+                return false;
             }
         });
     }

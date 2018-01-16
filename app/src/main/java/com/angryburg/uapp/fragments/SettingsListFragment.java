@@ -48,6 +48,8 @@ public class SettingsListFragment extends Fragment implements HiddenSettingsFrag
                         "Watch thread on reply - Currently " + P.getReadable("watch_on_reply"),
                         "Infinite scrolling (requires userscript) - Currently " + P.getReadable("infscroll"),
                         "Invert Colors (requires userscript) - Currently " + P.getReadable("invert"),
+                        "Draw bar at beginning of new replies (requires userscript) - Currently " + P.getReadable("bar"),
+                        "Jump to bar on load (requires userscript) - Currently " + P.getReadable("scroll_to_bar"),
                 };
                 list.setAdapter(new ArrayAdapter<>(getActivity(), android.R.layout.simple_list_item_1, settings));
                 list.setOnItemClickListener(new AdapterView.OnItemClickListener() {

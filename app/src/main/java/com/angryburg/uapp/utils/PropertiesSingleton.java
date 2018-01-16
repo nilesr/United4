@@ -85,6 +85,8 @@ public final class PropertiesSingleton {
         properties.put("shuffle", "false");
         properties.put("current_song", "");
         properties.put("debug", "false");
+        properties.put("bar", "false");
+        properties.put("scroll_to_bar", "false");
         resetForAppStart();
     }
 

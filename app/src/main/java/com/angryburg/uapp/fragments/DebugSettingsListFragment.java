@@ -96,6 +96,7 @@ public class DebugSettingsListFragment extends Fragment implements HiddenSetting
         toolbar.setOnMenuItemClickListener(new Toolbar.OnMenuItemClickListener() {
             @Override
             public boolean onMenuItemClick(MenuItem item) {
+                //noinspection SwitchStatementWithoutDefaultBranch
                 switch (item.getItemId()) {
                     case R.id.back_item:
                         getActivity().finish();

@@ -88,6 +88,8 @@ public final class PropertiesSingleton {
         properties.put("bar", "false");
         properties.put("scroll_to_bar", "false");
         properties.put("hide_version", "false");
+        properties.put("show_yous", "false");
+        properties.put("display_my_id", "false");
         resetForAppStart();
     }
 

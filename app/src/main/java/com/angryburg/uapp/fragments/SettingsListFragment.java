@@ -51,6 +51,8 @@ public class SettingsListFragment extends Fragment implements HiddenSettingsFrag
                         "Draw bar at beginning of new replies (requires userscript) - Currently " + P.getReadable("bar"),
                         "Jump to bar on load (requires userscript) - Currently " + P.getReadable("scroll_to_bar"),
                         "Hide version text on homescreen - Currently " + P.getReadable("hide_version"),
+                        "Show (You)s and (OP)s (requires userscript) - Currently " + P.getReadable("show_yous"),
+                        "Show me my ID (requires userscript) - Currently " + P.getReadable("display_my_id"),
                 };
                 list.setAdapter(new ArrayAdapter<>(getActivity(), android.R.layout.simple_list_item_1, settings));
                 list.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -123,6 +125,14 @@ public class SettingsListFragment extends Fragment implements HiddenSettingsFrag
                             case 12:
                                 P.toggle("hide_version");
                                 NotifierService.notify(NotifierService.NotificationType.RELOAD_INDEX);
+                                run();
+                                break;
+                            case 13:
+                                P.toggle("show_yous");
+                                run();
+                                break;
+                            case 14:
+                                P.toggle("display_my_id");
                                 run();
                                 break;
                             default:

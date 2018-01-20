@@ -137,15 +137,15 @@ public class ThreadWatcherFragment extends Fragment implements HiddenSettingsFra
     /**
      * The array adapter for the list view, uses thread_watcher_list_item
      * If the thread is loading, it shows a spinner and hides everything else
-     * Otherwise it hides the spinner and shows the three text boxes and button
+     * Otherwise it hides the spinner and shows the three text boxes
      * It also sets the click listener for the button and the text in the boxes
      */
-    private class ThreadWatcherAdapter extends ArrayAdapter<WatchableThread> {
+    private static class ThreadWatcherAdapter extends ArrayAdapter<WatchableThread> {
         public ThreadWatcherAdapter(Context context, WatchableThread[] list) {
             super(context, 0, list);
         }
         @NonNull
-        @Override public View getView(int position, View convertView, @NonNull ViewGroup parent) {
+        @Override public View getView(final int position, View convertView, @NonNull ViewGroup parent) {
             final WatchableThread thread = getItem(position);
             if (convertView == null) {
                 convertView = LayoutInflater.from(getContext()).inflate(R.layout.thread_watcher_list_item, parent, false);
@@ -184,17 +184,18 @@ public class ThreadWatcherFragment extends Fragment implements HiddenSettingsFra
                 subtitleContinuation.setText(subtitleContinuationText);
             } else {
                 convertView.findViewById(R.id.rel_layout_inner).setVisibility(View.GONE);
-                convertView.findViewById(R.id.unwatch_button).setVisibility(View.GONE);
+                convertView.findViewById(R.id.unwatch_button).setVisibility(View.VISIBLE);
                 convertView.findViewById(R.id.spinner).setVisibility(View.VISIBLE);
             }
             convertView.findViewById(R.id.unwatch_button).setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    if (thread == null) {
-                        GenericAlertDialogFragment.newInstance("This shouldn't happen, user tried to unwatch a thread that was null", getFragmentManager());
-                        return;
-                    }
-                    ThreadWatcher.unwatchThread(thread.post_id); // will invalidate the list view for us
+                    //if (thread == null) {
+                        //GenericAlertDialogFragment.newInstance("This shouldn't happen, user tried to unwatch a thread that was null", getFragmentManager());
+                        //return;
+                    //}
+                    //ThreadWatcher.unwatchThread(thread.post_id); // will invalidate the list view for us
+                    ThreadWatcher.unwatchThreadByIndex(position);
                 }
             });
             return convertView;

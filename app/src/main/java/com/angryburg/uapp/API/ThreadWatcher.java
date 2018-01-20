@@ -91,7 +91,7 @@ public final class ThreadWatcher {
                         if (thread.new_replies > 0) updated_threads++;
                     } catch (Exception e) {
                         e.printStackTrace();
-                        Log.e(TAG, "Error on thread " + finalParallelIds[finalI]);
+                        Log.e(TAG, "Error on thread " + finalParallelIds[finalI] + " at index " + finalI);
                     }
                     updateView();
                 }
@@ -205,6 +205,17 @@ public final class ThreadWatcher {
             if (old_id != id) {
                 new_string_list.add(String.valueOf(old_id));
             }
+        }
+        P.set("watched_threads", new JSONArray(new_string_list).toString());
+        refreshAll();
+    }
+
+    public static void unwatchThreadByIndex(int position) {
+        int[] old = pullParallelIds();
+        ArrayList<String> new_string_list = new ArrayList<>();
+        for (int i = 0; i < old.length; i++) {
+            if (i == position) continue;
+            new_string_list.add(String.valueOf(old[i]));
         }
         P.set("watched_threads", new JSONArray(new_string_list).toString());
         refreshAll();

@@ -129,7 +129,7 @@ public class UserscriptActivity extends MainActivity implements ThreadWatcherLis
                 });
             }
         }
-        if (ThreadWatcher.threads.length > 0) {
+        if (ThreadWatcher.threads != null && ThreadWatcher.threads.length > 0) {
             SubMenu submenu = toolbar.getMenu().addSubMenu("Watched Threads");
             for (int i = 0; i < ThreadWatcher.threads.length; i++) {
                 final WatchableThread thread = ThreadWatcher.threads[i];

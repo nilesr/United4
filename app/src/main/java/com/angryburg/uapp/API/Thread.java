@@ -120,4 +120,23 @@ public class Thread {
             this.hash = object.getString("hash");
         }
     }
+    public JSONObject save() throws JSONException {
+        JSONObject object = new JSONObject();
+        object.accumulate("post_id", post_id);
+        object.accumulate("board", board);
+        object.accumulate("is_op", is_op);
+        object.accumulate("comment", comment);
+        object.accumulate("date_posted", date_posted);
+        object.accumulate("ip", ip);
+        object.accumulate("capcode", capcode);
+        object.accumulate("title", title);
+        object.accumulate("last_bumped", last_bumped);
+        object.accumulate("is_locked", is_locked);
+        object.accumulate("number_of_replies", number_of_replies);
+        object.accumulate("sticky", sticky);
+        object.accumulate("parent", parent);
+        object.accumulate("stickyness", stickyness);
+        object.accumulate("hash", hash);
+        return object;
+    }
 }

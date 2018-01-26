@@ -3,13 +3,13 @@ package com.angryburg.uapp.API;
 import android.util.Log;
 
 import org.json.JSONArray;
+import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 
 import com.angryburg.uapp.application.United;
 import com.angryburg.uapp.utils.P;
-
 
 /**
  * Class that watches threads for updates.
@@ -59,6 +59,27 @@ public final class ThreadWatcher {
         }
         return parallelIds;
     }
+    /**
+     * Gets the array of threads that we're watching from the properties singleton
+     * @return an array of all the IDs of the threads that we're watching
+     */
+    private static WatchableThread[] pullSavedThreads(int reqLen) {
+        WatchableThread[] parallelThreads;
+        try {
+            String[] savedThreadsAsStrings = arrayFromJsonArray(P.get("saved_threads"));
+            parallelThreads = new WatchableThread[savedThreadsAsStrings.length];
+            for (int i = 0; i < savedThreadsAsStrings.length; i++) {
+                try {
+                    parallelThreads[i] = new WatchableThread(new JSONObject(savedThreadsAsStrings[i]));
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+        } catch (Exception ignored) {
+            parallelThreads = new WatchableThread[reqLen];
+        }
+        return parallelThreads;
+    }
 
     /**
      * Gets a list of all the threads we're supposed to be watching, sets `threads` to all nulls,
@@ -68,7 +89,6 @@ public final class ThreadWatcher {
      */
     public static void refreshAll() {
         int[] parallelIds = pullParallelIds();
-        threads = new WatchableThread[parallelIds.length];
         updated_threads = 0;
         if (parallelIds.length == 0) {
             // If you're only watching one thread and you unwatch it, updateView otherwise wouldn't be
@@ -78,9 +98,19 @@ public final class ThreadWatcher {
             updateView();
             return;
         }
+        threads = pullSavedThreads(parallelIds.length);
+        if (threads.length != parallelIds.length) {
+            threads = new WatchableThread[parallelIds.length];
+        }
         for (int i = 0; i < parallelIds.length; i++) {
             final int finalI = i;
             final int[] finalParallelIds = parallelIds;
+            if (threads[i] != null && threads[i].is_locked) {
+                Log.i(TAG, "Thread " + threads[i].title + " is closed, not refreshing");
+                continue;
+            }
+            Log.i(TAG, "Thread " + parallelIds[i] + " is NOT closed, refreshing");
+            threads[i] = null;
             new java.lang.Thread(new Runnable() {
                 @Override
                 public void run() {
@@ -98,6 +128,7 @@ public final class ThreadWatcher {
             }).start();
             updateView(); // to set the Loading... messages
         }
+        updateView();
     }
 
     /**
@@ -142,9 +173,26 @@ public final class ThreadWatcher {
                 e.printStackTrace();
             }
         }
+        trySaveThreads(true);
+    }
+    private static void trySaveThreads(boolean fromRefresh) {
+        // if all threads have loaded, save
+        if (threads == null) return;
+        if (fromRefresh) for (WatchableThread t : threads) if (t == null) return;
+        ArrayList<String> saved = new ArrayList<>();
+        for (WatchableThread t : threads) {
+            try {
+                saved.add(t.save().toString());
+            } catch (Exception ignored) {
+                saved.add("");
+            }
+        }
+        P.set("saved_threads", new JSONArray(saved).toString());
+
     }
 
     private static String[] arrayFromJsonArray(String inp) throws Exception {
+        if (inp.isEmpty()) return new String[0];
         JSONArray arr = new JSONArray(inp);
         String res[] = new String[arr.length()];
         for (int i = 0; i < arr.length(); i++) {
@@ -192,6 +240,10 @@ public final class ThreadWatcher {
         }
         new_string_array[old.length] = String.valueOf(id);
         P.set("watched_threads", new JSONArray(Arrays.asList(new_string_array)).toString());
+        WatchableThread[] current = threads;
+        threads = new WatchableThread[threads.length + 1];
+        System.arraycopy(current, 0, threads, 0, current.length);
+        trySaveThreads(false);
         refreshAll();
     }
     /**
@@ -200,17 +252,22 @@ public final class ThreadWatcher {
      */
     public static void unwatchThread(int id) {
         int[] old = pullParallelIds();
-        ArrayList<String> new_string_list = new ArrayList<>();
-        for (int old_id : old) {
-            if (old_id != id) {
-                new_string_list.add(String.valueOf(old_id));
-            }
-        }
-        P.set("watched_threads", new JSONArray(new_string_list).toString());
-        refreshAll();
+        // Cannot use Arrays.asList becase int != Integer and you cannot cast an int[] to an Integer[] either
+        ArrayList<Integer> asList = new ArrayList<>(old.length);
+        for (int t : old) asList.add(t);
+        unwatchThreadByIndex(asList.indexOf(id));
     }
 
+    /**
+     * Called to stop watching thread given a particular index into the array of watched threads.
+     * Updates the watched_threads property and refreshes all the threads
+     * @param position the index of the thread to stop watching
+     */
     public static void unwatchThreadByIndex(int position) {
+        if (position < 0) {
+            java.lang.Thread.dumpStack();
+            return;
+        }
         int[] old = pullParallelIds();
         ArrayList<String> new_string_list = new ArrayList<>();
         for (int i = 0; i < old.length; i++) {
@@ -218,6 +275,11 @@ public final class ThreadWatcher {
             new_string_list.add(String.valueOf(old[i]));
         }
         P.set("watched_threads", new JSONArray(new_string_list).toString());
+        WatchableThread[] current = threads;
+        threads = new WatchableThread[current.length - 1];
+        System.arraycopy(current, 0, threads, 0, position);
+        System.arraycopy(current, position + 1, threads, position, current.length - position - 1);
+        trySaveThreads(false);
         refreshAll();
     }
 }

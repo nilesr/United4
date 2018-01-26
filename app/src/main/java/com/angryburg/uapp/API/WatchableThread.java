@@ -21,12 +21,17 @@ public final class WatchableThread extends Thread {
     public int new_replies;
 
     /**
+     * Creates a thread from the given json object
      * @see Thread#Thread(JSONObject)
      * @param object the object to deserialize
      * @throws JSONException if the object was malformed
      */
-    private WatchableThread(JSONObject object) throws JSONException {
+    public WatchableThread(JSONObject object) throws JSONException {
         super(object);
+        if (object.has("new_replies")) {
+            this.new_replies = object.getInt("new_replies");
+        }
+        updateNewRepliesCount();
     }
 
     /**
@@ -57,5 +62,11 @@ public final class WatchableThread extends Thread {
             prev_replies = Integer.valueOf(prev_replies_str);
         }
         new_replies = number_of_replies - prev_replies;
+    }
+    @Override
+    public JSONObject save() throws JSONException {
+        JSONObject object = super.save();
+        object.accumulate("new_replies", new_replies);
+        return object;
     }
 }

@@ -32,17 +32,20 @@ public class AndroidShortcuts extends Activity implements BoardsListListener {
         @Override
         public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
             BoardsList.Board board = (BoardsList.Board) adapterView.getItemAtPosition(i);
-            Intent launchIntent = new Intent();
-            launchIntent.putExtra("URL", P.get("awoo_endpoint") + "/" + board.name);
-            launchIntent.setAction("com.angryburg.la_u_ncher.intent.action.BOARD");
-            Intent result = new Intent();
-            result.putExtra(Intent.EXTRA_SHORTCUT_INTENT, launchIntent);
-            result.putExtra(Intent.EXTRA_SHORTCUT_NAME, "danger/" + board.name + "/");
-            result.putExtra(Intent.EXTRA_SHORTCUT_ICON_RESOURCE, makeIcon());
-            setResult(RESULT_OK, result);
-            finish();
+            createShortcut(board.name, "danger/" + board.name + "/");
         }
     };
+    private void createShortcut(String name, String shortcutName) {
+        Intent launchIntent = new Intent();
+        launchIntent.putExtra("URL", P.get("awoo_endpoint") + "/" + name);
+        launchIntent.setAction("com.angryburg.la_u_ncher.intent.action.BOARD");
+        Intent result = new Intent();
+        result.putExtra(Intent.EXTRA_SHORTCUT_INTENT, launchIntent);
+        result.putExtra(Intent.EXTRA_SHORTCUT_NAME, shortcutName);
+        result.putExtra(Intent.EXTRA_SHORTCUT_ICON_RESOURCE, makeIcon());
+        setResult(RESULT_OK, result);
+        finish();
+    }
 
     @Override public void onCreate(Bundle state) {
         super.onCreate(state);
@@ -60,6 +63,12 @@ public class AndroidShortcuts extends Activity implements BoardsListListener {
                 result.putExtra(Intent.EXTRA_SHORTCUT_ICON_RESOURCE, makeIcon());
                 setResult(RESULT_OK, result);
                 finish();
+            }
+        });
+        findViewById(R.id.button_to_launch_to_home_page).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                createShortcut("", "Awoo");
             }
         });
     }

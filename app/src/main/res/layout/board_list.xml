@@ -7,9 +7,12 @@
         android:id="@+id/button_to_launch_to_thread_watcher"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="30dp"
-        android:layout_marginBottom="30dp"
         android:text="Launch to Thread Watcher" />
+    <Button
+        android:id="@+id/button_to_launch_to_home_page"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Launch to Boards List" />
 
     <RelativeLayout
         android:layout_width="match_parent"

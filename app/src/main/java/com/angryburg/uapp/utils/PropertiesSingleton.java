@@ -90,6 +90,7 @@ public final class PropertiesSingleton {
         properties.put("hide_version", "false");
         properties.put("show_yous", "false");
         properties.put("display_my_id", "false");
+        properties.put("dark_mode", "false");
         resetForAppStart();
     }
 

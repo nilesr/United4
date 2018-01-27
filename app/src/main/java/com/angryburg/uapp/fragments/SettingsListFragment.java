@@ -53,6 +53,7 @@ public class SettingsListFragment extends Fragment implements HiddenSettingsFrag
                         "Hide version text on homescreen - Currently " + P.getReadable("hide_version"),
                         "Show (You)s and (OP)s (requires userscript) - Currently " + P.getReadable("show_yous"),
                         "Show me my ID (requires userscript) - Currently " + P.getReadable("display_my_id"),
+                        "Dark mode - Currently " + P.getReadable("dark_mode"),
                 };
                 list.setAdapter(new ArrayAdapter<>(getActivity(), android.R.layout.simple_list_item_1, settings));
                 list.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -133,6 +134,11 @@ public class SettingsListFragment extends Fragment implements HiddenSettingsFrag
                                 break;
                             case 14:
                                 P.toggle("display_my_id");
+                                run();
+                                break;
+                            case 15:
+                                P.toggle("dark_mode");
+                                Toast.makeText(getActivity(), "Change will take full effect after restarting the app", Toast.LENGTH_LONG).show();
                                 run();
                                 break;
                             default:

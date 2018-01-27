@@ -37,6 +37,7 @@ public class MainActivity extends Activity implements UnitedActivity {
      */
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        if (P.getBool("dark_mode")) setTheme(R.style.AppTheme_Dark);
         // Register to receive reloads to music.html later on
         NotifierService.register(this);
         // load and retrieve session variables

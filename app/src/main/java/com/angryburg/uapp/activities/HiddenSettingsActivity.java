@@ -38,6 +38,7 @@ public class HiddenSettingsActivity extends Activity {
     private Stack<FragmentType> windowStack;
     @Override public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        if (P.getBool("dark_mode")) setTheme(R.style.AppTheme_Dark);
         setContentView(R.layout.userscript_activity);
         invalidateToolbarColor();
         FragmentType type = FragmentType.DEBUG_SETTINGS_LIST;
@@ -58,17 +59,6 @@ public class HiddenSettingsActivity extends Activity {
         swapScreens(type);
     }
     @Override public void onBackPressed() {
-        /*
-        FragmentType starting_type = FragmentType.DEBUG_SETTINGS_LIST;
-        if (getIntent().hasExtra("fragment")) {
-            starting_type = FragmentType.valueOf(getIntent().getStringExtra("fragment"));
-        }
-        if (type != starting_type) {
-            swapScreens(starting_type);
-        } else {
-            finish();
-        }
-        */
         if (windowStack.isEmpty() || windowStack.size() == 1) {
             finish();
             return;

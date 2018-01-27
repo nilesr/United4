@@ -3,6 +3,7 @@ package com.angryburg.uapp.fragments;
 import android.annotation.SuppressLint;
 import android.app.Fragment;
 import android.content.Intent;
+import android.graphics.Color;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -72,6 +73,7 @@ public class UnitedWebFragment extends Fragment {
             public void run() {
                 // Set up our web view with a unitedPropertiesIf and the right starting url
                 WebView webview = res.findViewById(R.id.main_webkit);
+                webview.setBackgroundColor(Color.rgb(0, 0, 0));
                 webview.getSettings().setJavaScriptEnabled(true);
                 webview.getSettings().setAllowFileAccess(true);
                 //webview.getSettings().setDomStorageEnabled(true);

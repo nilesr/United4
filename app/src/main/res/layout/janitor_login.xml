@@ -13,7 +13,7 @@
         android:layout_marginBottom="10dp"
         android:text="Janitor Login"
         android:textAlignment="center"
-        android:textColor="@android:color/black"
+        android:textColor="?android:textColorPrimary"
         android:textSize="30sp" />
 
     <TextView
@@ -47,6 +47,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:onClick="buttonClicked"
+        android:textColor="?android:textColorPrimary"
         android:text="Authenticate" />
 
     <TextView

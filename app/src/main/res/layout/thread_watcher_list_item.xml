@@ -12,7 +12,8 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentStart="true"
-        android:layout_alignTop="@+id/unwatch_button" />
+        android:layout_alignTop="@+id/unwatch_button"
+        android:layout_alignParentLeft="true" />
 
     <RelativeLayout
         android:id="@+id/rel_layout_inner"
@@ -31,7 +32,7 @@
             android:layout_marginRight="10dp"
             android:layout_marginTop="5dp"
             android:text="Beta test the new app?"
-            android:textColor="@android:color/black"
+            android:textColor="?android:textColorPrimary"
             android:textSize="18sp"
             android:textStyle="bold" />
 
@@ -51,7 +52,8 @@
             android:layout_below="@+id/thread_title"
             android:layout_toEndOf="@+id/new_replies"
             android:text=" new replies"
-            android:textColor="@android:color/darker_gray" />
+            android:textColor="@android:color/darker_gray"
+            android:layout_toRightOf="@+id/new_replies" />
 
     </RelativeLayout>
 
@@ -64,8 +66,10 @@
         android:layout_alignParentEnd="true"
         android:layout_centerVertical="true"
         android:focusable="false"
+        android:textColor="?android:textColorPrimary"
         android:layout_marginRight="10dp"
-        android:text="Unwatch" />
+        android:text="Unwatch"
+        android:layout_alignParentRight="true" />
 
 </RelativeLayout>
 

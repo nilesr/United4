@@ -1,12 +1,12 @@
-# La/u/ncher 4.2.0
+# La/u/ncher 4.2.1
 
 ### Try it in your browser!
 Resize your browser to be phone-sized and visit https://niles.xyz/united
 
 ### Try it on your phone!
-https://github.com/nilesr/United4/releases/tag/4.2.0
+https://github.com/nilesr/United4/releases/tag/4.2.1
 
-Direct link: https://niles.xyz/uapp-4.2.0.apk
+Direct link: https://niles.xyz/uapp-4.2.1.apk
 
 <span style="display: none;">
 Google play store, sometimes a version behind: https://play.google.com/store/apps/details?id=com.angryburg.uapp

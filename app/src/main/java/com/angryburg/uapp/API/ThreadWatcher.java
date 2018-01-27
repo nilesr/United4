@@ -13,6 +13,11 @@ import com.angryburg.uapp.utils.P;
 
 /**
  * Class that watches threads for updates.
+ *
+ * The reason that we make such a big deal out of not polling the server about closed threads is
+ * that usually when awoo randomly dies, it's right after 50 or so rapid metadata requests.
+ * Technically this is incorrect behavior, as a closed thread may be reopened at any time by a
+ * moderator, or reopened, replied to, and then closed again
  */
 
 public final class ThreadWatcher {
@@ -32,7 +37,7 @@ public final class ThreadWatcher {
      * A list of listeners to be updated when refresh is called (threads start loading) or when
      * a thread finishes loading, so the listener can update the view
      */
-    static ArrayList<ThreadWatcherListener> listeners = new ArrayList<>();
+    private static ArrayList<ThreadWatcherListener> listeners = new ArrayList<>();
 
     /*
      * Begin getting the list of threads the first time we're accessed
@@ -90,14 +95,6 @@ public final class ThreadWatcher {
     public static void refreshAll() {
         int[] parallelIds = pullParallelIds();
         updated_threads = 0;
-        if (parallelIds.length == 0) {
-            // If you're only watching one thread and you unwatch it, updateView otherwise wouldn't be
-            // called because no thread download complete action would ever trigger, so you would still
-            // see the one, old thread until you rotated or changed activities and came back.
-            // This fixes that
-            updateView();
-            return;
-        }
         threads = pullSavedThreads(parallelIds.length);
         if (threads.length != parallelIds.length) {
             threads = new WatchableThread[parallelIds.length];
@@ -107,6 +104,7 @@ public final class ThreadWatcher {
             final int[] finalParallelIds = parallelIds;
             if (threads[i] != null && threads[i].is_locked) {
                 Log.i(TAG, "Thread " + threads[i].title + " is closed, not refreshing");
+                if (threads[i].new_replies > 0) updated_threads++;
                 continue;
             }
             Log.i(TAG, "Thread " + parallelIds[i] + " is NOT closed, refreshing");
@@ -175,9 +173,19 @@ public final class ThreadWatcher {
         }
         trySaveThreads(true);
     }
+
+    /**
+     * Tries to save all active threads into the saved_threads property so they can be
+     * restored on the next restart without fetching closed threads from the server.
+     * @param fromRefresh Whether we're trying to save threads because the user clicked the refresh
+     *                    button, or because they unwatched a thread.
+     *                    If they unwatched a thread, we need so save immediately or the lengths of
+     *                    saved_threads and watched_threads will be out of sync and the contents of
+     *                    saved_threads may be discarded, requiring more requests to the server
+     */
     private static void trySaveThreads(boolean fromRefresh) {
         // if all threads have loaded, save
-        if (threads == null) return;
+        if (threads == null) return; // This check is needed
         if (fromRefresh) for (WatchableThread t : threads) if (t == null) return;
         ArrayList<String> saved = new ArrayList<>();
         for (WatchableThread t : threads) {
@@ -252,10 +260,13 @@ public final class ThreadWatcher {
      */
     public static void unwatchThread(int id) {
         int[] old = pullParallelIds();
-        // Cannot use Arrays.asList becase int != Integer and you cannot cast an int[] to an Integer[] either
-        ArrayList<Integer> asList = new ArrayList<>(old.length);
-        for (int t : old) asList.add(t);
-        unwatchThreadByIndex(asList.indexOf(id));
+        for (int i = 0; i < old.length; i++) {
+            if (old[i] == id) {
+                unwatchThreadByIndex(i);
+                return;
+            }
+        }
+        Log.e(TAG, "Unwatching a thread by ID could not find the thread in parallelIds. Was the thread watched to begin with?");
     }
 
     /**

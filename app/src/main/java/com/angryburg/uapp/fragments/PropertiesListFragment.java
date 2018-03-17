@@ -11,12 +11,9 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
-import android.widget.Toast;
 
 import com.angryburg.uapp.R;
 import com.angryburg.uapp.activities.HiddenSettingsActivity;
-import com.angryburg.uapp.utils.NotifierService;
-import com.angryburg.uapp.utils.P;
 import com.angryburg.uapp.utils.PropertiesSingleton;
 
 import java.io.Serializable;
@@ -35,7 +32,7 @@ public class PropertiesListFragment extends Fragment implements HiddenSettingsFr
             @Override
             public void run() {
                 ListView list = res.findViewById(R.id.settings_list);
-                final String[] settings = PropertiesSingleton.get().getKeys();
+                final String[] settings = PropertiesSingleton.getKeys();
                 Arrays.sort(settings, new UserscriptAwareComparator());
                 list.setAdapter(new ArrayAdapter<>(getActivity(), android.R.layout.simple_list_item_1, settings));
                 list.setOnItemClickListener(new AdapterView.OnItemClickListener() {

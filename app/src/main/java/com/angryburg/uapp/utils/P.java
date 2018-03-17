@@ -14,7 +14,7 @@ public final class P {
      * @return the value of that property
      */
     public static String get(String prop) {
-        return PropertiesSingleton.get().getProperty(prop);
+        return PropertiesSingleton.getProperty(prop);
     }
     /**
      * @see PropertiesSingleton#setProperty(String, String)
@@ -22,7 +22,7 @@ public final class P {
      * @param value the value to set it to
      */
     public static void set(String prop, String value) {
-        PropertiesSingleton.get().setProperty(prop, value);
+        PropertiesSingleton.setProperty(prop, value);
     }
 
     /**
@@ -52,6 +52,11 @@ public final class P {
         set(prop, Boolean.valueOf(!getBool(prop)).toString());
     }
 
+    /**
+     * Gets a color from its key or defaults to Topaz
+     * @param prop the key of the property
+     * @return the associated value from PropertiesSingleton, or Topaz
+     */
     public static int getColor(String prop) {
         String val = get(prop);
         int _default = 0xFF837D87; // Topaz

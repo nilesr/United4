@@ -83,13 +83,14 @@ public class UnitedPropertiesIf {
             return "0";
         }
     }
-    @JavascriptInterface public static void addPosted(String id, String is_op) {
-        int iid;
+    @JavascriptInterface public static void addPosted(String post_id, String parent_id, String hash, String is_op) {
+        int post_id_int, parent_id_int;
         try {
-            iid = Integer.valueOf(id);
-            NotificationWorker.addPosted(iid);
+            post_id_int = Integer.valueOf(post_id);
+            parent_id_int = Integer.valueOf(parent_id);
+            NotificationWorker.addPosted(post_id_int, parent_id_int, hash);
             if (is_op.equalsIgnoreCase("true")) {
-                NotificationWorker.addPostedOP(iid);
+                NotificationWorker.addPostedOP(post_id_int);
             }
         } catch (Exception ignored) {
             //

@@ -37,8 +37,13 @@ public class NotificationWorker {
         List<Thread> result = new ArrayList<>();
         String posted_ids = P.get("posted_ids");
         if (posted_ids.isEmpty() || posted_ids.equals("[]")) return result;
+        String my_hashes = P.get("my_hashes");
+        if (my_hashes.isEmpty() || my_hashes.equals("[]")) return result;
         try {
-            String responses = fetch(P.get("awoo_endpoint") + API + "/replies?list=" + URLEncoder.encode(posted_ids, "UTF-8"), authorizer);
+            String responses = fetch(P.get("awoo_endpoint") + API + "/replies" +
+                    "?list=" + URLEncoder.encode(posted_ids, "UTF-8") +
+                    "&hashes=" + URLEncoder.encode(my_hashes, "UTF-8")
+                    , authorizer);
             JSONArray arr = new JSONArray(responses);
             for (int i = 0; i < arr.length(); i++) {
                 int id = arr.getInt(i);
@@ -131,7 +136,7 @@ public class NotificationWorker {
      * Adds the ID to the list of threads and replies posted by this user
      * @param id the id of the new thread or reply
      */
-    public static void addPosted(int id) {
+    public static void addPosted(int id, int parent_id, String hash) {
         String old = P.get("posted_ids");
         if (old.isEmpty()) old = "[]";
         JSONArray new_arr = new JSONArray();
@@ -141,7 +146,20 @@ public class NotificationWorker {
             e.printStackTrace();
         }
         new_arr.put(id);
-        P.set("posted_ids", new_arr.toString());
+        P.set("my_hashes", new_arr.toString());
+        old = P.get("my_hashes");
+        if (old.isEmpty()) old = "[]";
+        new_arr = new JSONArray();
+        try {
+            new_arr = new JSONArray(old);
+            JSONObject obj = new JSONObject();
+            obj.put("op", parent_id);
+            obj.put("hash", hash);
+            new_arr.put(obj);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        P.set("my_hashes", new_arr.toString());
     }
     /**
      * Adds the ID to the list of new threads posted by this user

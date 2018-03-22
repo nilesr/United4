@@ -13,6 +13,7 @@ import com.angryburg.uapp.fragments.AwooEndpointFragment;
 import com.angryburg.uapp.fragments.ColorPickerFragment;
 import com.angryburg.uapp.fragments.DebugSettingsListFragment;
 import com.angryburg.uapp.fragments.NewPropertyFragment;
+import com.angryburg.uapp.fragments.NotificationSettingsFragment;
 import com.angryburg.uapp.fragments.PropertiesListFragment;
 import com.angryburg.uapp.fragments.PropertyEditorFragment;
 import com.angryburg.uapp.fragments.SettingsListFragment;
@@ -158,6 +159,9 @@ public class HiddenSettingsActivity extends Activity {
             case PROPERTIES_LIST:
                 newFragment = new PropertiesListFragment();
                 break;
+            case NOTIFICATION_SETTINGS:
+                newFragment = new NotificationSettingsFragment();
+                break;
         }
         newFragment.setArguments(arguments);
         // Put the fragment in our layout
@@ -202,6 +206,7 @@ public class HiddenSettingsActivity extends Activity {
         AWOO_ENDPOINT,
         PROPERTY_EDITOR,
         PROPERTY_EDITOR_NEW,
-        PROPERTIES_LIST
+        PROPERTIES_LIST,
+        NOTIFICATION_SETTINGS
     }
 }

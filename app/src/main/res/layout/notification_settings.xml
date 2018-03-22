@@ -1,0 +1,133 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_margin="10dp"
+    android:orientation="vertical">
+
+    <TextView
+        android:id="@+id/textView8"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Notification Settings"
+        android:textAlignment="center"
+        android:textColor="?android:textColorPrimary"
+        android:textSize="30sp" />
+
+    <TextView
+        android:id="@+id/textView5"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Notifications"
+        tools:layout_editor_absoluteX="16dp"
+        tools:layout_editor_absoluteY="16dp" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <RadioButton
+            android:id="@+id/notifications_disabled"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="Enabled"
+            tools:layout_editor_absoluteX="16dp"
+            tools:layout_editor_absoluteY="35dp" />
+
+        <RadioButton
+            android:id="@+id/notifications_enabled"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="Disabled"
+            tools:layout_editor_absoluteX="157dp"
+            tools:layout_editor_absoluteY="35dp" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="horizontal" android:baselineAligned="false">
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/textView6"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Check Interval"
+                tools:layout_editor_absoluteX="16dp"
+                tools:layout_editor_absoluteY="66dp" />
+
+            <RadioButton
+                android:id="@+id/hour"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Check Every Hour"
+                android:textColor="?android:textColorPrimary"
+                tools:layout_editor_absoluteX="16dp"
+                tools:layout_editor_absoluteY="85dp" />
+
+            <RadioButton
+                android:id="@+id/half_day"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Check Every Half Day"
+                android:textColor="?android:textColorPrimary"
+                tools:layout_editor_absoluteX="16dp"
+                tools:layout_editor_absoluteY="116dp" />
+
+            <RadioButton
+                android:id="@+id/day"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Check Once Per Day"
+                android:textColor="?android:textColorPrimary"
+                tools:layout_editor_absoluteX="16dp"
+                tools:layout_editor_absoluteY="148dp" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/textView7"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Notifications For" />
+
+            <RadioButton
+                android:id="@+id/notify_direct"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textColor="?android:textColorPrimary"
+                android:text="Direct Replies Only" />
+
+            <RadioButton
+                android:id="@+id/notify_direct_and_created"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textColor="?android:textColorPrimary"
+                android:text="All replies to threads I create and direct replies in other threads" />
+
+            <RadioButton
+                android:id="@+id/notify_all"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textColor="?android:textColorPrimary"
+                android:text="All threads I'm watching" />
+        </LinearLayout>
+    </LinearLayout>
+
+</LinearLayout>

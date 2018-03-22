@@ -4,6 +4,7 @@
     android:versionCode="421"
     package="com.angryburg.uapp">
 
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.INTERNET" />
     <application
         android:name="com.angryburg.uapp.application.United"
@@ -39,7 +40,14 @@
                 <category android:name="android.intent.category.DEFAULT"/>
             </intent-filter>
         </activity>
-
+        <service
+            android:name=".utils.AwooNotificationService"
+            android:label="Awoo Notifier Service"
+            android:permission="android.permission.BIND_NOTIFICATION_LISTENER_SERVICE">
+             <intent-filter>
+                 <action android:name="android.service.notification.NotificationListenerService" />
+             </intent-filter>
+        </service>
     </application>
 
 </manifest>

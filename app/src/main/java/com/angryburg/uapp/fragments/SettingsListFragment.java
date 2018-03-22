@@ -40,6 +40,7 @@ public class SettingsListFragment extends Fragment implements HiddenSettingsFrag
                 final String[] settings = new String[] {
                         "Userscript - Currently " + P.getReadable("userscript"),
                         "Startup music - Currently " + P.getReadable("startup_music"),
+                        "Notification Settings",
                         "Janitor Login",
                         "Change Toolbar Color",
                         "Always show activity back button in toolbar - Currently " + P.getReadable("force_show_back_btn"),
@@ -79,17 +80,20 @@ public class SettingsListFragment extends Fragment implements HiddenSettingsFrag
                                 }
                                 break;
                             case 2:
-                                ((HiddenSettingsActivity) getActivity()).push(HiddenSettingsActivity.FragmentType.JANITOR_LOGIN);
+                                ((HiddenSettingsActivity) getActivity()).push(HiddenSettingsActivity.FragmentType.NOTIFICATION_SETTINGS);
                                 break;
                             case 3:
-                                ((HiddenSettingsActivity) getActivity()).push(HiddenSettingsActivity.FragmentType.COLOR_PICKER);
+                                ((HiddenSettingsActivity) getActivity()).push(HiddenSettingsActivity.FragmentType.JANITOR_LOGIN);
                                 break;
                             case 4:
+                                ((HiddenSettingsActivity) getActivity()).push(HiddenSettingsActivity.FragmentType.COLOR_PICKER);
+                                break;
+                            case 5:
                                 P.toggle("force_show_back_btn");
                                 NotifierService.notify(NotifierService.NotificationType.INVALIDATE_TOOLBAR);
                                 run();
                                 break;
-                            case 5:
+                            case 6:
                                 String[] values = {"false", "-25", "match", "+25"};
                                 String new_value = values[(Arrays.asList(values).indexOf(P.get("window_bar_color")) + 1) % values.length];
                                 P.set("window_bar_color", new_value);
@@ -97,46 +101,46 @@ public class SettingsListFragment extends Fragment implements HiddenSettingsFrag
                                 NotifierService.notify(NotifierService.NotificationType.INVALIDATE_TOOLBAR);
                                 run();
                                 break;
-                            case 6:
+                            case 7:
                                 P.toggle("mute_sounds");
                                 run();
                                 break;
-                            case 7:
+                            case 8:
                                 P.toggle("watch_on_reply");
                                 run();
                                 break;
-                            case 8:
+                            case 9:
                                 P.toggle("infscroll");
                                 NotifierService.notify(NotifierService.NotificationType.RELOAD_ALL);
                                 run();
                                 break;
-                            case 9:
+                            case 10:
                                 P.toggle("invert");
                                 NotifierService.notify(NotifierService.NotificationType.RELOAD_ALL);
                                 run();
                                 break;
-                            case 10:
+                            case 11:
                                 P.toggle("bar");
                                 run();
                                 break;
-                            case 11:
+                            case 12:
                                 P.toggle("scroll_to_bar");
                                 run();
                                 break;
-                            case 12:
+                            case 13:
                                 P.toggle("hide_version");
                                 NotifierService.notify(NotifierService.NotificationType.RELOAD_INDEX);
                                 run();
                                 break;
-                            case 13:
+                            case 14:
                                 P.toggle("show_yous");
                                 run();
                                 break;
-                            case 14:
+                            case 15:
                                 P.toggle("display_my_id");
                                 run();
                                 break;
-                            case 15:
+                            case 16:
                                 P.toggle("dark_mode");
                                 Toast.makeText(getActivity(), "Change will take full effect after restarting the app", Toast.LENGTH_LONG).show();
                                 run();

@@ -20,6 +20,7 @@ import java.util.Random;
 
 import com.angryburg.uapp.API.Authorizer;
 import com.angryburg.uapp.API.BoardsList;
+import com.angryburg.uapp.API.NotificationWorker;
 import com.angryburg.uapp.API.ThreadWatcher;
 import com.angryburg.uapp.utils.P;
 import com.angryburg.uapp.utils.NotifierService;
@@ -32,7 +33,11 @@ import static java.lang.Integer.parseInt;
 
 public class United extends Application {
     private static final String TAG = United.class.getSimpleName();
-    private static WeakReference<Context> singleton = null;
+    /**
+     * this has to be public for the background notifications
+     * don't use it
+     */
+    public static WeakReference<Context> singleton = null;
     private static MediaPlayer player = null;
     /**
      * The object to use to authenticate API requests

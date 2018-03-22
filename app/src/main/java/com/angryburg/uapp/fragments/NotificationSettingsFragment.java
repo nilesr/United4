@@ -35,8 +35,8 @@ public class NotificationSettingsFragment extends Fragment implements HiddenSett
                         P.set("notifications", ((Checkable) res.findViewById(R.id.notifications_enabled)).isChecked() ? "true" : "false");
                     }
                 });
-                ((Checkable) res.findViewById(R.id.notify_all)).setChecked(P.get("which_notifications").isEmpty() || "ALL".equalsIgnoreCase(P.get("which_notifications")));
-                ((Checkable) res.findViewById(R.id.notify_direct)).setChecked("DIRECT".equalsIgnoreCase(P.get("which_notifications")));
+                ((Checkable) res.findViewById(R.id.notify_all)).setChecked("ALL".equalsIgnoreCase(P.get("which_notifications")));
+                ((Checkable) res.findViewById(R.id.notify_direct)).setChecked(P.get("which_notifications").isEmpty() || "DIRECT".equalsIgnoreCase(P.get("which_notifications")));
                 ((Checkable) res.findViewById(R.id.notify_direct_and_created)).setChecked("DIRECT_AND_CREATED".equalsIgnoreCase(P.get("which_notifications")));
                 ((Checkable) res.findViewById(R.id.hour)).setChecked(P.get("alarm_interval").isEmpty() || "HOUR".equalsIgnoreCase(P.get("alarm_interval")));
                 ((Checkable) res.findViewById(R.id.half_day)).setChecked("HALF_DAY".equalsIgnoreCase(P.get("alarm_interval")));

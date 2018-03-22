@@ -1,12 +1,19 @@
 package com.angryburg.uapp.utils;
 
 import android.annotation.SuppressLint;
+import android.app.Notification;
 import android.app.Service;
+import android.content.Context;
 import android.content.Intent;
 import android.net.ConnectivityManager;
 import android.os.AsyncTask;
 import android.os.IBinder;
 import android.os.PowerManager;
+
+import com.angryburg.uapp.API.NotificationWorker;
+import com.angryburg.uapp.API.Thread;
+
+import java.util.List;
 
 /**
 * Created by Niles on 3/21/18.
@@ -39,23 +46,22 @@ public class AwooNotificationService extends Service {
             return;
         }
         // do the actual work, in a separate thread
-        new PollTask().execute();
+        new PollTask().execute(this);
     }
     @SuppressLint("StaticFieldLeak")
-    private class PollTask extends AsyncTask<Void, Void, Void> {
+    private class PollTask extends AsyncTask<Context, Void, List<Thread>> {
         /**
          * This runs on a separate thread
          */
-        @Override protected Void doInBackground(Void... params) {
-            /* do stuff! */
-            return null;
+        @Override protected List<Thread> doInBackground(Context... params) {
+            return NotificationWorker.pullNotifications(params[0]);
         }
         /**
          * This is run on the UI thread.
          * It pushes notifications, then stops the service.
          */
-        @Override protected void onPostExecute(Void result) {
-            /* handle your data */
+        @Override protected void onPostExecute(List<Thread> result) {
+            NotificationWorker.showNotifications(result, AwooNotificationService.this);
             stopSelf();
         }
     }

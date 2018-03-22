@@ -3,6 +3,7 @@ package com.angryburg.uapp.API;
 import android.util.Log;
 
 import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
@@ -254,6 +255,7 @@ public final class ThreadWatcher {
         trySaveThreads(false);
         refreshAll();
     }
+
     /**
      * Called to stop watching thread. Updates the watched_threads property and refreshes all the threads
      * @param id the id of the thread to stop watching
@@ -293,4 +295,5 @@ public final class ThreadWatcher {
         trySaveThreads(false);
         refreshAll();
     }
+
 }

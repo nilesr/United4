@@ -7,6 +7,7 @@ import android.widget.Toast;
 
 import java.lang.ref.WeakReference;
 
+import com.angryburg.uapp.API.NotificationWorker;
 import com.angryburg.uapp.API.ThreadWatcher;
 import com.angryburg.uapp.activities.UnitedActivity;
 import com.angryburg.uapp.application.United;
@@ -80,6 +81,18 @@ public class UnitedPropertiesIf {
         } catch (Exception ignored) {
             GenericAlertDialogFragment.newInstance("Unexpected error getting app version", activity.get().asActivity().getFragmentManager());
             return "0";
+        }
+    }
+    @JavascriptInterface public static void addPosted(String id, String is_op) {
+        int iid;
+        try {
+            iid = Integer.valueOf(id);
+            NotificationWorker.addPosted(iid);
+            if (is_op.equalsIgnoreCase("true")) {
+                NotificationWorker.addPostedOP(iid);
+            }
+        } catch (Exception ignored) {
+            //
         }
     }
 }

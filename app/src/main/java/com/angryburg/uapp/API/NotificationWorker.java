@@ -1,10 +1,12 @@
 package com.angryburg.uapp.API;
 
+import android.app.AlarmManager;
 import android.app.NotificationChannel;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Build;
+import android.os.SystemClock;
 import android.support.v4.app.NotificationCompat;
 import android.support.v4.app.NotificationManagerCompat;
 import android.util.Log;
@@ -12,6 +14,7 @@ import android.util.Log;
 import com.angryburg.uapp.R;
 import com.angryburg.uapp.activities.UserscriptActivity;
 import com.angryburg.uapp.application.United;
+import com.angryburg.uapp.utils.AwooNotificationService;
 import com.angryburg.uapp.utils.P;
 
 import org.json.JSONArray;
@@ -102,7 +105,8 @@ public class NotificationWorker {
     }
     public static List<Thread> pullNotifications(Context context) {
         Log.i(TAG, "pulling notifications");
-        if (United.singleton == null) United.singleton = new WeakReference<>(context);
+        if (United.singleton == null || United.getContext() == null)
+            United.singleton = new WeakReference<>(context);
         cached_notified_ids = null;
         if (P.get("which_notifications").isEmpty() || "DIRECT".equalsIgnoreCase(P.get("which_notifications"))) {
             return pullDirect(context);
@@ -131,6 +135,18 @@ public class NotificationWorker {
             e.printStackTrace();
         }
         return false;
+    }
+    public static void setNotified(int id) {
+        if (cached_notified_ids != null) cached_notified_ids.add(id);
+        String notified_ids = P.get("notified_ids");
+        if (notified_ids.isEmpty()) notified_ids = "[]";
+        try {
+            JSONArray arr = new JSONArray(notified_ids);
+            arr.put(id);
+            P.set("notified_ids", arr.toString());
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
     /**
      * Adds the ID to the list of threads and replies posted by this user
@@ -212,6 +228,19 @@ public class NotificationWorker {
                     .setContentIntent(i2)
                     .setAutoCancel(true);
             NotificationManagerCompat.from(context).notify(0,builder.build());
+            setNotified(thread.post_id);
         }
+    }
+    public static void setAlarm(Context context) {
+        if (United.singleton == null || United.getContext() == null)
+            United.singleton = new WeakReference<>(context);
+        int minutes = P.getMinutes();
+        AlarmManager am = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
+        Intent i = new Intent(context, AwooNotificationService.class);
+        PendingIntent pi = PendingIntent.getService(context, 0, i, 0);
+        if (am == null) return;
+        am.cancel(pi);
+        if (!P.getBool("notifications")) return;
+        am.setInexactRepeating(AlarmManager.ELAPSED_REALTIME_WAKEUP, SystemClock.elapsedRealtime() + minutes*60*1000, minutes*60*1000, pi);
     }
 }

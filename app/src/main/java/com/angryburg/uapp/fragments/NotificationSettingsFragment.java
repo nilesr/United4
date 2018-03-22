@@ -1,6 +1,9 @@
 package com.angryburg.uapp.fragments;
 
 import android.app.Fragment;
+import android.app.FragmentManager;
+import android.content.Context;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.view.LayoutInflater;
@@ -9,9 +12,14 @@ import android.view.ViewGroup;
 import android.widget.Checkable;
 import android.widget.CompoundButton;
 
+import com.angryburg.uapp.API.NotificationWorker;
+import com.angryburg.uapp.API.Thread;
 import com.angryburg.uapp.R;
 import com.angryburg.uapp.activities.HiddenSettingsActivity;
+import com.angryburg.uapp.utils.NotifierService;
 import com.angryburg.uapp.utils.P;
+
+import java.util.List;
 
 /**
  * Created by Niles on 3/21/18.
@@ -32,7 +40,14 @@ public class NotificationSettingsFragment extends Fragment implements HiddenSett
                 ((CompoundButton) res.findViewById(R.id.notifications_enabled)).setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
                     @Override
                     public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
-                        P.set("notifications", ((Checkable) res.findViewById(R.id.notifications_enabled)).isChecked() ? "true" : "false");
+                        boolean enabled = ((Checkable) res.findViewById(R.id.notifications_enabled)).isChecked();
+                        P.set("notifications", enabled ? "true" : "false");
+                        res.findViewById(R.id.notify_all).setEnabled(enabled);
+                        res.findViewById(R.id.notify_direct).setEnabled(enabled);
+                        res.findViewById(R.id.notify_direct_and_created).setEnabled(enabled);
+                        res.findViewById(R.id.hour).setEnabled(enabled);
+                        res.findViewById(R.id.half_day).setEnabled(enabled);
+                        res.findViewById(R.id.day).setEnabled(enabled);
                     }
                 });
                 ((Checkable) res.findViewById(R.id.notify_all)).setChecked("ALL".equalsIgnoreCase(P.get("which_notifications")));
@@ -47,6 +62,14 @@ public class NotificationSettingsFragment extends Fragment implements HiddenSett
                 ((CompoundButton) res.findViewById(R.id.hour)).setOnCheckedChangeListener(notify_duration_listener);
                 ((CompoundButton) res.findViewById(R.id.half_day)).setOnCheckedChangeListener(notify_duration_listener);
                 ((CompoundButton) res.findViewById(R.id.day)).setOnCheckedChangeListener(notify_duration_listener);
+                if (Build.VERSION.SDK_INT >= 26) {
+                    GenericAlertDialogFragment.newInstance("Your version of android is too new, and notifications are not available. ", getFragmentManager());
+                    // force the check changed listener to run to disable the rest of the UI
+                    ((Checkable) res.findViewById(R.id.notifications_disabled)).setChecked(false);
+                    ((Checkable) res.findViewById(R.id.notifications_disabled)).setChecked(true);
+                    res.findViewById(R.id.notifications_enabled).setEnabled(false);
+                    res.findViewById(R.id.notifications_disabled).setEnabled(false);
+                }
             }
         });
         return res;
@@ -61,6 +84,19 @@ public class NotificationSettingsFragment extends Fragment implements HiddenSett
                 P.set("which_notifications", "DIRECT");
             else if (((Checkable) getView().findViewById(R.id.notify_direct_and_created)).isChecked())
                 P.set("which_notifications", "DIRECT_AND_CREATED");
+            GenericProgressDialogFragment.newInstance("Marking existing replies as notified, please wait...", getFragmentManager());
+            final FragmentManager mgr = getFragmentManager();
+            final Context act = getActivity();
+            new java.lang.Thread(new Runnable() {
+                @Override
+                public void run() {
+                    List<Thread> threads = NotificationWorker.pullNotifications(act);
+                    for (Thread t : threads) {
+                        NotificationWorker.setNotified(t.post_id);
+                    }
+                    GenericProgressDialogFragment.dismiss(mgr);
+                }
+            }).start();
         }
     };
     private CompoundButton.OnCheckedChangeListener notify_duration_listener = new CompoundButton.OnCheckedChangeListener() {
@@ -73,6 +109,7 @@ public class NotificationSettingsFragment extends Fragment implements HiddenSett
                 P.set("alarm_interval", "HALF_DAY");
             else if (((Checkable) getView().findViewById(R.id.day)).isChecked())
                 P.set("alarm_interval", "DAY");
+            NotificationWorker.setAlarm(getActivity());
         }
     };
 }

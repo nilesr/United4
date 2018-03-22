@@ -14,6 +14,7 @@ import android.webkit.WebView;
 import java.net.URI;
 import java.util.Iterator;
 
+import com.angryburg.uapp.API.NotificationWorker;
 import com.angryburg.uapp.R;
 import com.angryburg.uapp.application.United;
 import com.angryburg.uapp.fragments.UnitedWebFragment;
@@ -216,14 +217,7 @@ public class MainActivity extends Activity implements UnitedActivity {
     }
     public void onResume() {
         super.onResume();
-        if (!P.getBool("notifications")) return;
-        int minutes = P.getMinutes();
-        AlarmManager am = (AlarmManager) getSystemService(ALARM_SERVICE);
-        Intent i = new Intent(this, AwooNotificationService.class);
-        PendingIntent pi = PendingIntent.getService(this, 0, i, 0);
-        if (am == null) return;
-        am.cancel(pi);
-        am.setInexactRepeating(AlarmManager.ELAPSED_REALTIME_WAKEUP, SystemClock.elapsedRealtime() + minutes*60*1000, minutes*60*1000, pi);
+        NotificationWorker.setAlarm(this);
     }
 
 }

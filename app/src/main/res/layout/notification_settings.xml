@@ -23,13 +23,13 @@
         tools:layout_editor_absoluteX="16dp"
         tools:layout_editor_absoluteY="16dp" />
 
-    <LinearLayout
+    <RadioGroup
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal">
 
         <RadioButton
-            android:id="@+id/notifications_disabled"
+            android:id="@+id/notifications_enabled"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
@@ -38,7 +38,7 @@
             tools:layout_editor_absoluteY="35dp" />
 
         <RadioButton
-            android:id="@+id/notifications_enabled"
+            android:id="@+id/notifications_disabled"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
@@ -46,14 +46,14 @@
             tools:layout_editor_absoluteX="157dp"
             tools:layout_editor_absoluteY="35dp" />
 
-    </LinearLayout>
+    </RadioGroup>
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="horizontal" android:baselineAligned="false">
 
-        <LinearLayout
+        <RadioGroup
             android:layout_width="0dp"
             android:layout_weight="1"
             android:layout_height="match_parent"
@@ -93,9 +93,9 @@
                 android:textColor="?android:textColorPrimary"
                 tools:layout_editor_absoluteX="16dp"
                 tools:layout_editor_absoluteY="148dp" />
-        </LinearLayout>
+        </RadioGroup>
 
-        <LinearLayout
+        <RadioGroup
             android:layout_width="0dp"
             android:layout_weight="1"
             android:layout_height="match_parent"
@@ -127,7 +127,7 @@
                 android:layout_height="wrap_content"
                 android:textColor="?android:textColorPrimary"
                 android:text="All threads I'm watching" />
-        </LinearLayout>
+        </RadioGroup>
     </LinearLayout>
 
 </LinearLayout>

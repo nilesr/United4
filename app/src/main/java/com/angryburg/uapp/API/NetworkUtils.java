@@ -1,5 +1,7 @@
 package com.angryburg.uapp.API;
 
+import android.util.Log;
+
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
@@ -10,6 +12,7 @@ import java.net.URL;
  */
 
 public final class NetworkUtils {
+    private static final String TAG = NetworkUtils.class.getSimpleName();
     private NetworkUtils() {
     }
 
@@ -27,6 +30,7 @@ public final class NetworkUtils {
      * @throws Authorizer.AuthorizationFailureException If the request could not be authorized
      */
     static String fetch(String url, Authorizer authorizer) throws Authorizer.AuthorizationFailureException, IOException {
+        Log.d(TAG, "Fetching url " + url);
         // If we have an authorizer, get its cookie before calling openConnection so that
         // sending the second request is not blocking on the first one returning.
         String cookie = null;

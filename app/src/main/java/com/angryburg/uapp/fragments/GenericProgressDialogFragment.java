@@ -41,6 +41,6 @@ public class GenericProgressDialogFragment extends DialogFragment {
      */
     public static void dismiss(FragmentManager fragmentManager) {
         DialogFragment f = (DialogFragment) fragmentManager.findFragmentByTag("progress_dialog");
-        f.dismiss();
+        if (f != null) f.dismiss();
     }
 }

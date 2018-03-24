@@ -240,7 +240,7 @@ public final class ThreadWatcher {
      * Called to watch a new thread. Updates the watched_threads property and refreshes all the threads
      * @param id the id of the new thread to watch
      */
-    public static void watchThread(int id) {
+    public static void watchThread(int id, boolean delay) {
         int[] old = pullParallelIds();
         for (int oldid : old) if (oldid == id) return; // we are already watching this thread
         String[] new_string_array = new String[old.length + 1];
@@ -253,7 +253,8 @@ public final class ThreadWatcher {
         threads = new WatchableThread[threads.length + 1];
         System.arraycopy(current, 0, threads, 0, current.length);
         trySaveThreads(false);
-        refreshAll();
+        if (!delay)
+            refreshAll();
     }
 
     /**

@@ -21,6 +21,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.FileNotFoundException;
 import java.lang.ref.WeakReference;
 import java.net.URLEncoder;
 import java.util.ArrayList;
@@ -51,7 +52,12 @@ public class NotificationWorker {
             for (int i = 0; i < arr.length(); i++) {
                 int id = arr.getInt(i);
                 if (hasNotified(id)) continue;
-                String object = fetch(P.get("awoo_endpoint") + API + "/thread/" + id + "/metadata", authorizer);
+                String object;
+                try {
+                    object = fetch(P.get("awoo_endpoint") + API + "/thread/" + id + "/metadata", authorizer);
+                } catch (FileNotFoundException ignored) {
+                    continue; // thread was deleted or archived
+                }
                 result.add(new Thread(new JSONObject(object)));
             }
         } catch (Exception e) {
@@ -61,13 +67,18 @@ public class NotificationWorker {
     }
     private static List<Thread> pullDirectAndCreated(Context context) {
         List<Thread> result = pullDirect(context);
-        String posted_ops_str = P.get("posted_ops");
+        String posted_ops_str = P.get("posted_op_ids");
         if (posted_ops_str.isEmpty() || posted_ops_str.equals("[]")) return result;
         try {
             JSONArray posted_ops = new JSONArray(posted_ops_str);
             for (int i = 0; i < posted_ops.length(); i++) {
                 int id = posted_ops.getInt(i);
-                String this_thread_str = fetch(P.get("awoo_endpoint") + API + "/thread/" + id + "/replies", authorizer);
+                String this_thread_str;
+                try {
+                    this_thread_str = fetch(P.get("awoo_endpoint") + API + "/thread/" + id + "/replies", authorizer);
+                } catch (FileNotFoundException ignored) {
+                    continue; // thread was deleted or archived
+                }
                 JSONArray this_thread = new JSONArray(this_thread_str);
                 // j = 1 instead of 0 to skip the OP
                 for (int j = 1; j < this_thread.length(); j++) {
@@ -89,7 +100,12 @@ public class NotificationWorker {
             JSONArray arr = new JSONArray(watched_threads_str);
             for (int i = 0; i < arr.length(); i++) {
                 int id = Integer.valueOf(arr.getString(i));
-                String this_thread_str = fetch(P.get("awoo_endpoint") + API + "/thread/" + id + "/replies", authorizer);
+                String this_thread_str;
+                try {
+                    this_thread_str = fetch(P.get("awoo_endpoint") + API + "/thread/" + id + "/replies", authorizer);
+                } catch (FileNotFoundException ignored) {
+                    continue; // thread was deleted or archived
+                }
                 JSONArray this_thread = new JSONArray(this_thread_str);
                 // j = 1 instead of 0 to skip the OP
                 for (int j = 1; j < this_thread.length(); j++) {
@@ -162,7 +178,7 @@ public class NotificationWorker {
             e.printStackTrace();
         }
         new_arr.put(id);
-        P.set("my_hashes", new_arr.toString());
+        P.set("posted_ids", new_arr.toString());
         old = P.get("my_hashes");
         if (old.isEmpty()) old = "[]";
         new_arr = new JSONArray();
@@ -195,6 +211,7 @@ public class NotificationWorker {
     }
 
     public static void showNotifications(List<Thread> threads, Context context) {
+        Log.i(TAG, "sending " + threads.size() + " notifications");
         if (threads.isEmpty()) return;
         /*
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
@@ -216,9 +233,9 @@ public class NotificationWorker {
             if (thread.comment.length() > 51)
                 title = thread.comment.substring(0, 50) + "...";
             Intent intent = new Intent(context, UserscriptActivity.class);
-            intent.putExtra("URL", P.get("awoo_endpoint") + "/" + thread.board + "/thread/" + thread.parent + "#comment-" + thread.comment);
+            intent.putExtra("URL", P.get("awoo_endpoint") + "/" + thread.board + "/thread/" + thread.parent + "#comment-" + thread.post_id);
             intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-            PendingIntent i2 = PendingIntent.getActivity(context, 0, intent, 0);
+            PendingIntent i2 = PendingIntent.getActivity(context, thread.post_id, intent, 0);
             NotificationCompat.Builder builder = new NotificationCompat.Builder(context)
                     .setSmallIcon(R.mipmap.ic_launcher)
                     .setContentTitle("New reply")
@@ -227,7 +244,7 @@ public class NotificationWorker {
                     .setPriority(NotificationCompat.PRIORITY_LOW)
                     .setContentIntent(i2)
                     .setAutoCancel(true);
-            NotificationManagerCompat.from(context).notify(0,builder.build());
+            NotificationManagerCompat.from(context).notify(thread.post_id,builder.build());
             setNotified(thread.post_id);
         }
     }

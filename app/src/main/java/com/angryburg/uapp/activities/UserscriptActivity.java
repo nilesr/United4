@@ -189,7 +189,7 @@ public class UserscriptActivity extends MainActivity implements ThreadWatcherLis
                         if (ThreadWatcher.isWatching(url_thread.second)) {
                             ThreadWatcher.unwatchThread(url_thread.second);
                         } else {
-                            ThreadWatcher.watchThread(url_thread.second);
+                            ThreadWatcher.watchThread(url_thread.second, false);
                         }
                         break;
                     case R.id.settings:

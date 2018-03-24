@@ -174,6 +174,7 @@ public class UnitedWebFragment extends Fragment {
         @Override public void onPageFinished(WebView view, String url) {
             super.onPageFinished(view, url);
             try {
+                if (getActivity() == null) return; // happens sometimes when the internet is disconnected
                 getActivity().setTitle(view.getTitle());
             } catch (Exception e) {
                 // the activity was finished before we could set it, happens sometimes with launching external urls.

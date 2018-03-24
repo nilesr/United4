@@ -69,7 +69,10 @@ public class UnitedPropertiesIf {
         int iid;
         try {
             iid = Integer.valueOf(id);
-            ThreadWatcher.watchThread(iid);
+            // since they're adding this through the web interface, it MAY be the case that it's being added
+            // because they replied to it, in which case we want to wait for their reply to register on the server
+            // before refreshing the thread watcher (or they will see the +1 for their own reply)
+            ThreadWatcher.watchThread(iid, true);
         } catch (Exception ignored) {
             //
         }
@@ -83,14 +86,14 @@ public class UnitedPropertiesIf {
             return "0";
         }
     }
-    @JavascriptInterface public static void addPosted(String post_id, String parent_id, String hash, String is_op) {
+    @JavascriptInterface public static void addPosted(String post_id, String parent_id, String hash, String is_reply) {
         int post_id_int, parent_id_int;
         try {
             post_id_int = Integer.valueOf(post_id);
             parent_id_int = Integer.valueOf(parent_id);
             NotificationWorker.addPosted(post_id_int, parent_id_int, hash);
-            if (is_op.equalsIgnoreCase("true")) {
-                NotificationWorker.addPostedOP(post_id_int);
+            if (is_reply.equalsIgnoreCase("false")) {
+                NotificationWorker.addPostedOP(parent_id_int);
             }
         } catch (Exception ignored) {
             //

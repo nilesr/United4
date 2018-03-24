@@ -70,7 +70,7 @@ public final class P {
     }
 
     public static int getMinutes() {
-        if (true) return 1; // TEMP DEBUG STOPSHIP
+        //if (true) return 1; // TEMP DEBUG STOPSHIP
         if (P.get("alarm_interval").isEmpty() || P.get("alarm_interval").equalsIgnoreCase("HOUR")) {
             return 60;
         } else if (P.get("alarm_interval").equalsIgnoreCase("HALF_DAY")) {

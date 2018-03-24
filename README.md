@@ -1,12 +1,12 @@
-# La/u/ncher 4.2.1
+# La/u/ncher 4.2.2
 
 ### Try it in your browser!
 Resize your browser to be phone-sized and visit https://niles.xyz/united
 
 ### Try it on your phone!
-https://github.com/nilesr/United4/releases/tag/4.2.1
+https://github.com/nilesr/United4/releases/tag/4.2.2
 
-Direct link: https://niles.xyz/uapp-4.2.1.apk
+Direct link: https://niles.xyz/uapp-4.2.2.apk
 
 <span style="display: none;">
 Google play store, sometimes a version behind: https://play.google.com/store/apps/details?id=com.angryburg.uapp
@@ -16,7 +16,7 @@ Google play store, sometimes a version behind: https://play.google.com/store/app
 
  - ~~Changing the bar color won't take full effect until all UserscriptActivity instances are destroyed (i.e. rotating the screen or restarting the app)~~ Fixed in 4.1.5
  - Creating a new thread, then going to the thread watcher and unwatching it, then replying to the thread with "Watch thread on reply disabled" will watch the thread again because ?watch is still in the URL
- - Creating a new thread sometimes leads to negative "new post" values in the thread watcher
+ - ~~Creating a new thread sometimes leads to negative "new post" values in the thread watcher~~ Should be fixed in 4.2.2, never could quite reproduce this accurately
  - Reportedly cannot be uninstalled on a zenfone max first series
 
 ## todo list

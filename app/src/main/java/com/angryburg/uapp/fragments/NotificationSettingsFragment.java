@@ -50,7 +50,7 @@ public class NotificationSettingsFragment extends Fragment implements HiddenSett
                 ((CompoundButton) res.findViewById(R.id.hour)).setOnCheckedChangeListener(notify_duration_listener);
                 ((CompoundButton) res.findViewById(R.id.half_day)).setOnCheckedChangeListener(notify_duration_listener);
                 ((CompoundButton) res.findViewById(R.id.day)).setOnCheckedChangeListener(notify_duration_listener);
-                if (Build.VERSION.SDK_INT >= 26) {
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
                     GenericAlertDialogFragment.newInstance("Your version of android is too new, and notifications are not available. ", getFragmentManager());
                     // force the check changed listener to run to disable the rest of the UI
                     ((Checkable) res.findViewById(R.id.notifications_disabled)).setChecked(true);

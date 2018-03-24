@@ -3,6 +3,8 @@ package com.angryburg.uapp.API;
 import android.app.AlarmManager;
 import android.app.NotificationChannel;
 import android.app.PendingIntent;
+import android.app.job.JobInfo;
+import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Build;
@@ -252,12 +254,18 @@ public class NotificationWorker {
         if (United.singleton == null || United.getContext() == null)
             United.singleton = new WeakReference<>(context);
         int minutes = P.getMinutes();
-        AlarmManager am = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
-        Intent i = new Intent(context, AwooNotificationService.class);
-        PendingIntent pi = PendingIntent.getService(context, 0, i, 0);
-        if (am == null) return;
-        am.cancel(pi);
-        if (!P.getBool("notifications")) return;
-        am.setInexactRepeating(AlarmManager.ELAPSED_REALTIME_WAKEUP, SystemClock.elapsedRealtime() + minutes*60*1000, minutes*60*1000, pi);
+        //if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            //int job_id = P.getInt("job_id", 0) + 1;
+            //JobInfo.Builder builder = new JobInfo.Builder(job_id, new ComponentName(context, AwooNotificationService.class));
+            //P.set("job_id", String.valueOf(job_id));
+        //} else {
+            AlarmManager am = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
+            Intent i = new Intent(context, AwooNotificationService.class);
+            PendingIntent pi = PendingIntent.getService(context, 0, i, 0);
+            if (am == null) return;
+            am.cancel(pi);
+            if (!P.getBool("notifications")) return;
+            am.setInexactRepeating(AlarmManager.ELAPSED_REALTIME_WAKEUP, SystemClock.elapsedRealtime() + minutes*60*1000, minutes*60*1000, pi);
+        //}
     }
 }

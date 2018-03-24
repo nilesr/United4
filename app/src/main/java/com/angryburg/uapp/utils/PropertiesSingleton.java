@@ -4,6 +4,7 @@ import android.annotation.SuppressLint;
 import android.app.FragmentManager;
 import android.content.Context;
 import android.content.pm.PackageInfo;
+import android.os.Build;
 import android.preference.PreferenceManager;
 import android.util.JsonReader;
 import android.util.Log;
@@ -106,7 +107,7 @@ public final class PropertiesSingleton {
         if (getProperty("watch_on_reply").isEmpty()) setProperty("watch_on_reply", "true");
         if (getProperty("which_notifications").isEmpty()) setProperty("which_notifications", "DIRECT");
         if (getProperty("alarm_interval").isEmpty()) setProperty("alarm_interval", "HALF_DAY");
-        if (getProperty("notifications").isEmpty()) setProperty("notifications", "true");
+        if (getProperty("notifications").isEmpty()) setProperty("notifications",  Build.VERSION.SDK_INT >= Build.VERSION_CODES.O ? "false" : "true");
         // Pull the current version and put it in the main screen
         String version = "error";
         try {

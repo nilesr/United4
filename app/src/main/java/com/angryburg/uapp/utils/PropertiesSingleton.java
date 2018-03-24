@@ -71,6 +71,8 @@ public final class PropertiesSingleton {
                 setFirstRunProperties();
                 setProperty("migrated", "errors");
             }
+        } else if (getProperty("migrated").equalsIgnoreCase("reset")) {
+            setFirstRunProperties();
         }
     }
     private static void setFirstRunProperties() {
@@ -87,6 +89,9 @@ public final class PropertiesSingleton {
         setProperty("show_yous", "false");
         setProperty("display_my_id", "false");
         setProperty("dark_mode", "false");
+        setProperty("which_notifications", "DIRECT");
+        setProperty("alarm_interval", "HALF_DAY");
+        setProperty("notifications", "true");
     }
 
 
@@ -99,6 +104,9 @@ public final class PropertiesSingleton {
         if (getProperty("force_show_back_btn").isEmpty()) setProperty("force_show_back_btn", "true");
         if (getProperty("window_bar_color").isEmpty()) setProperty("window_bar_color", "-25");
         if (getProperty("watch_on_reply").isEmpty()) setProperty("watch_on_reply", "true");
+        if (getProperty("which_notifications").isEmpty()) setProperty("which_notifications", "DIRECT");
+        if (getProperty("alarm_interval").isEmpty()) setProperty("alarm_interval", "HALF_DAY");
+        if (getProperty("notifications").isEmpty()) setProperty("notifications", "true");
         // Pull the current version and put it in the main screen
         String version = "error";
         try {

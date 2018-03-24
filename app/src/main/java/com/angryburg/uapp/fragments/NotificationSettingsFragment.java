@@ -35,7 +35,6 @@ public class NotificationSettingsFragment extends Fragment implements HiddenSett
             @Override
             public void run() {
                 ((Checkable) res.findViewById(R.id.notifications_enabled)).setChecked(P.getBool("notifications"));
-                ((Checkable) res.findViewById(R.id.notifications_disabled)).setChecked(!P.getBool("notifications"));
                 ((CompoundButton) res.findViewById(R.id.notifications_enabled)).setOnCheckedChangeListener(enable_disable_listener);
                 ((CompoundButton) res.findViewById(R.id.notifications_disabled)).setOnCheckedChangeListener(enable_disable_listener);
                 enable_disable_listener.onCheckedChanged(null, false);

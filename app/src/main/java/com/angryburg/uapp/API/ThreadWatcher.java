@@ -253,8 +253,17 @@ public final class ThreadWatcher {
         threads = new WatchableThread[threads.length + 1];
         System.arraycopy(current, 0, threads, 0, current.length);
         trySaveThreads(false);
-        if (!delay)
+        if (delay) {
+            new java.lang.Thread(new Runnable() {
+                @Override
+                public void run() {
+                    try { java.lang.Thread.sleep(1000); } catch (Exception ignored) {}
+                    refreshAll();
+                }
+            }).start();
+        } else {
             refreshAll();
+        }
     }
 
     /**

@@ -1,5 +1,6 @@
 package com.angryburg.uapp.fragments;
 
+import android.annotation.SuppressLint;
 import android.app.Fragment;
 import android.content.Context;
 import android.content.Intent;
@@ -106,12 +107,24 @@ public class ThreadWatcherFragment extends Fragment implements HiddenSettingsFra
     public static void addOptions(Toolbar toolbar) {
         toolbar.setTitle("Thread Watcher");
         toolbar.getMenu().clear();
+        toolbar.inflateMenu(R.menu.refresh_button);
         toolbar.inflateMenu(R.menu.thread_watcher_menu);
         toolbar.setOnMenuItemClickListener(new Toolbar.OnMenuItemClickListener() {
             @Override
             public boolean onMenuItemClick(MenuItem item) {
-                ThreadWatcher.refreshAll();
-                return true;
+                int i = item.getItemId();
+                if (i == R.id.clear_closed) {
+                    com.angryburg.uapp.API.Thread[] threads = ThreadWatcher.threads;
+                    for (com.angryburg.uapp.API.Thread t : threads) {
+                        if (t != null && t.is_locked)
+                            ThreadWatcher.unwatchThread(t.post_id);
+                    }
+                    return true;
+                } else if (i == R.id.refresh) {
+                    ThreadWatcher.refreshAll();
+                    return true;
+                }
+                return false;
             }
         });
     }
@@ -144,6 +157,7 @@ public class ThreadWatcherFragment extends Fragment implements HiddenSettingsFra
         public ThreadWatcherAdapter(Context context, WatchableThread[] list) {
             super(context, 0, list);
         }
+        @SuppressLint("SetTextI18n")
         @NonNull
         @Override public View getView(final int position, View convertView, @NonNull ViewGroup parent) {
             final WatchableThread thread = getItem(position);
@@ -159,7 +173,7 @@ public class ThreadWatcherFragment extends Fragment implements HiddenSettingsFra
                 convertView.findViewById(R.id.rel_layout_inner).setVisibility(View.VISIBLE);
                 convertView.findViewById(R.id.unwatch_button).setVisibility(View.VISIBLE);
                 convertView.findViewById(R.id.spinner).setVisibility(View.GONE);
-                title.setText(thread.title);
+                title.setText((thread.is_locked ? "(Locked) " : "") + thread.title);
                 // Possible options are:
                 // No new replies
                 //      "No" must be grey

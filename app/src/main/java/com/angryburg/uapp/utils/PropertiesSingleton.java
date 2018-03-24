@@ -74,6 +74,7 @@ public final class PropertiesSingleton {
             }
         } else if (getProperty("migrated").equalsIgnoreCase("reset")) {
             setFirstRunProperties();
+            setProperty("migrated", "reset_complete");
         }
     }
     private static void setFirstRunProperties() {

@@ -2,7 +2,8 @@
 <menu xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:android="http://schemas.android.com/apk/res/android">
     <item
-        android:title="Remove Closed Threads"
-        android:id="@+id/clear_closed"
+        android:icon="@mipmap/refresh"
+        android:title="Refresh"
+        android:id="@+id/refresh"
         app:showAsAction="ifRoom" />
 </menu>

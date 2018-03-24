@@ -1,14 +1,11 @@
 package com.angryburg.uapp.activities;
 
 import android.content.Intent;
-import android.graphics.Color;
-import android.os.Build;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.util.Pair;
 import android.view.MenuItem;
 import android.view.SubMenu;
-import android.view.Window;
 
 import java.util.List;
 
@@ -77,7 +74,7 @@ public class UserscriptActivity extends MainActivity implements ThreadWatcherLis
         toolbar.setBackgroundColor(P.getColor("toolbar_color"));
         WindowUtils.updateWindowBarColor(this);
         toolbar.getMenu().clear();
-        toolbar.inflateMenu(R.menu.thread_watcher_menu);
+        toolbar.inflateMenu(R.menu.refresh_button);
         if (ThreadWatcher.updated_threads > 0) {
             toolbar.inflateMenu(R.menu.userscript_menu_with_notification);
         } else {

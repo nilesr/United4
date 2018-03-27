@@ -23,6 +23,8 @@ import com.angryburg.uapp.fragments.ThreadWatcherFragment;
 import com.angryburg.uapp.utils.P;
 import com.angryburg.uapp.utils.WindowUtils;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Stack;
 
 /**
@@ -46,17 +48,20 @@ public class HiddenSettingsActivity extends Activity {
         windowStack = new Stack<>();
         if (savedInstanceState != null && savedInstanceState.containsKey("stack")) {
             //noinspection unchecked
-            windowStack = (Stack<FragmentType>) savedInstanceState.getSerializable("stack");
-            if (windowStack == null) {
+            String[] arr = savedInstanceState.getStringArray("stack");
+            if (arr != null) {
                 windowStack = new Stack<>();
-            } else {
+                for (String val : arr) {
+                    windowStack.push(FragmentType.valueOf(val));
+                }
                 type = windowStack.peek();
             }
-        }
-        if (getIntent().hasExtra("fragment") && savedInstanceState == null){
+        } else if (getIntent().hasExtra("fragment") && savedInstanceState == null){
             type = FragmentType.valueOf(getIntent().getStringExtra("fragment"));
+            windowStack.push(type);
+        } else {
+            windowStack.push(type);
         }
-        windowStack.push(type);
         swapScreens(type);
     }
     @Override public void onBackPressed() {
@@ -177,7 +182,12 @@ public class HiddenSettingsActivity extends Activity {
      */
     public void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
-        outState.putSerializable("stack", windowStack);
+        String[] arr = new String[windowStack.size()];
+        int i = 0;
+        for (FragmentType t : windowStack.toArray(new FragmentType[windowStack.size()]))
+            //noinspection ValueOfIncrementOrDecrementUsed
+            arr[i++] = t.toString();
+        outState.putStringArray("stack", arr);
     }
 
     /**

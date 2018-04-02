@@ -8,9 +8,10 @@ https://github.com/nilesr/United4/releases/tag/4.2.3
 
 Direct link: https://niles.xyz/uapp-4.2.3.apk
 
-<span style="display: none;">
-Google play store, sometimes a version behind: https://play.google.com/store/apps/details?id=com.angryburg.uapp
-</span>
+<a href="https://f-droid.org/packages/com.angryburg.uapp/" target="_blank">
+<img src="https://f-droid.org/badge/get-it-on.png" alt="Get it on F-Droid" height="80"/></a>
+<a href="https://play.google.com/store/apps/details?id=com.angryburg.uapp" target="_blank">
+<img src="https://play.google.com/intl/en_us/badges/images/generic/en-play-badge.png" alt="Get it on Google Play" height="80"/></a>
 
 ## Known bugs
 

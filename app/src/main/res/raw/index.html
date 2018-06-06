@@ -105,6 +105,9 @@
                 }
                 // set the background image to `theme`_home.png
                 document.body.style.background = "url(\"" + theme + "_home.png\") no-repeat center/cover fixed";
+                if (theme == "motif") {
+                    document.body.style.background = "url(\"" + theme + "_home.png\") repeat fixed";
+                }
                 // set each image to the theme's image for that button, based on it's id
                 Array.prototype.slice.call(document.getElementsByTagName("img"), 0).forEach(function(elem) {
                     elem.style.height = image_height.toString() + "px";

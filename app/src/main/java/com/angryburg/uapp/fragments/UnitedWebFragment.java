@@ -4,6 +4,7 @@ import android.annotation.SuppressLint;
 import android.app.Fragment;
 import android.content.Intent;
 import android.graphics.Color;
+import android.net.MailTo;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -20,6 +21,7 @@ import android.webkit.WebViewClient;
 import java.net.URL;
 import java.net.URLEncoder;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
 import com.angryburg.uapp.R;
@@ -134,9 +136,15 @@ public class UnitedWebFragment extends Fragment {
             Log.i(TAG, "URL: " + url);
             if (P.getBool("override_authorizer")) return false;
             if (url.startsWith(RESOURCE_FOLDER)) return false;
+            if (url.startsWith("mailto:")) {
+                MailTo mt = MailTo.parse(url);
+                Intent i = newEmailIntent(mt.getTo(), mt.getSubject(), mt.getBody(), mt.getCc());
+                UnitedWebFragment.this.getActivity().startActivity(i);
+                return true;
+            }
             try {
                 String authority = new URL(url).getAuthority();
-                List<String> allowed = new ArrayList<>();
+                Collection<String> allowed = new ArrayList<>();
                 allowed.add(new URL(P.get("awoo_endpoint")).getAuthority());
                 allowed.add(new URL("https://dangeru.us").getAuthority());
                 allowed.add(new URL("https://boards.dangeru.us").getAuthority());
@@ -194,5 +202,23 @@ public class UnitedWebFragment extends Fragment {
             WebView webview = getView().findViewById(R.id.main_webkit);
             webview.restoreState(savedInstanceState);
         }
+    }
+
+    /**
+     * Creates an intent for an email activity
+     * @param address the email address to send to
+     * @param subject the subject
+     * @param body the body
+     * @param cc any email addresses to cc
+     * @return an intent that when started, prompts the user to send the email
+     */
+    private static Intent newEmailIntent(String address, String subject, String body, String cc) {
+        Intent intent = new Intent(Intent.ACTION_SEND);
+        intent.putExtra(Intent.EXTRA_EMAIL, new String[] { address });
+        intent.putExtra(Intent.EXTRA_TEXT, body);
+        intent.putExtra(Intent.EXTRA_SUBJECT, subject);
+        intent.putExtra(Intent.EXTRA_CC, cc);
+        intent.setType("message/rfc822");
+        return intent;
     }
 }

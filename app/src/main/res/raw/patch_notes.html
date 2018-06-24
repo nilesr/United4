@@ -19,6 +19,9 @@
                 background-color: lightgrey;
                 font-size: 25px;
             }
+            a {
+                color: lightgrey;
+            }
         </style>
         <script>
             var ol = function onLoad() {
@@ -36,13 +39,13 @@
     <body onLoad='ol()'>
         <button onClick="settings()">Open Settings</button>
         <h3>4.2.4:</h3>
-        - Add Motif theme by Bird &lt;bird-dangeru@protonmail.com&gt;<br />
-        - Add Kids theme by SaltyStan &lt;saltystan@airmail.cc&gt;
+        - Add Motif theme by Bird &lt;<a href="mailto:bird-dangeru@protonmail.com">bird-dangeru@protonmail.com</a>&gt;<br />
+        - Add Kids theme by SaltyStan &lt;<a href="mailto:saltystan@airmail.cc">saltystan@airmail.cc</a>&gt;
         <h3>4.2.3:</h3>
         - Fix crash due to Android thinking that Stack is parcelable but actually giving me an ArrayList when I unpack it.
         <h3>4.2.2:</h3>
-        - Added Lain theme by Fartox &lt;lauticorchero@gmail.com&gt;<br />
-        - Added Neon theme by Moge-Ko &lt;mogmog.mogeko@gmail.com&gt;<br />
+        - Added Lain theme by Fartox &lt;<a href="mailto:lauticorchero@gmail.com">lauticorchero@gmail.com</a>&gt;<br />
+        - Added Neon theme by Moge-Ko &lt;<a href="mailto:mogmog.mogeko@gmail.com">mogmog.mogeko@gmail.com</a>&gt;<br />
         - Migrate from a file-based format to Android's built in SharedPreferences. This should hopefully fix the bug where your preferences would randomly be reset.<br />
         - Notifications! Notifications are enabled by default for direct replies to your posts, and will automatically check for new notifications once every half-day, more options are available in settings. Notifications are not available on API level 26 (Android 8.0) and above. Thanks to users 8878c9 and be54d0 of /test/163648, and users 70e156, e9f469 and b779e1 of /test/69372<br />
         - The thread watcher now indicates which threads are locked and has a menu item to let you remove all locked threads at once. Thanks to user ed1741 of /test/163648

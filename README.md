@@ -1,12 +1,12 @@
-# La/u/ncher 4.2.3
+# La/u/ncher 4.2.4
 
 ### Try it in your browser!
 Resize your browser to be phone-sized and visit https://niles.xyz/united
 
 ### Try it on your phone!
-https://github.com/nilesr/United4/releases/tag/4.2.3
+https://github.com/nilesr/United4/releases/tag/4.2.4
 
-Direct link: https://niles.xyz/uapp-4.2.3.apk
+Direct link: https://niles.xyz/uapp-4.2.4.apk
 
 <a href="https://f-droid.org/packages/com.angryburg.uapp/" target="_blank">
 <img src="https://f-droid.org/badge/get-it-on.png" alt="Get it on F-Droid" height="80"/></a>
@@ -21,9 +21,12 @@ Direct link: https://niles.xyz/uapp-4.2.3.apk
  - Reportedly cannot be uninstalled on a zenfone max first series
 
 ## todo list
-- music
-	- song select has a sound too
-	- #buttons > img have click sounds too
+- control+f
+- allow user to specify their own hex code for toolbar\_color
+- actual toggles that don't require recreating the whole list for settings, little > arrows on the right for more menus
+- supposedly userscript is not drawing bar if opening thread via thread watcher
+- display board in thread watcher
+- supposedly scrolls all the way up when unwatching a thread
 
 # License
 

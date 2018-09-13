@@ -60,11 +60,12 @@ public class ColorListFragment extends android.app.Fragment implements HiddenSet
                         }
                         TextView textView = (TextView) convertView;
                         ThemeColor item = getItem(position);
-                        textView.setTextColor(Color.BLACK);
                         if (item == null) {
+                            textView.setTextColor(Color.BLACK);
                             textView.setBackgroundColor(Color.WHITE);
                             textView.setText("Custom Color");
                         } else {
+                            textView.setTextColor(Color.WHITE);
                             textView.setBackgroundColor(item.color);
                             textView.setText(item.name);
                         }

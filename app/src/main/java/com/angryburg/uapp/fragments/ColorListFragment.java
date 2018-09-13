@@ -25,10 +25,10 @@ import com.angryburg.uapp.utils.P;
  * Created by Niles on 9/1/17.
  */
 
-public class ColorPickerFragment extends android.app.Fragment implements HiddenSettingsFragment {
+public class ColorListFragment extends android.app.Fragment implements HiddenSettingsFragment {
     @Override
     public HiddenSettingsActivity.FragmentType getType() {
-        return HiddenSettingsActivity.FragmentType.COLOR_PICKER;
+        return HiddenSettingsActivity.FragmentType.COLOR_LIST;
     }
     private static class ThemeColor {
         String name;

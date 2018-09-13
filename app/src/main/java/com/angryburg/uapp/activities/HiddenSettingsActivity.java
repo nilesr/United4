@@ -10,7 +10,7 @@ import android.support.v7.widget.Toolbar;
 
 import com.angryburg.uapp.R;
 import com.angryburg.uapp.fragments.AwooEndpointFragment;
-import com.angryburg.uapp.fragments.ColorPickerFragment;
+import com.angryburg.uapp.fragments.ColorListFragment;
 import com.angryburg.uapp.fragments.DebugSettingsListFragment;
 import com.angryburg.uapp.fragments.NewPropertyFragment;
 import com.angryburg.uapp.fragments.NotificationSettingsFragment;
@@ -23,8 +23,6 @@ import com.angryburg.uapp.fragments.ThreadWatcherFragment;
 import com.angryburg.uapp.utils.P;
 import com.angryburg.uapp.utils.WindowUtils;
 
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Stack;
 
 /**
@@ -152,8 +150,8 @@ public class HiddenSettingsActivity extends Activity {
             case DEBUG_SETTINGS_LIST:
                 newFragment = new DebugSettingsListFragment();
                 break;
-            case COLOR_PICKER:
-                newFragment = new ColorPickerFragment();
+            case COLOR_LIST:
+                newFragment = new ColorListFragment();
                 break;
             case PROPERTY_EDITOR:
                 newFragment = new PropertyEditorFragment();
@@ -212,7 +210,7 @@ public class HiddenSettingsActivity extends Activity {
         DEBUG_SETTINGS_LIST,
         JANITOR_LOGIN,
         THREAD_WATCHER,
-        COLOR_PICKER,
+        COLOR_LIST,
         AWOO_ENDPOINT,
         PROPERTY_EDITOR,
         PROPERTY_EDITOR_NEW,

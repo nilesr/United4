@@ -86,7 +86,7 @@ public class SettingsListFragment extends Fragment implements HiddenSettingsFrag
                                 ((HiddenSettingsActivity) getActivity()).push(HiddenSettingsActivity.FragmentType.JANITOR_LOGIN);
                                 break;
                             case 4:
-                                ((HiddenSettingsActivity) getActivity()).push(HiddenSettingsActivity.FragmentType.COLOR_PICKER);
+                                ((HiddenSettingsActivity) getActivity()).push(HiddenSettingsActivity.FragmentType.COLOR_LIST);
                                 break;
                             case 5:
                                 P.toggle("force_show_back_btn");

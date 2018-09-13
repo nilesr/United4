@@ -204,7 +204,7 @@ public class SettingsListFragment extends Fragment implements HiddenSettingsFrag
                             convertView = LayoutInflater.from(getContext()).inflate(R.layout.settings_list_item, parent, false);
                         }
                         final SettingInterface setting = settings[position];
-                        ViewGroup view = (ViewGroup) convertView;
+                        final ViewGroup view = (ViewGroup) convertView;
                         view.removeAllViews();
                         if (setting.toggle() == null) {
                             TextView tv = new TextView(getActivity());
@@ -221,6 +221,13 @@ public class SettingsListFragment extends Fragment implements HiddenSettingsFrag
                             sw.setLayoutParams(new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
                             sw.setText(setting.getText());
                             sw.setChecked(P.getBool(setting.toggle()));
+                            // this really shouldn't be necessary but it is
+                            sw.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+                                @Override
+                                public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+                                    view.callOnClick();
+                                }
+                            });
                         }
                         view.setOnClickListener(new View.OnClickListener() {
                             @Override

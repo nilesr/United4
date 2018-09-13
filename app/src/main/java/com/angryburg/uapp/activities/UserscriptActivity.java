@@ -6,6 +6,8 @@ import android.support.v7.widget.Toolbar;
 import android.util.Pair;
 import android.view.MenuItem;
 import android.view.SubMenu;
+import android.webkit.WebView;
+import android.widget.Toast;
 
 import java.util.List;
 
@@ -207,6 +209,13 @@ public class UserscriptActivity extends MainActivity implements ThreadWatcherLis
                         i4.putExtra(Intent.EXTRA_TEXT, getWebView().getUrl());
                         startActivity(Intent.createChooser(i4, "Share"));
                         break;
+                    case R.id.hide_thread:
+                        if (url_thread == null) return false;
+                        String key = url_thread.first + ":" + String.valueOf(url_thread.second);
+                        P.set(key, "hide");
+                        WebView v = getWebView();
+                        if (v != null && v.canGoBack()) v.goBack();
+                        Toast.makeText(UserscriptActivity.this, "You won't see this thread again", Toast.LENGTH_LONG).show();
                     default:
                         return false;
                 }

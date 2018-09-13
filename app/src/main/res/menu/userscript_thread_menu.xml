@@ -7,4 +7,9 @@
         android:icon="@mipmap/watch"
         app:showAsAction="always"
         />
+    <item
+        android:id="@+id/hide_thread"
+        android:title="Hide Thread"
+        app:showAsAction="never"
+        />
 </menu>

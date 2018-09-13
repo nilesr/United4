@@ -208,6 +208,7 @@ public class ThreadWatcherFragment extends Fragment implements HiddenSettingsFra
                     subtitleContinuationText = " new replies";
                 }
                 subtitleContinuationText += " (" + thread.number_of_replies + " total)";
+                subtitleContinuationText += " - /" + thread.board + "/";
                 subtitleContinuation.setText(subtitleContinuationText);
             } else {
                 convertView.findViewById(R.id.rel_layout_inner).setVisibility(View.GONE);

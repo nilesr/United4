@@ -11,6 +11,7 @@ import android.support.v7.widget.Toolbar;
 import com.angryburg.uapp.R;
 import com.angryburg.uapp.fragments.AwooEndpointFragment;
 import com.angryburg.uapp.fragments.ColorListFragment;
+import com.angryburg.uapp.fragments.ColorPickerFragment;
 import com.angryburg.uapp.fragments.DebugSettingsListFragment;
 import com.angryburg.uapp.fragments.NewPropertyFragment;
 import com.angryburg.uapp.fragments.NotificationSettingsFragment;
@@ -165,6 +166,9 @@ public class HiddenSettingsActivity extends Activity {
             case NOTIFICATION_SETTINGS:
                 newFragment = new NotificationSettingsFragment();
                 break;
+            case COLOR_PICKER:
+                newFragment = new ColorPickerFragment();
+                break;
         }
         newFragment.setArguments(arguments);
         // Put the fragment in our layout
@@ -215,6 +219,7 @@ public class HiddenSettingsActivity extends Activity {
         PROPERTY_EDITOR,
         PROPERTY_EDITOR_NEW,
         PROPERTIES_LIST,
+        COLOR_PICKER,
         NOTIFICATION_SETTINGS
     }
 }

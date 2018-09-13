@@ -60,15 +60,24 @@ public class ColorListFragment extends android.app.Fragment implements HiddenSet
                         }
                         TextView textView = (TextView) convertView;
                         ThemeColor item = getItem(position);
-                        textView.setBackgroundColor(item.color);
-                        textView.setTextColor(Color.WHITE);
-                        textView.setText(item.name);
+                        textView.setTextColor(Color.BLACK);
+                        if (item == null) {
+                            textView.setBackgroundColor(Color.WHITE);
+                            textView.setText("Custom Color");
+                        } else {
+                            textView.setBackgroundColor(item.color);
+                            textView.setText(item.name);
+                        }
                         return textView;
                     }
                 });
                 list.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                     @Override
                     public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                        if (colors[i] == null) {
+                            ((HiddenSettingsActivity) getActivity()).push(HiddenSettingsActivity.FragmentType.COLOR_PICKER);
+                            return;
+                        }
                         P.set("toolbar_color", String.valueOf(colors[i].color));
                         ((HiddenSettingsActivity) getActivity()).invalidateToolbarColor();
                         NotifierService.notify(NotifierService.NotificationType.INVALIDATE_TOOLBAR);
@@ -85,6 +94,7 @@ public class ColorListFragment extends android.app.Fragment implements HiddenSet
 
     private static ThemeColor[] makeColors() {
         ArrayList<ThemeColor> l = new ArrayList<>();
+        l.add(null);
         l.add(new ThemeColor("Firebrick", 0xFFB71C1C));
         l.add(new ThemeColor("Royal Health", 0xFF880E4F));
         l.add(new ThemeColor("Indigo", 0xFF4A148C));

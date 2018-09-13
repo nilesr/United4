@@ -13,6 +13,7 @@ import com.angryburg.uapp.fragments.AwooEndpointFragment;
 import com.angryburg.uapp.fragments.ColorListFragment;
 import com.angryburg.uapp.fragments.ColorPickerFragment;
 import com.angryburg.uapp.fragments.DebugSettingsListFragment;
+import com.angryburg.uapp.fragments.HiddenThreadListFragment;
 import com.angryburg.uapp.fragments.NewPropertyFragment;
 import com.angryburg.uapp.fragments.NotificationSettingsFragment;
 import com.angryburg.uapp.fragments.PropertiesListFragment;
@@ -163,6 +164,9 @@ public class HiddenSettingsActivity extends Activity {
             case PROPERTIES_LIST:
                 newFragment = new PropertiesListFragment();
                 break;
+            case HIDDEN_LIST:
+                newFragment = new HiddenThreadListFragment();
+                break;
             case NOTIFICATION_SETTINGS:
                 newFragment = new NotificationSettingsFragment();
                 break;
@@ -220,6 +224,7 @@ public class HiddenSettingsActivity extends Activity {
         PROPERTY_EDITOR_NEW,
         PROPERTIES_LIST,
         COLOR_PICKER,
+        HIDDEN_LIST,
         NOTIFICATION_SETTINGS
     }
 }

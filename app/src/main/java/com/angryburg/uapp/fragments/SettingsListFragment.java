@@ -187,6 +187,17 @@ public class SettingsListFragment extends Fragment implements HiddenSettingsFrag
                     return "Dark mode - Currently " + P.getReadable("dark_mode");
                 }
             },
+            new Setting(null, new Runnable() {
+                @Override
+                public void run() {
+                    ((HiddenSettingsActivity) getActivity()).push(HiddenSettingsActivity.FragmentType.HIDDEN_LIST);
+                }
+            }) {
+                @Override
+                public String getText() {
+                    return "Hidden Threads";
+                }
+            },
     };
     @Nullable
     @Override

@@ -133,7 +133,7 @@ public final class ThreadWatcher {
     /**
      * Updates the updated_threads variable with the new count of updated threads
      */
-    private static void updateNewThreadCounts() {
+    public static void updateNewThreadCounts() {
         updated_threads = 0;
         for (WatchableThread thread : threads) {
             if (thread == null) continue;

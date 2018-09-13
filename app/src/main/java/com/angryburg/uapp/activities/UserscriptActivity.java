@@ -240,7 +240,7 @@ public class UserscriptActivity extends MainActivity implements ThreadWatcherLis
                 try {
                     invalidateToolbar(getWebView().getUrl());
                 } catch (Exception e) {
-                    e.printStackTrace();
+                    if (!(e instanceof NullPointerException)) e.printStackTrace();
                     // eh it's probably fine
                     invalidateToolbar(null);
                 }

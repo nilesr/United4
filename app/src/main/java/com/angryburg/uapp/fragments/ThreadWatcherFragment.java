@@ -47,7 +47,9 @@ public class ThreadWatcherFragment extends Fragment implements HiddenSettingsFra
                     return;
                 }
                 // Set the thread as read and open the thread in a new UserscriptActivity
-                ThreadWatcher.setRead(i);
+                // do NOT ThreadWatcher.setRead(i), it will update the board:id property, and then
+                // when the webpage loads, the userscript will think that there are no new replies
+                // and will not draw the bar or jump to the bar
                 WatchableThread thread = ThreadWatcher.threads[i];
                 String url = P.get("awoo_endpoint") + "/" + thread.board + "/thread/" + thread.post_id;
                 Intent intent = new Intent(getActivity(), UserscriptActivity.class);
@@ -144,6 +146,17 @@ public class ThreadWatcherFragment extends Fragment implements HiddenSettingsFra
      */
     @Override
     public void threadsUpdated() {
+        setAdapter();
+    }
+
+    /**
+     * user visiting the thread probably updated its board:id property because it marked it as read
+     * so stop showing "1 new reply" and change to "No new replies"
+     */
+    @Override
+    public void onResume() {
+        super.onResume();
+        ThreadWatcher.updateNewThreadCounts();
         setAdapter();
     }
 

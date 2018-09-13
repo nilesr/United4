@@ -210,13 +210,6 @@ public class SettingsListFragment extends Fragment implements HiddenSettingsFrag
                             TextView tv = new TextView(getActivity());
                             tv.setLayoutParams(new LinearLayout.LayoutParams(0, ViewGroup.LayoutParams.MATCH_PARENT, 0.85f));
                             tv.setText(setting.getText());
-                            view.setOnClickListener(new View.OnClickListener() {
-                                @Override
-                                public void onClick(View view) {
-                                    setting.click();
-                                    list.invalidateViews();
-                                }
-                            });
                             view.addView(tv);
                             ImageView iv = new ImageView(getContext());
                             iv.setImageResource(android.R.drawable.progress_horizontal);
@@ -228,16 +221,14 @@ public class SettingsListFragment extends Fragment implements HiddenSettingsFrag
                             sw.setLayoutParams(new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
                             sw.setText(setting.getText());
                             sw.setChecked(P.getBool(setting.toggle()));
-                            //sw.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-                            view.setOnClickListener(new View.OnClickListener() {
-                                @Override
-                                //public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
-                                public void onClick(View view) {
-                                    setting.click();
-                                    list.invalidateViews();
-                                }
-                            });
                         }
+                        view.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View view) {
+                                setting.click();
+                                list.invalidateViews();
+                            }
+                        });
                         return convertView;
                     }
 

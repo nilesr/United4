@@ -95,7 +95,7 @@ public class ColorListFragment extends android.app.Fragment implements HiddenSet
 
     private static ThemeColor[] makeColors() {
         ArrayList<ThemeColor> l = new ArrayList<>();
-        l.add(null);
+        l.add(null); // represents the custom color option
         l.add(new ThemeColor("Firebrick", 0xFFB71C1C));
         l.add(new ThemeColor("Royal Health", 0xFF880E4F));
         l.add(new ThemeColor("Indigo", 0xFF4A148C));

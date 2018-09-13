@@ -206,7 +206,7 @@ public class SettingsListFragment extends Fragment implements HiddenSettingsFrag
                         final SettingInterface setting = settings[position];
                         ViewGroup view = (ViewGroup) convertView;
                         view.removeAllViews();
-                        if (setting.submenu() || setting.toggle() == null) {
+                        if (setting.toggle() == null) {
                             TextView tv = new TextView(getActivity());
                             tv.setLayoutParams(new LinearLayout.LayoutParams(0, ViewGroup.LayoutParams.MATCH_PARENT, 0.85f));
                             tv.setText(setting.getText());
@@ -228,9 +228,11 @@ public class SettingsListFragment extends Fragment implements HiddenSettingsFrag
                             sw.setLayoutParams(new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
                             sw.setText(setting.getText());
                             sw.setChecked(P.getBool(setting.toggle()));
-                            sw.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+                            //sw.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+                            view.setOnClickListener(new View.OnClickListener() {
                                 @Override
-                                public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+                                //public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+                                public void onClick(View view) {
                                     setting.click();
                                     list.invalidateViews();
                                 }
@@ -287,12 +289,6 @@ public class SettingsListFragment extends Fragment implements HiddenSettingsFrag
         void click();
 
         /**
-         * returns whether it should be drawn as a button or a toggle
-         * @return whether it should be drawn as a button or a toggle
-         */
-        boolean submenu();
-
-        /**
          * For non-submenus, returns a property that can be read as a boolean to see if the toggle
          * should be shown in the enabled state or the disabled state, or null if there is no toggle
          * @return a property name to check, or null
@@ -335,7 +331,6 @@ public class SettingsListFragment extends Fragment implements HiddenSettingsFrag
             }
         }
 
-        public boolean submenu() { return toggle == null; }
         public String toggle() { return toggle; }
     }
 }

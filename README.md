@@ -1,12 +1,12 @@
-# La/u/ncher 4.2.4
+# La/u/ncher 4.2.5
 
 ### Try it in your browser!
 Resize your browser to be phone-sized and visit https://niles.xyz/united
 
 ### Try it on your phone!
-https://github.com/nilesr/United4/releases/tag/4.2.4
+https://github.com/nilesr/United4/releases/tag/4.2.5
 
-Direct link: https://niles.xyz/uapp-4.2.4.apk
+Direct link: https://niles.xyz/uapp-4.2.5.apk
 
 <a href="https://f-droid.org/packages/com.angryburg.uapp/" target="_blank">
 <img src="https://f-droid.org/badge/get-it-on.png" alt="Get it on F-Droid" height="80"/></a>

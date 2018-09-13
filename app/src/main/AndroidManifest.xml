@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    android:versionName="4.2.4"
-    android:versionCode="424"
+    android:versionName="4.2.5"
+    android:versionCode="425"
     package="com.angryburg.uapp">
 
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />

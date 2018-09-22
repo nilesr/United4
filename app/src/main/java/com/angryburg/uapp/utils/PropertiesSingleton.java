@@ -21,7 +21,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import com.angryburg.uapp.R;
 import com.angryburg.uapp.application.United;
 import com.angryburg.uapp.fragments.GenericAlertDialogFragment;
 
@@ -130,45 +129,45 @@ public final class PropertiesSingleton {
         setProperty("all_themes", str);
         HashMap<String, String> map = new HashMap<>();
         ArrayList<String> ordered_songs = new ArrayList<>();
-        put(map, ordered_songs, R.raw.hopes_and_dreams, "Hopes and Dreams");
-        put(map, ordered_songs, R.raw.a_neon_glow_lights_the_way, "A Neon Glow Lights the Way");
-        put(map, ordered_songs, R.raw.welcome_to_va_11_hall_a, "Welcome To VA-11 HALL-A");
-        put(map, ordered_songs, R.raw.every_day_is_night, "Every Day is Night");
-        put(map, ordered_songs, R.raw.commencing_simulation, "Commencing Simulation");
-        put(map, ordered_songs, R.raw.drive_me_wild, "Drive Me Wild");
-        put(map, ordered_songs, R.raw.good_for_health_bad_for_education, "Good for Health, Bad for Education");
-        put(map, ordered_songs, R.raw.who_was_i, "Who Was I?");
-        put(map, ordered_songs, R.raw.troubling_news, "Troubling News");
-        put(map, ordered_songs, R.raw.a_gaze_that_invited_disaster, "A Gaze That Invited Disaster");
-        put(map, ordered_songs, R.raw.friendly_conversation, "Friendly Conversation");
-        put(map, ordered_songs, R.raw.youve_got_me, "You've Got Me");
-        put(map, ordered_songs, R.raw.umemoto, "Umemoto");
-        put(map, ordered_songs, R.raw.jc_eltons, "JC Elton's");
-        put(map, ordered_songs, R.raw.go_go_streaming_chan, "Go! Go! Streaming-chan!");
-        put(map, ordered_songs, R.raw.all_systems_go, "All Systems, Go!");
-        put(map, ordered_songs, R.raw.where_do_i_go_from_here, "Where Do I Go From Here?");
-        put(map, ordered_songs, R.raw.will_you_remember_me, "Will You Remember Me?");
-        put(map, ordered_songs, R.raw.everything_will_be_okay, "Everything Will Be Okay");
-        put(map, ordered_songs, R.raw.march_of_the_white_knights, "March of the White Knights");
-        put(map, ordered_songs, R.raw.a_rene, "A. Rene");
-        put(map, ordered_songs, R.raw.neo_avatar, "Neo Avatar");
-        put(map, ordered_songs, R.raw.those_who_dwell_in_the_shadows, "Those Who Dwell in The Shadows");
-        put(map, ordered_songs, R.raw.nightime_maneuvers, "Nighttime Manuvers");
-        put(map, ordered_songs, R.raw.a_star_pierces_the_darkness, "A Star Pierces the Darkness");
-        put(map, ordered_songs, R.raw.your_love_is_a_drug, "Your Love is a Drug");
-        put(map, ordered_songs, R.raw.through_the_storm_we_will_find_a_way, "Through the Storm We Will Find a Way");
-        put(map, ordered_songs, R.raw.synthestitch, "Synthestitch");
-        put(map, ordered_songs, R.raw.snowfall, "Snowfall");
-        put(map, ordered_songs, R.raw.the_answer_lies_within, "The Answer Lies Within");
-        put(map, ordered_songs, R.raw.dawn_approaches, "Dawn Approaches");
-        put(map, ordered_songs, R.raw.with_renewed_hope_we_continue_forward, "With Renewed Hope, We Continue Forward");
-        put(map, ordered_songs, R.raw.last_call, "Last Call");
-        put(map, ordered_songs, R.raw.reminescence, "Reminiscence");
-        put(map, ordered_songs, R.raw.believe_in_me_who_believes_in_you, "Believe in Me Who Believes in You");
-        put(map, ordered_songs, R.raw.final_result, "Final Result");
-        put(map, ordered_songs, R.raw.until_we_meet_again, "Until We Meet Again");
-        put(map, ordered_songs, R.raw.digital_drive, "Digital Drive");
-        put(map, ordered_songs, R.raw.safe_haven, "Safe Haven");
+        put(map, ordered_songs, "hopes_and_dreams", "Hopes and Dreams");
+        put(map, ordered_songs, "a_neon_glow_lights_the_way", "A Neon Glow Lights the Way");
+        put(map, ordered_songs, "welcome_to_va_11_hall_a", "Welcome To VA-11 HALL-A");
+        put(map, ordered_songs, "every_day_is_night", "Every Day is Night");
+        put(map, ordered_songs, "commencing_simulation", "Commencing Simulation");
+        put(map, ordered_songs, "drive_me_wild", "Drive Me Wild");
+        put(map, ordered_songs, "good_for_health_bad_for_education", "Good for Health, Bad for Education");
+        put(map, ordered_songs, "who_was_i", "Who Was I?");
+        put(map, ordered_songs, "troubling_news", "Troubling News");
+        put(map, ordered_songs, "a_gaze_that_invited_disaster", "A Gaze That Invited Disaster");
+        put(map, ordered_songs, "friendly_conversation", "Friendly Conversation");
+        put(map, ordered_songs, "youve_got_me", "You've Got Me");
+        put(map, ordered_songs, "umemoto", "Umemoto");
+        put(map, ordered_songs, "jc_eltons", "JC Elton's");
+        put(map, ordered_songs, "go_go_streaming_chan", "Go! Go! Streaming-chan!");
+        put(map, ordered_songs, "all_systems_go", "All Systems, Go!");
+        put(map, ordered_songs, "where_do_i_go_from_here", "Where Do I Go From Here?");
+        put(map, ordered_songs, "will_you_remember_me", "Will You Remember Me?");
+        put(map, ordered_songs, "everything_will_be_okay", "Everything Will Be Okay");
+        put(map, ordered_songs, "march_of_the_white_knights", "March of the White Knights");
+        put(map, ordered_songs, "a_rene", "A. Rene");
+        put(map, ordered_songs, "neo_avatar", "Neo Avatar");
+        put(map, ordered_songs, "those_who_dwell_in_the_shadows", "Those Who Dwell in The Shadows");
+        put(map, ordered_songs, "nightime_maneuvers", "Nighttime Manuvers");
+        put(map, ordered_songs, "a_star_pierces_the_darkness", "A Star Pierces the Darkness");
+        put(map, ordered_songs, "your_love_is_a_drug", "Your Love is a Drug");
+        put(map, ordered_songs, "through_the_storm_we_will_find_a_way", "Through the Storm We Will Find a Way");
+        put(map, ordered_songs, "synthestitch", "Synthestitch");
+        put(map, ordered_songs, "snowfall", "Snowfall");
+        put(map, ordered_songs, "the_answer_lies_within", "The Answer Lies Within");
+        put(map, ordered_songs, "dawn_approaches", "Dawn Approaches");
+        put(map, ordered_songs, "with_renewed_hope_we_continue_forward", "With Renewed Hope, We Continue Forward");
+        put(map, ordered_songs, "last_call", "Last Call");
+        put(map, ordered_songs, "reminescence", "Reminiscence");
+        put(map, ordered_songs, "believe_in_me_who_believes_in_you", "Believe in Me Who Believes in You");
+        put(map, ordered_songs, "final_result", "Final Result");
+        put(map, ordered_songs, "until_we_meet_again", "Until We Meet Again");
+        put(map, ordered_songs, "digital_drive", "Digital Drive");
+        put(map, ordered_songs, "safe_haven", "Safe Haven");
         str = new JSONObject(map).toString();
         setProperty("songs", str);
         setProperty("ordered_songs", new JSONArray(ordered_songs).toString());
@@ -183,8 +182,8 @@ public final class PropertiesSingleton {
      * @param id The resource ID
      * @param s The song name
      */
-    private static void put(Map<String, String> map, @SuppressWarnings("TypeMayBeWeakened") List<String> ordered_songs, int id, String s) {
-        map.put(s, Integer.toString(id));
+    private static void put(Map<String, String> map, @SuppressWarnings("TypeMayBeWeakened") List<String> ordered_songs, String id, String s) {
+        map.put(s, id);
         ordered_songs.add(s);
     }
 

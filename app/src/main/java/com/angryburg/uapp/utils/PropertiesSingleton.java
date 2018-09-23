@@ -84,10 +84,10 @@ public final class PropertiesSingleton {
         setProperty("shuffle", "false");
         setProperty("current_song", "");
         setProperty("debug", "false");
-        setProperty("bar", "false");
-        setProperty("scroll_to_bar", "false");
+        setProperty("bar", "true");
+        setProperty("scroll_to_bar", "true");
         setProperty("hide_version", "false");
-        setProperty("show_yous", "false");
+        setProperty("show_yous", "true");
         setProperty("display_my_id", "false");
         setProperty("dark_mode", "false");
         setProperty("which_notifications", "DIRECT");

@@ -271,4 +271,10 @@ public class UserscriptActivity extends MainActivity implements ThreadWatcherLis
     public void boardsListReady(List<BoardsList.Board> list) {
         invalidateToolbar();
     }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        invalidateToolbar();
+    }
 }

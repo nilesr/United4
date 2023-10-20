@@ -21,34 +21,32 @@ public final class WindowUtils {
      */
     @SuppressWarnings("LiteralAsArgToStringEquals")
     public static void updateWindowBarColor(Activity act) {
-        if (Build.VERSION.SDK_INT >= 21) {
-            if (P.get("window_bar_color").equalsIgnoreCase("false")) {
-                act.getWindow().setStatusBarColor(Color.BLACK);
+        if (P.get("window_bar_color").equalsIgnoreCase("false")) {
+            act.getWindow().setStatusBarColor(Color.BLACK);
+        } else {
+            double factor;
+            if (P.get("window_bar_color").equalsIgnoreCase("+25")) {
+                factor = 1.25;
+            } else if (P.get("window_bar_color").equalsIgnoreCase("match")) {
+                factor = 1;
             } else {
-                double factor;
-                if (P.get("window_bar_color").equalsIgnoreCase("+25")) {
-                    factor = 1.25;
-                } else if (P.get("window_bar_color").equalsIgnoreCase("match")) {
-                    factor = 1;
-                } else {
-                    factor = 0.75;
-                }
-                //act.getWindow().setStatusBarColor(P.getColor("toolbar_color"));
-                int color = P.getColor("toolbar_color");
-                int r = color & 0xFF;
-                //noinspection UnnecessaryParentheses
-                int g =(color >> 8) & 0xFF;
-                //noinspection UnnecessaryParentheses
-                int b =(color >> 16) & 0xFF;
-                //noinspection NumericCastThatLosesPrecision
-                r = min((int) (r * factor), 0xFF);
-                //noinspection AssignmentReplaceableWithOperatorAssignment,NumericCastThatLosesPrecision
-                g = min((int) (g * factor), 0xFF);
-                //noinspection AssignmentReplaceableWithOperatorAssignment,NumericCastThatLosesPrecision
-                b = min((int) (b * factor), 0xFF);
-                color = 0xFF000000 + r + (g << 8) + (b << 16);
-                act.getWindow().setStatusBarColor(color);
+                factor = 0.75;
             }
+            //act.getWindow().setStatusBarColor(P.getColor("toolbar_color"));
+            int color = P.getColor("toolbar_color");
+            int r = color & 0xFF;
+            //noinspection UnnecessaryParentheses
+            int g =(color >> 8) & 0xFF;
+            //noinspection UnnecessaryParentheses
+            int b =(color >> 16) & 0xFF;
+            //noinspection NumericCastThatLosesPrecision
+            r = min((int) (r * factor), 0xFF);
+            //noinspection AssignmentReplaceableWithOperatorAssignment,NumericCastThatLosesPrecision
+            g = min((int) (g * factor), 0xFF);
+            //noinspection AssignmentReplaceableWithOperatorAssignment,NumericCastThatLosesPrecision
+            b = min((int) (b * factor), 0xFF);
+            color = 0xFF000000 + r + (g << 8) + (b << 16);
+            act.getWindow().setStatusBarColor(color);
         }
     }
 }

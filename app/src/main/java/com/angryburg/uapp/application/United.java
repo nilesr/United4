@@ -7,7 +7,7 @@ import android.media.AudioManager;
 import android.media.SoundPool;
 import android.net.Uri;
 import android.os.Build;
-import android.support.annotation.Nullable;
+import androidx.annotation.Nullable;
 import android.util.JsonReader;
 import android.util.Log;
 
@@ -16,28 +16,30 @@ import com.angryburg.uapp.API.BoardsList;
 import com.angryburg.uapp.API.ThreadWatcher;
 import com.angryburg.uapp.utils.NotifierService;
 import com.angryburg.uapp.utils.P;
-import com.google.android.exoplayer2.DefaultLoadControl;
-import com.google.android.exoplayer2.ExoPlaybackException;
-import com.google.android.exoplayer2.ExoPlayer;
-import com.google.android.exoplayer2.ExoPlayerFactory;
-import com.google.android.exoplayer2.LoadControl;
-import com.google.android.exoplayer2.PlaybackParameters;
-import com.google.android.exoplayer2.Player;
-import com.google.android.exoplayer2.SimpleExoPlayer;
-import com.google.android.exoplayer2.Timeline;
-import com.google.android.exoplayer2.extractor.DefaultExtractorsFactory;
-import com.google.android.exoplayer2.extractor.ExtractorsFactory;
-import com.google.android.exoplayer2.source.ExtractorMediaSource;
-import com.google.android.exoplayer2.source.MediaSource;
-import com.google.android.exoplayer2.source.TrackGroupArray;
-import com.google.android.exoplayer2.trackselection.AdaptiveTrackSelection;
-import com.google.android.exoplayer2.trackselection.DefaultTrackSelector;
-import com.google.android.exoplayer2.trackselection.TrackSelection;
-import com.google.android.exoplayer2.trackselection.TrackSelectionArray;
-import com.google.android.exoplayer2.upstream.DataSource;
-import com.google.android.exoplayer2.upstream.DefaultBandwidthMeter;
-import com.google.android.exoplayer2.upstream.DefaultDataSourceFactory;
-import com.google.android.exoplayer2.util.Util;
+
+import androidx.media3.common.MediaItem;
+import androidx.media3.common.util.UnstableApi;
+import androidx.media3.exoplayer.DefaultLoadControl;
+import androidx.media3.exoplayer.ExoPlaybackException;
+import androidx.media3.exoplayer.ExoPlayer;
+import androidx.media3.exoplayer.LoadControl;
+import androidx.media3.common.PlaybackParameters;
+import androidx.media3.common.Player;
+import androidx.media3.exoplayer.ExoPlayer;
+import androidx.media3.common.Timeline;
+import androidx.media3.exoplayer.upstream.DefaultBandwidthMeter;
+import androidx.media3.extractor.DefaultExtractorsFactory;
+import androidx.media3.extractor.ExtractorsFactory;
+import androidx.media3.exoplayer.source.ProgressiveMediaSource;
+import androidx.media3.exoplayer.source.MediaSource;
+import androidx.media3.exoplayer.source.TrackGroupArray;
+import androidx.media3.exoplayer.trackselection.AdaptiveTrackSelection;
+import androidx.media3.exoplayer.trackselection.DefaultTrackSelector;
+import androidx.media3.exoplayer.trackselection.TrackSelection;
+import androidx.media3.exoplayer.trackselection.TrackSelectionArray;
+import androidx.media3.datasource.DataSource;
+import androidx.media3.datasource.DefaultDataSourceFactory;
+import androidx.media3.common.util.Util;
 
 import org.json.JSONArray;
 
@@ -47,8 +49,11 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
-import static com.google.android.exoplayer2.Player.STATE_ENDED;
+import static androidx.media3.common.Player.STATE_ENDED;
+import static androidx.media3.common.Player.STATE_IDLE;
+import static androidx.media3.common.Player.STATE_READY;
 
+@UnstableApi
 /**
  * Created by Niles on 8/19/17.
  */
@@ -65,22 +70,19 @@ public class United extends Application {
      */
     public static Authorizer authorizer = null;
 
-
-    public static DefaultBandwidthMeter bandwidthMeter = new DefaultBandwidthMeter();
-    public static TrackSelection.Factory videoTrackSelectionFactory =
-            new AdaptiveTrackSelection.Factory(bandwidthMeter);
-    public static DefaultTrackSelector trackSelector =
-            new DefaultTrackSelector(videoTrackSelectionFactory);
-    public static SimpleExoPlayer player = null;
+    public static Player player = null;
 
     /**
-     * Makes a new sound pool, loads the requested sound and plays it once it's loaded
-     * Could be made a LOT better by reusing the same pool and checking if it's already loaded
+     * Makes a new sound pool, loads the requested sound and plays it once it's
+     * loaded
+     * Could be made a LOT better by reusing the same pool and checking if it's
+     * already loaded
      *
      * @param file the sound to play
      */
     public static void playSound(String file) {
-        if (P.getBool("mute_sounds")) return;
+        if (P.getBool("mute_sounds"))
+            return;
         SoundPool pool = buildPool();
         try {
             AssetFileDescriptor fd = getContext().getAssets().openFd(file);
@@ -101,15 +103,9 @@ public class United extends Application {
      */
     private static SoundPool buildPool() {
         SoundPool pool;
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            pool = new SoundPool.Builder().setMaxStreams(10).build();
-        } else {
-            //noinspection deprecation
-            pool = new SoundPool(10, AudioManager.STREAM_MUSIC, 1);
-        }
+        pool = new SoundPool.Builder().setMaxStreams(10).build();
         return pool;
     }
-
 
     /**
      * Hold on to ApplicationContext statically so we can always get it
@@ -121,8 +117,10 @@ public class United extends Application {
     }
 
     /**
-     * Plays the given song, by finding its R.raw id in the songs map, stored in properties
-     * If notify is set set to true, will notify the webpage. For more information, see NotifierService's documentation
+     * Plays the given song, by finding its R.raw id in the songs map, stored in
+     * properties
+     * If notify is set set to true, will notify the webpage. For more information,
+     * see NotifierService's documentation
      *
      * @param song   the full name of the song to play
      * @param reload whether to notify the web page
@@ -138,7 +136,7 @@ public class United extends Application {
             while (reader.hasNext()) {
                 String name = reader.nextName();
                 String read = reader.nextString();
-                //noinspection EqualsReplaceableByObjectsCall
+                // noinspection EqualsReplaceableByObjectsCall
                 if (name.equals(song)) {
                     id = read;
                     Log.i(TAG, "Song id is " + id);
@@ -164,17 +162,19 @@ public class United extends Application {
         if (player != null) {
             player.stop();
         }
-        LoadControl loadControl = new DefaultLoadControl();
-        player = ExoPlayerFactory.newSimpleInstance(getContext(), trackSelector, loadControl);
+        player = new ExoPlayer.Builder(getContext()).build();
         player.addListener(new SongDoneListener());
 
-        DataSource.Factory dataSourceFactory = new DefaultDataSourceFactory(getContext(), Util.getUserAgent(getContext(), "la/u/ncher"), bandwidthMeter);
+        DataSource.Factory dataSourceFactory = new DefaultDataSourceFactory(getContext(),
+                Util.getUserAgent(getContext(), "la/u/ncher"));
 
-        ExtractorsFactory extractorsFactory = new DefaultExtractorsFactory();
+        //ExtractorsFactory extractorsFactory = new DefaultExtractorsFactory();
 
-        MediaSource mediaSource = new ExtractorMediaSource(Uri.parse("https://niles.xyz/valhalla_music/" + id + ".mp3"), dataSourceFactory, extractorsFactory, null, null);
+        MediaSource mediaSource = new ProgressiveMediaSource.Factory(dataSourceFactory).createMediaSource(MediaItem.fromUri(Uri.parse("https://niles.xyz/valhalla_music/" + id + ".mp3")));
+                //dataSourceFactory, extractorsFactory, null, null);
         player.setPlayWhenReady(true);
-        player.prepare(mediaSource);
+        player.setMediaItem(mediaSource.getMediaItem());
+        player.prepare();
         if (reload) {
             NotifierService.notify(NotifierService.NotificationType.RELOAD_MUSIC);
         }
@@ -184,16 +184,19 @@ public class United extends Application {
      * Stops the currently playing song
      */
     public static void stop() {
-        if (player != null) player.stop();
+        if (player != null)
+            player.stop();
     }
 
     /**
-     * Set up the application context singleton, start pulling down updated threads and the list of boards
+     * Set up the application context singleton, start pulling down updated threads
+     * and the list of boards
      */
     public void onCreate() {
         super.onCreate();
         singleton = new WeakReference<>(getApplicationContext());
-        if (P.getBool("userscript")) ThreadWatcher.initialize();
+        if (P.getBool("userscript"))
+            ThreadWatcher.initialize();
         if (P.getBool("logged_in")) {
             authorizer = new Authorizer(P.get("username"), P.get("password"));
         }
@@ -206,11 +209,12 @@ public class United extends Application {
     }
 
     /**
-     * Called when a song is done playing. If we're looping, seek to the beginning and start again
+     * Called when a song is done playing. If we're looping, seek to the beginning
+     * and start again
      * If we're shuffling, pick a random song and play it, and notify music.html
      * Otherwise, go to the next song in the list, play it and notify music.html
      */
-    private static class SongDoneListener implements ExoPlayer.EventListener {
+    private static class SongDoneListener implements Player.Listener {
         public static void onCompletion(Player player) {
             boolean looping = P.getBool("looping");
             boolean shuffling = P.getBool("shuffle");
@@ -238,7 +242,8 @@ public class United extends Application {
                 }
                 // Figure out what song we're supposed to play
                 String next_song = all_songs.get(idx);
-                // Play it and notify music.html if it's up. For more information see the documentation for
+                // Play it and notify music.html if it's up. For more information see the
+                // documentation for
                 // NotifierService
                 playSong(next_song, true);
             } catch (Exception ignored) {
@@ -246,58 +251,27 @@ public class United extends Application {
             }
         }
 
-        @Override
-        public void onTimelineChanged(Timeline timeline, @Nullable Object manifest, int reason) {
-
-        }
 
         @Override
-        public void onTracksChanged(TrackGroupArray trackGroups, TrackSelectionArray trackSelections) {
-
-        }
-
-        @Override
-        public void onLoadingChanged(boolean isLoading) {
-
-        }
-
-        @Override
-        public void onPlayerStateChanged(boolean playWhenReady, int playbackState) {
+        public void onPlaybackStateChanged(int playbackState) {
+            Log.i(TAG, "stateChanged to "+ playbackState);
             if (playbackState == STATE_ENDED) {
                 onCompletion(player);
             }
-
         }
 
         @Override
-        public void onRepeatModeChanged(int repeatMode) {
-
+        public void onPlayWhenReadyChanged(boolean shuffleModeEnabled, int playbackState) {
+            Log.i(TAG, "onPlayReadystateChanged to "+ playbackState);
+            if (playbackState == STATE_IDLE) {
+                Log.i(TAG, "starting playback");
+                //player.play();
+            }
+            if (playbackState == STATE_READY) {
+                Log.i(TAG, "would be starting playback from ready");
+                //player.play();
+            }
         }
 
-        @Override
-        public void onShuffleModeEnabledChanged(boolean shuffleModeEnabled) {
-
-        }
-
-        @Override
-        public void onPlayerError(ExoPlaybackException error) {
-
-        }
-
-        @Override
-        public void onPositionDiscontinuity(int reason) {
-
-        }
-
-        @Override
-        public void onPlaybackParametersChanged(PlaybackParameters playbackParameters) {
-
-        }
-
-        @Override
-        public void onSeekProcessed() {
-
-        }
     }
 }
-

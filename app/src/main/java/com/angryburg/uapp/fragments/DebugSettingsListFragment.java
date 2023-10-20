@@ -2,8 +2,8 @@ package com.angryburg.uapp.fragments;
 
 import android.app.Fragment;
 import android.os.Bundle;
-import android.support.annotation.Nullable;
-import android.support.v7.widget.Toolbar;
+import androidx.annotation.Nullable;
+import androidx.appcompat.widget.Toolbar;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
@@ -28,6 +28,7 @@ public class DebugSettingsListFragment extends Fragment implements HiddenSetting
     public HiddenSettingsActivity.FragmentType getType() {
         return HiddenSettingsActivity.FragmentType.DEBUG_SETTINGS_LIST;
     }
+
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
@@ -37,12 +38,13 @@ public class DebugSettingsListFragment extends Fragment implements HiddenSetting
             public void run() {
                 ListView list = res.findViewById(R.id.settings_list);
                 final String[] settings = new String[] {
-                    "Reset all preferences",
-                    "Toggle debug button, currently " + P.getReadable("debug"),
-                    "Toggle userscript, currently " + P.getReadable("userscript"),
-                    "Change Awoo Endpoint (currently " + P.get("awoo_endpoint") + ")",
-                    "Override UnitedWebFragmentWebViewAuthorizer, currently " + P.getReadable("override_authorizer"),
-                    "Edit Properties",
+                        "Reset all preferences",
+                        "Toggle debug button, currently " + P.getReadable("debug"),
+                        "Toggle userscript, currently " + P.getReadable("userscript"),
+                        "Change Awoo Endpoint (currently " + P.get("awoo_endpoint") + ")",
+                        "Override UnitedWebFragmentWebViewAuthorizer, currently "
+                                + P.getReadable("override_authorizer"),
+                        "Edit Properties",
                 };
                 list.setAdapter(new ArrayAdapter<>(getActivity(), android.R.layout.simple_list_item_1, settings));
                 list.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -59,18 +61,21 @@ public class DebugSettingsListFragment extends Fragment implements HiddenSetting
                                 break;
                             case 2:
                                 P.toggle("userscript");
-                                if (P.getBool("userscript")) ThreadWatcher.refreshAll();
+                                if (P.getBool("userscript"))
+                                    ThreadWatcher.refreshAll();
                                 run();
                                 break;
                             case 3:
-                                ((HiddenSettingsActivity) getActivity()).push(HiddenSettingsActivity.FragmentType.AWOO_ENDPOINT);
+                                ((HiddenSettingsActivity) getActivity())
+                                        .push(HiddenSettingsActivity.FragmentType.AWOO_ENDPOINT);
                                 break;
                             case 4:
                                 P.toggle("override_authorizer");
                                 run();
                                 break;
                             case 5:
-                                ((HiddenSettingsActivity) getActivity()).push(HiddenSettingsActivity.FragmentType.PROPERTIES_LIST);
+                                ((HiddenSettingsActivity) getActivity())
+                                        .push(HiddenSettingsActivity.FragmentType.PROPERTIES_LIST);
                                 break;
                             default:
                                 GenericAlertDialogFragment.newInstance("Should never happen", getFragmentManager());
@@ -84,8 +89,10 @@ public class DebugSettingsListFragment extends Fragment implements HiddenSetting
         });
         return res;
     }
+
     /**
      * adds a close button to the menu bar
+     * 
      * @param toolbar the toolbar
      */
     public void addOptions(Toolbar toolbar) {
@@ -96,24 +103,24 @@ public class DebugSettingsListFragment extends Fragment implements HiddenSetting
         toolbar.setOnMenuItemClickListener(new Toolbar.OnMenuItemClickListener() {
             @Override
             public boolean onMenuItemClick(MenuItem item) {
-                //noinspection SwitchStatementWithoutDefaultBranch
-                switch (item.getItemId()) {
-                    case R.id.back_item:
-                        getActivity().finish();
-                        return true;
-                    case R.id.reload_all:
-                        NotifierService.notify(NotifierService.NotificationType.RELOAD_ALL);
-                        return true;
-                    case R.id.reload_index:
-                        NotifierService.notify(NotifierService.NotificationType.RELOAD_INDEX);
-                        return true;
-                    case R.id.reload_music:
-                        NotifierService.notify(NotifierService.NotificationType.RELOAD_MUSIC);
-                        return true;
-                    case R.id.invalidate_toolbar:
-                        ((HiddenSettingsActivity) getActivity()).invalidateToolbarColor();
-                        NotifierService.notify(NotifierService.NotificationType.INVALIDATE_TOOLBAR);
-                        return true;
+                // noinspection SwitchStatementWithoutDefaultBranch
+                int itemId = item.getItemId();
+                if (itemId == R.id.back_item) {
+                    getActivity().finish();
+                    return true;
+                } else if (itemId == R.id.reload_all) {
+                    NotifierService.notify(NotifierService.NotificationType.RELOAD_ALL);
+                    return true;
+                } else if (itemId == R.id.reload_index) {
+                    NotifierService.notify(NotifierService.NotificationType.RELOAD_INDEX);
+                    return true;
+                } else if (itemId == R.id.reload_music) {
+                    NotifierService.notify(NotifierService.NotificationType.RELOAD_MUSIC);
+                    return true;
+                } else if (itemId == R.id.invalidate_toolbar) {
+                    ((HiddenSettingsActivity) getActivity()).invalidateToolbarColor();
+                    NotifierService.notify(NotifierService.NotificationType.INVALIDATE_TOOLBAR);
+                    return true;
                 }
                 return false;
             }

@@ -2,7 +2,7 @@ package com.angryburg.uapp.fragments;
 
 import android.app.Fragment;
 import android.os.Bundle;
-import android.support.annotation.Nullable;
+import androidx.annotation.Nullable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -66,9 +66,11 @@ public class PropertyEditorFragment extends Fragment implements HiddenSettingsFr
     }
 
     private void scrapeValue() {
-        if (getView() == null) return;
+        if (getView() == null)
+            return;
         value = ((TextView) getView().findViewById(R.id.value_text)).getText().toString();
     }
+
     @Override
     public void onSaveInstanceState(Bundle outState) {
         outState.putString("value", value);

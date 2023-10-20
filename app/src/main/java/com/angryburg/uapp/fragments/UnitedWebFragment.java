@@ -8,7 +8,7 @@ import android.net.MailTo;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
-import android.support.annotation.Nullable;
+import androidx.annotation.Nullable;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -173,11 +173,7 @@ public class UnitedWebFragment extends Fragment {
             }
         }
         @Override public boolean shouldOverrideUrlLoading(WebView view, WebResourceRequest request) {
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                return shouldOverrideUrlLoading(view, request.getUrl().toString());
-            }
-            GenericAlertDialogFragment.newInstance("Something went wrong in UnitedWebFragmentWebViewClient, this method should only be called on API level 24+, but it was called on an API level below 21", getFragmentManager());
-            return true;
+            return shouldOverrideUrlLoading(view, request.getUrl().toString());
         }
         @Override public void onPageFinished(WebView view, String url) {
             super.onPageFinished(view, url);

@@ -5,9 +5,9 @@ import android.app.Fragment;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
-import android.support.v7.widget.Toolbar;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.appcompat.widget.Toolbar;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
@@ -40,12 +40,13 @@ public class HiddenThreadListFragment extends Fragment implements HiddenSettings
     public HiddenThreadListFragment() {
         super();
         for (String key : PropertiesSingleton.getKeys()) {
-            //noinspection EqualsReplaceableByObjectsCall
+            // noinspection EqualsReplaceableByObjectsCall
             if (key.contains(":") && "hide".equals(P.get(key))) {
                 hidden_list.add(key);
             }
         }
     }
+
     @Override
     public HiddenSettingsActivity.FragmentType getType() {
         return HiddenSettingsActivity.FragmentType.HIDDEN_LIST;
@@ -70,7 +71,7 @@ public class HiddenThreadListFragment extends Fragment implements HiddenSettings
         res.post(new Runnable() {
             @Override
             public void run() {
-                //noinspection OverlyStrongTypeCast
+                // noinspection OverlyStrongTypeCast
                 ((ListView) res.findViewById(R.id.thread_list)).setOnItemClickListener(listener);
                 Toolbar toolbar = getActivity().findViewById(R.id.toolbar);
                 setAdapter();
@@ -85,11 +86,13 @@ public class HiddenThreadListFragment extends Fragment implements HiddenSettings
      * Also handles showing the "You have no hidden threads" message
      */
     public void setAdapter() {
-        if (getActivity() == null) return;
+        if (getActivity() == null)
+            return;
         getActivity().runOnUiThread(new Runnable() {
             @Override
             public void run() {
-                if (getView() == null) return;
+                if (getView() == null)
+                    return;
                 ListView list = getView().findViewById(R.id.thread_list);
                 TextView message = getView().findViewById(R.id.no_threads_message);
                 message.setText("You have no hidden threads");
@@ -100,7 +103,8 @@ public class HiddenThreadListFragment extends Fragment implements HiddenSettings
                     message.setVisibility(View.GONE);
                     list.setVisibility(View.VISIBLE);
                 }
-                list.setAdapter(new HiddenThreadListAdapter(getActivity(), hidden_list.toArray(new String[hidden_list.size()])));
+                list.setAdapter(new HiddenThreadListAdapter(getActivity(),
+                        hidden_list.toArray(new String[hidden_list.size()])));
                 list.invalidate();
             }
         });
@@ -108,6 +112,7 @@ public class HiddenThreadListFragment extends Fragment implements HiddenSettings
 
     /**
      * Adds the back button to the toolbar
+     * 
      * @param toolbar the toolbar to add the item to
      */
     public void addOptions(Toolbar toolbar) {
@@ -133,12 +138,15 @@ public class HiddenThreadListFragment extends Fragment implements HiddenSettings
         HiddenThreadListAdapter(Context context, String[] list) {
             super(context, 0, list);
         }
+
         @SuppressLint("SetTextI18n")
         @NonNull
-        @Override public View getView(final int position, View convertView, @NonNull ViewGroup parent) {
+        @Override
+        public View getView(final int position, View convertView, @NonNull ViewGroup parent) {
             final String thread = getItem(position);
             if (convertView == null) {
-                convertView = LayoutInflater.from(getContext()).inflate(R.layout.thread_watcher_list_item, parent, false);
+                convertView = LayoutInflater.from(getContext()).inflate(R.layout.thread_watcher_list_item, parent,
+                        false);
             }
             TextView title = convertView.findViewById(R.id.thread_title);
             title.setText(thread);

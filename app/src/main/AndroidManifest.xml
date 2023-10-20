@@ -1,33 +1,40 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    android:versionName="4.2.5"
-    android:versionCode="425"
-    package="com.angryburg.uapp">
+    xmlns:tools="http://schemas.android.com/tools">
 
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
     <uses-permission android:name="android.permission.WAKE_LOCK" />
+    <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
     <application
         android:name="com.angryburg.uapp.application.United"
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher_real"
         android:label="@string/app_name"
         android:supportsRtl="true"
-        android:theme="@style/AppTheme">
-        <activity android:name="com.angryburg.uapp.activities.MainActivity">
+        android:theme="@style/AppTheme"
+        tools:targetApi="31">
+        <!--android:roundIcon="@mipmap/ic_launcher_round"-->
+        <activity
+            android:name="com.angryburg.uapp.activities.MainActivity"
+            android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name="com.angryburg.uapp.activities.HiddenSettingsActivity">
+        <activity
+            android:name="com.angryburg.uapp.activities.HiddenSettingsActivity"
+            android:exported="false">
             <intent-filter>
                 <action android:name="com.angryburg.la_u_ncher.intent.action.THREAD_WATCHER" />
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity>
-        <activity android:name="com.angryburg.uapp.activities.UserscriptActivity">
+        <activity
+            android:name="com.angryburg.uapp.activities.UserscriptActivity"
+            android:exported="false">
             <intent-filter>
                 <action android:name="com.angryburg.la_u_ncher.intent.action.BOARD" />
                 <category android:name="android.intent.category.DEFAULT" />
@@ -36,7 +43,8 @@
         <activity
             android:name="com.angryburg.uapp.activities.AndroidShortcuts"
             android:icon="@mipmap/ic_launcher"
-            android:label="danger/u/ board">
+            android:label="danger/u/ board"
+            android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.CREATE_SHORTCUT"/>
                 <category android:name="android.intent.category.DEFAULT"/>
@@ -45,12 +53,16 @@
         <service
             android:name=".utils.AwooNotificationService"
             android:label="Awoo Notifier Service"
-            android:permission="android.permission.BIND_NOTIFICATION_LISTENER_SERVICE">
+            android:permission="android.permission.BIND_NOTIFICATION_LISTENER_SERVICE"
+            android:exported="false">
              <intent-filter>
                  <action android:name="android.service.notification.NotificationListenerService" />
              </intent-filter>
         </service>
-        <receiver android:name=".utils.AwooBootReceiver">
+        <receiver
+            android:name=".utils.AwooBootReceiver"
+            android:exported="true">
+            <!--TODO: is exported: true necessary here or can it be false?-->
             <intent-filter>
                 <action android:name="android.intent.action.BOOT_COMPLETED" />
             </intent-filter>

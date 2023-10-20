@@ -2,8 +2,8 @@ package com.angryburg.uapp.fragments;
 
 import android.app.Fragment;
 import android.os.Bundle;
-import android.support.annotation.Nullable;
-import android.support.v7.widget.Toolbar;
+import androidx.annotation.Nullable;
+import androidx.appcompat.widget.Toolbar;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
@@ -40,7 +40,8 @@ public class PropertiesListFragment extends Fragment implements HiddenSettingsFr
                     public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
                         Bundle args = new Bundle();
                         args.putString("key", settings[i]);
-                        ((HiddenSettingsActivity) getActivity()).push(HiddenSettingsActivity.FragmentType.PROPERTY_EDITOR, args);
+                        ((HiddenSettingsActivity) getActivity())
+                                .push(HiddenSettingsActivity.FragmentType.PROPERTY_EDITOR, args);
                     }
                 });
                 Toolbar toolbar = getActivity().findViewById(R.id.toolbar);
@@ -57,6 +58,7 @@ public class PropertiesListFragment extends Fragment implements HiddenSettingsFr
 
     /**
      * adds a close button to the menu bar
+     * 
      * @param toolbar the toolbar
      */
     public void addOptions(Toolbar toolbar) {
@@ -70,7 +72,8 @@ public class PropertiesListFragment extends Fragment implements HiddenSettingsFr
                 if (item.getItemId() == R.id.add_property) {
                     Bundle args = new Bundle();
                     args.putString("create", "true");
-                    ((HiddenSettingsActivity) getActivity()).push(HiddenSettingsActivity.FragmentType.PROPERTY_EDITOR_NEW, args);
+                    ((HiddenSettingsActivity) getActivity())
+                            .push(HiddenSettingsActivity.FragmentType.PROPERTY_EDITOR_NEW, args);
                 } else {
                     getActivity().finish();
                 }
@@ -82,8 +85,10 @@ public class PropertiesListFragment extends Fragment implements HiddenSettingsFr
     private static class UserscriptAwareComparator implements Comparator<String>, Serializable {
         @Override
         public int compare(String s1, String s2) {
-            if (s1.contains(":") && !s2.contains(":")) return 1;
-            if (!s1.contains(":") && s2.contains(":")) return -1;
+            if (s1.contains(":") && !s2.contains(":"))
+                return 1;
+            if (!s1.contains(":") && s2.contains(":"))
+                return -1;
             return s1.compareTo(s2);
         }
     }

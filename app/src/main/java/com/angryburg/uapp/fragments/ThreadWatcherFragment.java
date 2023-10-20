@@ -6,9 +6,9 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
-import android.support.v7.widget.Toolbar;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.appcompat.widget.Toolbar;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
@@ -41,14 +41,18 @@ public class ThreadWatcherFragment extends Fragment implements HiddenSettingsFra
         final AdapterView.OnItemClickListener listener = new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                // we map 1 to 1 with ThreadWatcher.threads, and if that's null, it's not loaded yet
+                // we map 1 to 1 with ThreadWatcher.threads, and if that's null, it's not loaded
+                // yet
                 if (ThreadWatcher.threads[i] == null) {
-                    GenericAlertDialogFragment.newInstance("That thread hasn't loaded yet, please wait.", getFragmentManager());
+                    GenericAlertDialogFragment.newInstance("That thread hasn't loaded yet, please wait.",
+                            getFragmentManager());
                     return;
                 }
                 // Set the thread as read and open the thread in a new UserscriptActivity
-                // do NOT ThreadWatcher.setRead(i), it will update the board:id property, and then
-                // when the webpage loads, the userscript will think that there are no new replies
+                // do NOT ThreadWatcher.setRead(i), it will update the board:id property, and
+                // then
+                // when the webpage loads, the userscript will think that there are no new
+                // replies
                 // and will not draw the bar or jump to the bar
                 WatchableThread thread = ThreadWatcher.threads[i];
                 String url = P.get("awoo_endpoint") + "/" + thread.board + "/thread/" + thread.post_id;
@@ -60,7 +64,7 @@ public class ThreadWatcherFragment extends Fragment implements HiddenSettingsFra
         res.post(new Runnable() {
             @Override
             public void run() {
-                //noinspection OverlyStrongTypeCast
+                // noinspection OverlyStrongTypeCast
                 ((ListView) res.findViewById(R.id.thread_list)).setOnItemClickListener(listener);
                 setAdapter();
                 Toolbar toolbar = getActivity().findViewById(R.id.toolbar);
@@ -75,12 +79,14 @@ public class ThreadWatcherFragment extends Fragment implements HiddenSettingsFra
      * Also handles showing the "You are not currently watching any threads" message
      */
     public void setAdapter() {
-        if (getActivity() == null) return;
+        if (getActivity() == null)
+            return;
         getActivity().runOnUiThread(new Runnable() {
             @Override
             public void run() {
                 Log.i(TAG, "setAdapter, running on ui thread, ");
-                if (getView() == null) return;
+                if (getView() == null)
+                    return;
                 ListView list = getView().findViewById(R.id.thread_list);
                 TextView message = getView().findViewById(R.id.no_threads_message);
                 if (ThreadWatcher.threads.length == 0) {
@@ -104,6 +110,7 @@ public class ThreadWatcherFragment extends Fragment implements HiddenSettingsFra
 
     /**
      * Adds the Refresh button to the toolbar
+     * 
      * @param toolbar the toolbar to add the item to
      */
     public static void addOptions(Toolbar toolbar) {
@@ -133,6 +140,7 @@ public class ThreadWatcherFragment extends Fragment implements HiddenSettingsFra
 
     /**
      * Registers us as a listener for changes in ThreadWatcher (refreshes, etc..)
+     * 
      * @param savedInstanceState
      */
     @Override
@@ -150,7 +158,8 @@ public class ThreadWatcherFragment extends Fragment implements HiddenSettingsFra
     }
 
     /**
-     * user visiting the thread probably updated its board:id property because it marked it as read
+     * user visiting the thread probably updated its board:id property because it
+     * marked it as read
      * so stop showing "1 new reply" and change to "No new replies"
      */
     @Override
@@ -170,12 +179,15 @@ public class ThreadWatcherFragment extends Fragment implements HiddenSettingsFra
         public ThreadWatcherAdapter(Context context, WatchableThread[] list) {
             super(context, 0, list);
         }
+
         @SuppressLint("SetTextI18n")
         @NonNull
-        @Override public View getView(final int position, View convertView, @NonNull ViewGroup parent) {
+        @Override
+        public View getView(final int position, View convertView, @NonNull ViewGroup parent) {
             final WatchableThread thread = getItem(position);
             if (convertView == null) {
-                convertView = LayoutInflater.from(getContext()).inflate(R.layout.thread_watcher_list_item, parent, false);
+                convertView = LayoutInflater.from(getContext()).inflate(R.layout.thread_watcher_list_item, parent,
+                        false);
             }
             TextView title = convertView.findViewById(R.id.thread_title);
             TextView subtitle = convertView.findViewById(R.id.new_replies);
@@ -189,10 +201,10 @@ public class ThreadWatcherFragment extends Fragment implements HiddenSettingsFra
                 title.setText((thread.is_locked ? "(Locked) " : "") + thread.title);
                 // Possible options are:
                 // No new replies
-                //      "No" must be grey
+                // "No" must be grey
                 // 1 new reply
                 // 3 new replies
-                //      "1", "3" must be red
+                // "1", "3" must be red
                 // then we add the total count after
                 if (thread.new_replies == 0) {
                     subtitle.setText("No");
@@ -218,11 +230,13 @@ public class ThreadWatcherFragment extends Fragment implements HiddenSettingsFra
             convertView.findViewById(R.id.unwatch_button).setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    //if (thread == null) {
-                        //GenericAlertDialogFragment.newInstance("This shouldn't happen, user tried to unwatch a thread that was null", getFragmentManager());
-                        //return;
-                    //}
-                    //ThreadWatcher.unwatchThread(thread.post_id); // will invalidate the list view for us
+                    // if (thread == null) {
+                    // GenericAlertDialogFragment.newInstance("This shouldn't happen, user tried to
+                    // unwatch a thread that was null", getFragmentManager());
+                    // return;
+                    // }
+                    // ThreadWatcher.unwatchThread(thread.post_id); // will invalidate the list view
+                    // for us
                     ThreadWatcher.unwatchThreadByIndex(position);
                 }
             });

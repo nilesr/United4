@@ -2,9 +2,9 @@ package com.angryburg.uapp.fragments;
 
 import android.graphics.Color;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
-import android.support.v7.widget.Toolbar;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.appcompat.widget.Toolbar;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
@@ -30,14 +30,17 @@ public class ColorListFragment extends android.app.Fragment implements HiddenSet
     public HiddenSettingsActivity.FragmentType getType() {
         return HiddenSettingsActivity.FragmentType.COLOR_LIST;
     }
+
     private static class ThemeColor {
         String name;
         int color;
+
         ThemeColor(String name, int color) {
             this.name = name;
             this.color = color;
         }
     }
+
     private static ThemeColor[] colors = null;
 
     @Nullable
@@ -56,7 +59,8 @@ public class ColorListFragment extends android.app.Fragment implements HiddenSet
                     @Override
                     public View getView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
                         if (convertView == null) {
-                            convertView = LayoutInflater.from(getContext()).inflate(android.R.layout.simple_list_item_1, parent, false);
+                            convertView = LayoutInflater.from(getContext()).inflate(android.R.layout.simple_list_item_1,
+                                    parent, false);
                         }
                         TextView textView = (TextView) convertView;
                         ThemeColor item = getItem(position);
@@ -76,7 +80,8 @@ public class ColorListFragment extends android.app.Fragment implements HiddenSet
                     @Override
                     public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
                         if (colors[i] == null) {
-                            ((HiddenSettingsActivity) getActivity()).push(HiddenSettingsActivity.FragmentType.COLOR_PICKER);
+                            ((HiddenSettingsActivity) getActivity())
+                                    .push(HiddenSettingsActivity.FragmentType.COLOR_PICKER);
                             return;
                         }
                         P.set("toolbar_color", String.valueOf(colors[i].color));
@@ -87,7 +92,6 @@ public class ColorListFragment extends android.app.Fragment implements HiddenSet
                 Toolbar toolbar = getActivity().findViewById(R.id.toolbar);
                 addOptions(toolbar);
             }
-
 
         });
         return res;

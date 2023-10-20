@@ -2,8 +2,8 @@ package com.angryburg.uapp.fragments;
 
 import android.app.Fragment;
 import android.os.Bundle;
-import android.support.annotation.Nullable;
-import android.support.v7.widget.Toolbar;
+import androidx.annotation.Nullable;
+import androidx.appcompat.widget.Toolbar;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
@@ -47,12 +47,18 @@ public class ColorPickerFragment extends Fragment implements HiddenSettingsFragm
                 ((TextView) res.findViewById(R.id.red_text)).setText(String.valueOf(r));
                 ((TextView) res.findViewById(R.id.green_text)).setText(String.valueOf(g));
                 ((TextView) res.findViewById(R.id.blue_text)).setText(String.valueOf(b));
-                ((SeekBar) res.findViewById(R.id.red_bar)).setOnSeekBarChangeListener(new SeekListener(res.findViewById(R.id.red_text)));
-                ((SeekBar) res.findViewById(R.id.green_bar)).setOnSeekBarChangeListener(new SeekListener(res.findViewById(R.id.green_text)));
-                ((SeekBar) res.findViewById(R.id.blue_bar)).setOnSeekBarChangeListener(new SeekListener(res.findViewById(R.id.blue_text)));
-                ((TextView) res.findViewById(R.id.red_text)).setOnEditorActionListener(new TextListener(res.findViewById(R.id.red_bar)));
-                ((TextView) res.findViewById(R.id.green_text)).setOnEditorActionListener(new TextListener(res.findViewById(R.id.green_bar)));
-                ((TextView) res.findViewById(R.id.blue_text)).setOnEditorActionListener(new TextListener(res.findViewById(R.id.blue_bar)));
+                ((SeekBar) res.findViewById(R.id.red_bar))
+                        .setOnSeekBarChangeListener(new SeekListener(res.findViewById(R.id.red_text)));
+                ((SeekBar) res.findViewById(R.id.green_bar))
+                        .setOnSeekBarChangeListener(new SeekListener(res.findViewById(R.id.green_text)));
+                ((SeekBar) res.findViewById(R.id.blue_bar))
+                        .setOnSeekBarChangeListener(new SeekListener(res.findViewById(R.id.blue_text)));
+                ((TextView) res.findViewById(R.id.red_text))
+                        .setOnEditorActionListener(new TextListener(res.findViewById(R.id.red_bar)));
+                ((TextView) res.findViewById(R.id.green_text))
+                        .setOnEditorActionListener(new TextListener(res.findViewById(R.id.green_bar)));
+                ((TextView) res.findViewById(R.id.blue_text))
+                        .setOnEditorActionListener(new TextListener(res.findViewById(R.id.blue_bar)));
                 Toolbar toolbar = getActivity().findViewById(R.id.toolbar);
                 addOptions(toolbar);
             }
@@ -78,7 +84,8 @@ public class ColorPickerFragment extends Fragment implements HiddenSettingsFragm
     }
 
     private void setColor() {
-        if (getView() == null) return;
+        if (getView() == null)
+            return;
         try {
             int r = Integer.valueOf(((TextView) getView().findViewById(R.id.red_text)).getText().toString());
             int g = Integer.valueOf(((TextView) getView().findViewById(R.id.green_text)).getText().toString());
@@ -94,6 +101,7 @@ public class ColorPickerFragment extends Fragment implements HiddenSettingsFragm
 
     private class SeekListener implements SeekBar.OnSeekBarChangeListener {
         TextView text;
+
         public SeekListener(View text) {
             this.text = (TextView) text;
         }
@@ -105,14 +113,17 @@ public class ColorPickerFragment extends Fragment implements HiddenSettingsFragm
         }
 
         @Override
-        public void onStartTrackingTouch(SeekBar seekBar) { }
+        public void onStartTrackingTouch(SeekBar seekBar) {
+        }
 
         @Override
-        public void onStopTrackingTouch(SeekBar seekBar) { }
+        public void onStopTrackingTouch(SeekBar seekBar) {
+        }
     }
 
     private class TextListener implements TextView.OnEditorActionListener {
         SeekBar bar;
+
         public TextListener(View bar) {
             this.bar = (SeekBar) bar;
         }

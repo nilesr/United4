@@ -2,7 +2,7 @@ package com.angryburg.uapp.fragments;
 
 import android.app.Fragment;
 import android.os.Bundle;
-import android.support.v7.widget.Toolbar;
+import androidx.appcompat.widget.Toolbar;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.LayoutInflater;
@@ -27,11 +27,14 @@ public class AwooEndpointFragment extends Fragment implements HiddenSettingsFrag
     public HiddenSettingsActivity.FragmentType getType() {
         return HiddenSettingsActivity.FragmentType.AWOO_ENDPOINT;
     }
+
     private ArrayList<CompoundButton> buttons;
 
     /**
-     * Sets up each of the radio buttons, checking the currently selected one, and sets up the
+     * Sets up each of the radio buttons, checking the currently selected one, and
+     * sets up the
      * text changed listener on the other text box
+     * 
      * @param inflater
      * @param container
      * @param savedInstanceState
@@ -58,9 +61,16 @@ public class AwooEndpointFragment extends Fragment implements HiddenSettingsFrag
                     }
                 }
                 ((TextView) res.findViewById(R.id.other_box)).addTextChangedListener(new TextWatcher() {
-                    @Override public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) { }
-                    @Override public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) { }
-                    @Override public void afterTextChanged(Editable editable) {
+                    @Override
+                    public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+                    }
+
+                    @Override
+                    public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+                    }
+
+                    @Override
+                    public void afterTextChanged(Editable editable) {
                         P.set("awoo_endpoint", editable.toString());
                     }
                 });
@@ -75,9 +85,11 @@ public class AwooEndpointFragment extends Fragment implements HiddenSettingsFrag
     }
 
     /**
-     * Helper method to set the on checked changed listener and add the button to the buttons list
+     * Helper method to set the on checked changed listener and add the button to
+     * the buttons list
+     * 
      * @param res the view to search in
-     * @param id the id of the button in the view
+     * @param id  the id of the button in the view
      */
     private void setupButton(View res, int id) {
         ((CompoundButton) res.findViewById(id)).setOnCheckedChangeListener(listener);
@@ -85,25 +97,32 @@ public class AwooEndpointFragment extends Fragment implements HiddenSettingsFrag
     }
 
     /**
-     * On checked changed listener to show or hide the other box if necessary and set the awoo_endpoint property
+     * On checked changed listener to show or hide the other box if necessary and
+     * set the awoo_endpoint property
      */
     final CompoundButton.OnCheckedChangeListener listener = new CompoundButton.OnCheckedChangeListener() {
         @Override
         public void onCheckedChanged(CompoundButton button, boolean b) {
             // if we're being *UNchecked*, we don't care about it.
-            if (!b) return;
+            if (!b)
+                return;
             // uncheck all the other buttons
             for (CompoundButton other : buttons) {
-                if (!other.equals(button)) other.setChecked(false);
+                if (!other.equals(button))
+                    other.setChecked(false);
             }
             // awoo_endpoint will be set to the text of the button
             String text = String.valueOf(button.getText());
-            if (getView() == null) return;
-            // if it's the other button, show the other box and populate it with the awoo endpoint.
-            // no need to save the awoo_endpoint property, that's done in the ontextchanged listener
+            if (getView() == null)
+                return;
+            // if it's the other button, show the other box and populate it with the awoo
+            // endpoint.
+            // no need to save the awoo_endpoint property, that's done in the ontextchanged
+            // listener
             if ("Other".equals(text)) {
                 getView().findViewById(R.id.other_box).setVisibility(View.VISIBLE);
-                ((TextView) getView().findViewById(R.id.other_box)).setText(P.get("awoo_endpoint"), TextView.BufferType.EDITABLE);
+                ((TextView) getView().findViewById(R.id.other_box)).setText(P.get("awoo_endpoint"),
+                        TextView.BufferType.EDITABLE);
             } else {
                 // if it's not the other button, hide the other box and update the property
                 getView().findViewById(R.id.other_box).setVisibility(View.GONE);
@@ -114,6 +133,7 @@ public class AwooEndpointFragment extends Fragment implements HiddenSettingsFrag
 
     /**
      * adds a close option to the toolbar
+     * 
      * @param toolbar the toolbar to update
      */
     public void addOptions(Toolbar toolbar) {

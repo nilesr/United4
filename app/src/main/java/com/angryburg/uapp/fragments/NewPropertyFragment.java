@@ -2,7 +2,7 @@ package com.angryburg.uapp.fragments;
 
 import android.app.Fragment;
 import android.os.Bundle;
-import android.support.annotation.Nullable;
+import androidx.annotation.Nullable;
 import android.text.InputType;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -20,6 +20,7 @@ import com.angryburg.uapp.utils.P;
 
 public class NewPropertyFragment extends Fragment implements HiddenSettingsFragment {
     private String key = "";
+
     @Override
     public HiddenSettingsActivity.FragmentType getType() {
         return HiddenSettingsActivity.FragmentType.PROPERTY_EDITOR_NEW;
@@ -43,7 +44,8 @@ public class NewPropertyFragment extends Fragment implements HiddenSettingsFragm
                 scrapeKey();
                 Bundle args = new Bundle();
                 args.putString("key", key);
-                ((HiddenSettingsActivity) getActivity()).replace(HiddenSettingsActivity.FragmentType.PROPERTY_EDITOR, args);
+                ((HiddenSettingsActivity) getActivity()).replace(HiddenSettingsActivity.FragmentType.PROPERTY_EDITOR,
+                        args);
             }
         };
         res.post(new Runnable() {
@@ -64,9 +66,11 @@ public class NewPropertyFragment extends Fragment implements HiddenSettingsFragm
     }
 
     private void scrapeKey() {
-        if (getView() == null) return;
+        if (getView() == null)
+            return;
         key = ((TextView) getView().findViewById(R.id.key_text)).getText().toString();
     }
+
     @Override
     public void onSaveInstanceState(Bundle outState) {
         outState.putString("key", key);

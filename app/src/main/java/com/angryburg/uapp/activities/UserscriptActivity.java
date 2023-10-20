@@ -2,7 +2,7 @@ package com.angryburg.uapp.activities;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v7.widget.Toolbar;
+import androidx.appcompat.widget.Toolbar;
 import android.util.Pair;
 import android.view.MenuItem;
 import android.view.SubMenu;
@@ -165,59 +165,52 @@ public class UserscriptActivity extends MainActivity implements ThreadWatcherLis
             @Override
             public boolean onMenuItemClick(MenuItem item) {
                 if (item.hasSubMenu()) return true;
-                switch (item.getItemId()) {
-                    case R.id.refresh:
-                        getWebView().reload();
-                        break;
-                    case R.id.thread_watcher:
-                    case R.id.thread_watcher_with_notification:
-                        Intent i = new Intent(UserscriptActivity.this, HiddenSettingsActivity.class);
-                        i.putExtra("fragment", HiddenSettingsActivity.FragmentType.THREAD_WATCHER.toString());
-                        startActivity(i);
-                        break;
-                    case R.id.rules:
-                        Intent i2 = new Intent(UserscriptActivity.this, UserscriptActivity.class);
-                        i2.putExtra("URL", P.get("awoo_endpoint") + "/" + url_board + "/rules");
-                        startActivity(i2);
-                        break;
-                    case R.id.watch_thread:
-                        if (url_thread == null) {
-                            GenericAlertDialogFragment.newInstance("This shouldn't be possible", getFragmentManager());
-                            return true;
-                        }
-                        if (ThreadWatcher.isWatching(url_thread.second)) {
-                            ThreadWatcher.unwatchThread(url_thread.second);
-                        } else {
-                            ThreadWatcher.watchThread(url_thread.second, false);
-                        }
-                        break;
-                    case R.id.settings:
-                        Intent i3 = new Intent(UserscriptActivity.this, HiddenSettingsActivity.class);
-                        i3.putExtra("fragment", HiddenSettingsActivity.FragmentType.SETTINGS_LIST.toString());
-                        startActivity(i3);
-                        break;
-                    case R.id.back_item:
-                    case R.id.back_item_forced:
-                        setResult(0);
-                        finish();
-                        break;
-                    case R.id.share:
-                        Intent i4 = new Intent(Intent.ACTION_SEND);
-                        i4.setType("text/plain");
-                        //i4.addFlags(Intent.FLAG_ACTIVITY_CLEAR_WHEN_TASK_RESET);
-                        i4.putExtra(Intent.EXTRA_SUBJECT, getTitle());
-                        i4.putExtra(Intent.EXTRA_TEXT, getWebView().getUrl());
-                        startActivity(Intent.createChooser(i4, "Share"));
-                        break;
-                    case R.id.hide_thread:
-                        if (url_thread == null) return false;
-                        String key = url_thread.first + ":" + String.valueOf(url_thread.second);
-                        P.set(key, "hide");
-                        WebView v = getWebView();
-                        if (v != null && v.canGoBack()) v.goBack();
-                        Toast.makeText(UserscriptActivity.this, "You won't see this thread again", Toast.LENGTH_LONG).show();
-                    default:
-                        return false;
+                int itemId = item.getItemId();
+                if (itemId == R.id.refresh) {
+                    getWebView().reload();
+                } else if (itemId == R.id.thread_watcher || itemId == R.id.thread_watcher_with_notification) {
+                    Intent i = new Intent(UserscriptActivity.this, HiddenSettingsActivity.class);
+                    i.putExtra("fragment", HiddenSettingsActivity.FragmentType.THREAD_WATCHER.toString());
+                    startActivity(i);
+                } else if (itemId == R.id.rules) {
+                    Intent i2 = new Intent(UserscriptActivity.this, UserscriptActivity.class);
+                    i2.putExtra("URL", P.get("awoo_endpoint") + "/" + url_board + "/rules");
+                    startActivity(i2);
+                } else if (itemId == R.id.watch_thread) {
+                    if (url_thread == null) {
+                        GenericAlertDialogFragment.newInstance("This shouldn't be possible", getFragmentManager());
+                        return true;
+                    }
+                    if (ThreadWatcher.isWatching(url_thread.second)) {
+                        ThreadWatcher.unwatchThread(url_thread.second);
+                    } else {
+                        ThreadWatcher.watchThread(url_thread.second, false);
+                    }
+                } else if (itemId == R.id.settings) {
+                    Intent i3 = new Intent(UserscriptActivity.this, HiddenSettingsActivity.class);
+                    i3.putExtra("fragment", HiddenSettingsActivity.FragmentType.SETTINGS_LIST.toString());
+                    startActivity(i3);
+                } else if (itemId == R.id.back_item || itemId == R.id.back_item_forced) {
+                    setResult(0);
+                    finish();
+                } else if (itemId == R.id.share) {
+                    Intent i4 = new Intent(Intent.ACTION_SEND);
+                    i4.setType("text/plain");
+                    //i4.addFlags(Intent.FLAG_ACTIVITY_CLEAR_WHEN_TASK_RESET);
+                    i4.putExtra(Intent.EXTRA_SUBJECT, getTitle());
+                    i4.putExtra(Intent.EXTRA_TEXT, getWebView().getUrl());
+                    startActivity(Intent.createChooser(i4, "Share"));
+                } else if (itemId == R.id.hide_thread) {
+                    if (url_thread == null) return false;
+                    String key = url_thread.first + ":" + String.valueOf(url_thread.second);
+                    P.set(key, "hide");
+                    WebView v = getWebView();
+                    if (v != null && v.canGoBack()) v.goBack();
+                    Toast.makeText(UserscriptActivity.this, "You won't see this thread again", Toast.LENGTH_LONG).show();
+
+                    return false;
+                } else {
+                    return false;
                 }
                 return true;
             }

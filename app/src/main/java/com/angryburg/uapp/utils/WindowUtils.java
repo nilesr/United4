@@ -1,11 +1,12 @@
 package com.angryburg.uapp.utils;
 
-import android.app.Activity;
+import androidx.appcompat.app.AppCompatActivity;
 import android.graphics.Color;
 import android.os.Build;
 
 /**
- * Android 5+ only, changes the window bar color to match the toolbar color using the window_bar_color parameter
+ * Android 5+ only, changes the window bar color to match the toolbar color
+ * using the window_bar_color parameter
  */
 
 public final class WindowUtils {
@@ -13,14 +14,17 @@ public final class WindowUtils {
     }
 
     @SuppressWarnings("SameParameterValue")
-    private static int min(int a, int b) { return a > b ? b : a; }
+    private static int min(int a, int b) {
+        return a > b ? b : a;
+    }
 
     /**
      * Sets the window bar color to match the top bar color if applicable
+     * 
      * @param act the activity to pull the window from
      */
     @SuppressWarnings("LiteralAsArgToStringEquals")
-    public static void updateWindowBarColor(Activity act) {
+    public static void updateWindowBarColor(AppCompatActivity act) {
         if (P.get("window_bar_color").equalsIgnoreCase("false")) {
             act.getWindow().setStatusBarColor(Color.BLACK);
         } else {
@@ -32,18 +36,20 @@ public final class WindowUtils {
             } else {
                 factor = 0.75;
             }
-            //act.getWindow().setStatusBarColor(P.getColor("toolbar_color"));
+            // act.getWindow().setStatusBarColor(P.getColor("toolbar_color"));
             int color = P.getColor("toolbar_color");
             int r = color & 0xFF;
-            //noinspection UnnecessaryParentheses
-            int g =(color >> 8) & 0xFF;
-            //noinspection UnnecessaryParentheses
-            int b =(color >> 16) & 0xFF;
-            //noinspection NumericCastThatLosesPrecision
+            // noinspection UnnecessaryParentheses
+            int g = (color >> 8) & 0xFF;
+            // noinspection UnnecessaryParentheses
+            int b = (color >> 16) & 0xFF;
+            // noinspection NumericCastThatLosesPrecision
             r = min((int) (r * factor), 0xFF);
-            //noinspection AssignmentReplaceableWithOperatorAssignment,NumericCastThatLosesPrecision
+            // noinspection
+            // AssignmentReplaceableWithOperatorAssignment,NumericCastThatLosesPrecision
             g = min((int) (g * factor), 0xFF);
-            //noinspection AssignmentReplaceableWithOperatorAssignment,NumericCastThatLosesPrecision
+            // noinspection
+            // AssignmentReplaceableWithOperatorAssignment,NumericCastThatLosesPrecision
             b = min((int) (b * factor), 0xFF);
             color = 0xFF000000 + r + (g << 8) + (b << 16);
             act.getWindow().setStatusBarColor(color);

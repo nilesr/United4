@@ -1,11 +1,11 @@
 package com.angryburg.uapp.utils;
 
 import android.annotation.SuppressLint;
-import android.app.FragmentManager;
+import androidx.fragment.app.FragmentManager;
 import android.content.Context;
 import android.content.pm.PackageInfo;
 import android.os.Build;
-import android.preference.PreferenceManager;
+import androidx.preference.PreferenceManager;
 import android.util.JsonReader;
 import android.util.Log;
 
@@ -45,7 +45,8 @@ public final class PropertiesSingleton {
     }
 
     /**
-     * Reads in all the properties from the json file or some generic default properties if that failed
+     * Reads in all the properties from the json file or some generic default
+     * properties if that failed
      */
     private static void init() {
         resetForAppStart();
@@ -76,6 +77,7 @@ public final class PropertiesSingleton {
             setProperty("migrated", "reset_complete");
         }
     }
+
     private static void setFirstRunProperties() {
         // default properties that should only be set on the very first run of the app
         setProperty("startup_music", "false");
@@ -95,36 +97,49 @@ public final class PropertiesSingleton {
         setProperty("notifications", "true");
     }
 
-
     /**
      * static properties that never change
      */
     private static void resetForAppStart() {
-        // the default value for infinite scrolling is set by the userscript, so it doesn't need to be included here
-        if (getProperty("userscript").isEmpty()) setProperty("userscript", "true");
-        if (getProperty("force_show_back_btn").isEmpty()) setProperty("force_show_back_btn", "true");
-        if (getProperty("window_bar_color").isEmpty()) setProperty("window_bar_color", "-25");
-        if (getProperty("watch_on_reply").isEmpty()) setProperty("watch_on_reply", "true");
-        if (getProperty("which_notifications").isEmpty()) setProperty("which_notifications", "DIRECT");
-        if (getProperty("alarm_interval").isEmpty()) setProperty("alarm_interval", "HALF_DAY");
-        if (getProperty("notifications").isEmpty()) setProperty("notifications",  Build.VERSION.SDK_INT >= Build.VERSION_CODES.O ? "false" : "true");
+        // the default value for infinite scrolling is set by the userscript, so it
+        // doesn't need to be included here
+        if (getProperty("userscript").isEmpty())
+            setProperty("userscript", "true");
+        if (getProperty("force_show_back_btn").isEmpty())
+            setProperty("force_show_back_btn", "true");
+        if (getProperty("window_bar_color").isEmpty())
+            setProperty("window_bar_color", "-25");
+        if (getProperty("watch_on_reply").isEmpty())
+            setProperty("watch_on_reply", "true");
+        if (getProperty("which_notifications").isEmpty())
+            setProperty("which_notifications", "DIRECT");
+        if (getProperty("alarm_interval").isEmpty())
+            setProperty("alarm_interval", "HALF_DAY");
+        if (getProperty("notifications").isEmpty())
+            setProperty("notifications", Build.VERSION.SDK_INT >= Build.VERSION_CODES.O ? "false" : "true");
         // Pull the current version and put it in the main screen
         String version = "error";
         try {
-            PackageInfo packageInfo = United.getContext().getPackageManager().getPackageInfo(United.getContext().getPackageName(), 0);
+            PackageInfo packageInfo = United.getContext().getPackageManager()
+                    .getPackageInfo(United.getContext().getPackageName(), 0);
             version = String.valueOf(packageInfo.versionName);
         } catch (Exception ignored) {
             //
         }
         setProperty("version_notes", "Version " + version + "!\nTap for Patch Notes");
-        // index.html expects is_playing to be false on first load so it can play startup music
-        // if it was told to. It doesn't start the music if `is_playing` is set to true, so if you go
-        // to music.html, change the song, rotate and come back, it won't override the song you just picked
+        // index.html expects is_playing to be false on first load so it can play
+        // startup music
+        // if it was told to. It doesn't start the music if `is_playing` is set to true,
+        // so if you go
+        // to music.html, change the song, rotate and come back, it won't override the
+        // song you just picked
         // with the startup music again
         setProperty("is_playing", "false");
-        //List<String> themes = Arrays.asList("normal", "dotted", "steam", "kira", "meme", "vaporwave");
+        // List<String> themes = Arrays.asList("normal", "dotted", "steam", "kira",
+        // "meme", "vaporwave");
         // rip the meme theme, it was my favorite
-        List<String> themes = Arrays.asList("normal", "vaporwave", "noir", "burg", "unity", "empire", "classy", "lain", "neon", "kids", "motif");
+        List<String> themes = Arrays.asList("normal", "vaporwave", "noir", "burg", "unity", "empire", "classy", "lain",
+                "neon", "kids", "motif");
         String str = new JSONArray(themes).toString();
         setProperty("all_themes", str);
         HashMap<String, String> map = new HashMap<>();
@@ -174,21 +189,23 @@ public final class PropertiesSingleton {
         setProperty("awoo_endpoint", "https://boards.dangeru.us");
     }
 
-
     /**
      * helper function for putting things in both `songs` and `ordered_songs`
-     * @param map a map from song name to resource ID
+     * 
+     * @param map           a map from song name to resource ID
      * @param ordered_songs the list of songs
-     * @param id The resource ID
-     * @param s The song name
+     * @param id            The resource ID
+     * @param s             The song name
      */
-    private static void put(Map<String, String> map, @SuppressWarnings("TypeMayBeWeakened") List<String> ordered_songs, String id, String s) {
+    private static void put(Map<String, String> map, @SuppressWarnings("TypeMayBeWeakened") List<String> ordered_songs,
+            String id, String s) {
         map.put(s, id);
         ordered_songs.add(s);
     }
 
     /**
      * Gets a property, or an empty string if it wasn't set
+     * 
      * @param key the key for the property
      * @return the value of that property or an empty string if it isn't set
      */
@@ -196,18 +213,18 @@ public final class PropertiesSingleton {
         return PreferenceManager.getDefaultSharedPreferences(United.getContext()).getString(key, "");
     }
 
-
     /**
      * sets a property, then writes the entire json file out to the disk
-     * @param key The property to set
+     * 
+     * @param key   The property to set
      * @param value the value for that property
      */
     public static void setProperty(String key, String value) {
         // If we're playing or pausing the music, reload index.html
-        //noinspection EqualsReplaceableByObjectsCall
+        // noinspection EqualsReplaceableByObjectsCall
         if (key.equals("is_playing")) {
             if (!getProperty(key).equalsIgnoreCase(value)) {
-                //Thread.dumpStack();
+                // Thread.dumpStack();
                 NotifierService.notify(NotifierService.NotificationType.RELOAD_INDEX);
             }
         }
@@ -220,9 +237,12 @@ public final class PropertiesSingleton {
     }
 
     /**
-     * Resets all properties and forcibly closes the program to prevent them from being rewritten
+     * Resets all properties and forcibly closes the program to prevent them from
+     * being rewritten
      * on the next setProperty call
-     * @param fragman a fragment manager used to show an error message, if applicable
+     * 
+     * @param fragman a fragment manager used to show an error message, if
+     *                applicable
      */
     public static void resetAllAndExit(FragmentManager fragman) {
         try {
@@ -230,7 +250,8 @@ public final class PropertiesSingleton {
                 setPropertySynchronous(key, "");
             }
             setPropertySynchronous("migrated", "reset");
-            OutputStreamWriter writer = new OutputStreamWriter(United.getContext().openFileOutput(CONFIG, Context.MODE_PRIVATE));
+            OutputStreamWriter writer = new OutputStreamWriter(
+                    United.getContext().openFileOutput(CONFIG, Context.MODE_PRIVATE));
             writer.write("{}");
             writer.flush();
             writer.close();
@@ -242,6 +263,7 @@ public final class PropertiesSingleton {
 
     /**
      * Like setProperty but uses commit() instead of apply()
+     * 
      * @param key
      * @param value
      */

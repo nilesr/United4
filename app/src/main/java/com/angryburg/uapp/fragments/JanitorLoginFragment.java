@@ -1,6 +1,6 @@
 package com.angryburg.uapp.fragments;
 
-import android.app.Fragment;
+import androidx.fragment.app.Fragment;
 import android.os.Bundle;
 import androidx.appcompat.widget.Toolbar;
 import android.view.LayoutInflater;
@@ -24,9 +24,10 @@ import static com.angryburg.uapp.application.United.authorizer;
  * A fragment that a janitor can use to log in
  */
 
-public class JanitorLoginFragment extends Fragment implements  HiddenSettingsFragment {
+public class JanitorLoginFragment extends Fragment implements HiddenSettingsFragment {
     @SuppressWarnings("unused")
     private static final String TAG = JanitorLoginFragment.class.getSimpleName();
+
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         final View res = inflater.inflate(R.layout.janitor_login, container, false);
         res.post(new Runnable() {
@@ -46,14 +47,16 @@ public class JanitorLoginFragment extends Fragment implements  HiddenSettingsFra
     }
 
     /**
-     * Pulls the username and password from their text boxes, makes a progress dialog,
-     * tries to authenticate, then dismisses the progress dialog and updates the logged in text
+     * Pulls the username and password from their text boxes, makes a progress
+     * dialog,
+     * tries to authenticate, then dismisses the progress dialog and updates the
+     * logged in text
      */
     private class LoginButtonClickListener implements Button.OnClickListener {
         @Override
         public void onClick(final View view) {
             getPropertiesFromView();
-            GenericProgressDialogFragment.newInstance("Logging in...", getFragmentManager());
+            GenericProgressDialogFragment.newInstance("Logging in...", getParentFragmentManager());
             view.findViewById(R.id.button).setClickable(false);
             // can't do network on ui thread
             new Thread(new Runnable() {
@@ -61,7 +64,7 @@ public class JanitorLoginFragment extends Fragment implements  HiddenSettingsFra
                 public void run() {
                     authenticate();
                     view.findViewById(R.id.button).setClickable(true);
-                    GenericProgressDialogFragment.dismiss(getFragmentManager());
+                    GenericProgressDialogFragment.dismiss(getParentFragmentManager());
                     updateLoggedInText();
                 }
             }).start();
@@ -76,8 +79,11 @@ public class JanitorLoginFragment extends Fragment implements  HiddenSettingsFra
         getActivity().runOnUiThread(new Runnable() {
             @Override
             public void run() {
-                if (getView() == null) return;
-                ((TextView) getView().findViewById(R.id.logged_in)).setText("You are " + (P.getBool("logged_in") ? "currently" : "not") + " logged in" + (P.getBool("logged_in") ? " as " + P.get("username") : ""));
+                if (getView() == null)
+                    return;
+                ((TextView) getView().findViewById(R.id.logged_in))
+                        .setText("You are " + (P.getBool("logged_in") ? "currently" : "not") + " logged in"
+                                + (P.getBool("logged_in") ? " as " + P.get("username") : ""));
             }
         });
     }
@@ -91,20 +97,25 @@ public class JanitorLoginFragment extends Fragment implements  HiddenSettingsFra
         United.authorizer = new Authorizer(P.get("username"), P.get("password"));
         try {
             United.authorizer.reauthorize();
-            GenericAlertDialogFragment.newInstance("Success! You are logged in as " + authorizer.username, getFragmentManager());
+            GenericAlertDialogFragment.newInstance("Success! You are logged in as " + authorizer.username,
+                    getParentFragmentManager());
             P.set("logged_in", "true");
-            // the /staff/ board will only be shown when you're logged in, so update the boards list in the background
+            // the /staff/ board will only be shown when you're logged in, so update the
+            // boards list in the background
             BoardsList.refreshAllBoards(authorizer);
         } catch (Authorizer.AuthorizationFailureException e) {
             switch (e.type) {
                 case AUTH:
-                    GenericAlertDialogFragment.newInstance("Error - Check your username and password", getFragmentManager());
+                    GenericAlertDialogFragment.newInstance("Error - Check your username and password",
+                            getParentFragmentManager());
                     break;
                 case UNEXPECTED_RESPONSE:
-                    GenericAlertDialogFragment.newInstance("Unexpected response code - " + e.responseCode, getFragmentManager());
+                    GenericAlertDialogFragment.newInstance("Unexpected response code - " + e.responseCode,
+                            getParentFragmentManager());
                     break;
                 case OTHER:
-                    GenericAlertDialogFragment.newInstance("Unexpected error - " + e.cause, getFragmentManager());
+                    GenericAlertDialogFragment.newInstance("Unexpected error - " + e.cause,
+                            getParentFragmentManager());
                     break;
             }
         }
@@ -114,12 +125,14 @@ public class JanitorLoginFragment extends Fragment implements  HiddenSettingsFra
      * Pulls the username and password from their screen values
      */
     public void getPropertiesFromView() {
-        if (getView() == null) return;
+        if (getView() == null)
+            return;
         EditText username = getView().findViewById(R.id.username);
         EditText password = getView().findViewById(R.id.password);
         P.set("username", username.getText().toString());
         P.set("password", password.getText().toString());
     }
+
     @Override
     public HiddenSettingsActivity.FragmentType getType() {
         return HiddenSettingsActivity.FragmentType.JANITOR_LOGIN;
@@ -127,6 +140,7 @@ public class JanitorLoginFragment extends Fragment implements  HiddenSettingsFra
 
     /**
      * adds a back button to the toolbar
+     * 
      * @param toolbar the toolbar
      */
     public void addOptions(Toolbar toolbar) {

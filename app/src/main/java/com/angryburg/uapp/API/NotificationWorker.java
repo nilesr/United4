@@ -1,13 +1,9 @@
 package com.angryburg.uapp.API;
 
 import android.app.AlarmManager;
-import android.app.NotificationChannel;
 import android.app.PendingIntent;
-import android.app.job.JobInfo;
-import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
-import android.os.Build;
 import android.os.SystemClock;
 import androidx.core.app.NotificationCompat;
 import androidx.core.app.NotificationManagerCompat;
@@ -268,7 +264,7 @@ public class NotificationWorker {
             // TODO: check if this can be immutable or needs to be mutable
             PendingIntent i2 = PendingIntent.getActivity(context, thread.post_id, intent, PendingIntent.FLAG_IMMUTABLE);
             NotificationCompat.Builder builder = new NotificationCompat.Builder(context)
-                    .setSmallIcon(R.mipmap.ic_launcher)
+                    .setSmallIcon(R.mipmap.ic_launcher_dangeru)
                     .setContentTitle("New reply")
                     .setContentText(title)
                     .setStyle(new NotificationCompat.BigTextStyle().bigText(thread.comment))

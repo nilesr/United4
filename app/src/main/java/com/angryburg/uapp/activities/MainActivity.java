@@ -1,9 +1,9 @@
 package com.angryburg.uapp.activities;
 
-import android.app.Activity;
+import androidx.appcompat.app.AppCompatActivity;
 import android.app.AlarmManager;
-import android.app.FragmentManager;
-import android.app.FragmentTransaction;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 import android.app.PendingIntent;
 import android.content.ComponentName;
 import android.content.Intent;
@@ -31,18 +31,20 @@ import static com.angryburg.uapp.fragments.UnitedWebFragment.RESOURCE_FOLDER;
 /**
  * Main activity for danger/u/
  */
-public class MainActivity extends Activity implements UnitedActivity {
+public class MainActivity extends AppCompatActivity implements UnitedActivity {
     private ParcelableMap session;
     @SuppressWarnings("FieldCanBeLocal")
     private UnitedWebFragment webFragment;
 
     /**
      * Restores session variables from the saved instance state and sets up the view
+     * 
      * @param savedInstanceState the previously saved state
      */
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if (P.getBool("dark_mode")) setTheme(R.style.AppTheme_Dark);
+        if (P.getBool("dark_mode"))
+            setTheme(R.style.AppTheme_Dark);
         // Register to receive reloads to music.html later on
         NotifierService.register(this);
         // load and retrieve session variables
@@ -51,8 +53,10 @@ public class MainActivity extends Activity implements UnitedActivity {
         } else {
             session = new ParcelableMap();
         }
-        // we wrap this in an if statement because subclasses (like UserscriptActivity) want to inherit
-        // the behavior above (restoring saved session variables), but want to inflate a different layout
+        // we wrap this in an if statement because subclasses (like UserscriptActivity)
+        // want to inherit
+        // the behavior above (restoring saved session variables), but want to inflate a
+        // different layout
         // by calling setupView themselves.
         if (getClass().equals(MainActivity.class)) {
             setupView(R.layout.main_activity, R.id.activity_main_activity);
@@ -60,28 +64,31 @@ public class MainActivity extends Activity implements UnitedActivity {
     }
 
     /**
-     * Inflates the given layout and puts the web fragment in the given ID in that layout
+     * Inflates the given layout and puts the web fragment in the given ID in that
+     * layout
+     * 
      * @param layout the layout to inflate
-     * @param id the element in that layout to replace with the web fragment
+     * @param id     the element in that layout to replace with the web fragment
      */
     protected void setupView(int layout, int id) {
         // blocks until layout is inflated
         setContentView(layout);
         // put our UnitedWebFragment on there
-        FragmentManager manager = getFragmentManager();
+        FragmentManager manager = getSupportFragmentManager();
         webFragment = (UnitedWebFragment) manager.findFragmentByTag("main_webkit_wrapper");
         if (webFragment == null) {
             webFragment = new UnitedWebFragment();
             // if this is the first-time startup (no web fragment created yet), pull the
             // URL from the intent. If there was no URL in the intent, load index.html
             // Give that as the starting URL to the web fragment. The webview fragment will
-            // save its own URL to its state and will only pull from arguments on first startup
+            // save its own URL to its state and will only pull from arguments on first
+            // startup
             Bundle args = new Bundle();
             if (getIntent() != null && getIntent().hasExtra("URL")) {
                 args.putString("URL", getIntent().getStringExtra("URL"));
             } else {
                 args.putString("URL", RESOURCE_FOLDER + "index.html");
-                //args.putString("URL", P.get("awoo_endpoint"));
+                // args.putString("URL", P.get("awoo_endpoint"));
             }
             webFragment.setArguments(args);
             FragmentTransaction trans = manager.beginTransaction();
@@ -94,6 +101,7 @@ public class MainActivity extends Activity implements UnitedActivity {
 
     /**
      * Saves the session variables to our saved instance state
+     * 
      * @param outState instance state to save
      */
     @Override
@@ -102,13 +110,14 @@ public class MainActivity extends Activity implements UnitedActivity {
         outState.putParcelable("session", session.parcel());
     }
 
-
     @Override
     public void launchHTML(String url) {
         Intent i = new Intent(this, MainActivity.class);
         try {
-            // If we're launching to awoo and the userscript is enabled, use the activity with the menu
-            if (new URI(P.get("awoo_endpoint")).getAuthority().equals(new URI(url).getAuthority()) && P.getBool("userscript")) {
+            // If we're launching to awoo and the userscript is enabled, use the activity
+            // with the menu
+            if (new URI(P.get("awoo_endpoint")).getAuthority().equals(new URI(url).getAuthority())
+                    && P.getBool("userscript")) {
                 i = new Intent(this, UserscriptActivity.class);
             }
         } catch (Exception ignored) {
@@ -120,9 +129,12 @@ public class MainActivity extends Activity implements UnitedActivity {
         // get notified when it exits
         startActivityForResult(i, 0);
     }
-    @Override protected void onActivityResult(int request_code, int result_code, Intent bundle) {
+
+    @Override
+    protected void onActivityResult(int request_code, int result_code, Intent bundle) {
         // if the page we opened requested that we notify, do so.
-        // currently used by camo_customize.html to notify the home screen because the theme has changed
+        // currently used by camo_customize.html to notify the home screen because the
+        // theme has changed
         if (result_code == 1) {
             try {
                 getWebView().reload();
@@ -137,7 +149,8 @@ public class MainActivity extends Activity implements UnitedActivity {
     @Override
     public String getSessionVariable(String key) {
         String res = session.get(key);
-        if (res == null) return "";
+        if (res == null)
+            return "";
         return res;
     }
 
@@ -146,7 +159,8 @@ public class MainActivity extends Activity implements UnitedActivity {
         session.put(key, value);
     }
 
-    // finishes the current activity, requesting that the opener refresh the page if needed
+    // finishes the current activity, requesting that the opener refresh the page if
+    // needed
     @Override
     public void closeWindow(boolean refresh) {
         if (refresh) {
@@ -157,9 +171,10 @@ public class MainActivity extends Activity implements UnitedActivity {
         finish();
     }
 
-    // since UnitedActivity can't extend Activity, if you want to call Activity methods on one (getApplication, etc..) you need to chain this
+    // since UnitedActivity can't extend Activity, if you want to call Activity
+    // methods on one (getApplication, etc..) you need to chain this
     @Override
-    public Activity asActivity() {
+    public AppCompatActivity asActivity() {
         return this;
     }
 
@@ -215,6 +230,7 @@ public class MainActivity extends Activity implements UnitedActivity {
         }.start();
         super.finish();
     }
+
     public void onResume() {
         super.onResume();
         NotificationWorker.setAlarm(this);

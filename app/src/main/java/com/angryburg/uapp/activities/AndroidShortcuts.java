@@ -1,6 +1,6 @@
 package com.angryburg.uapp.activities;
 
-import android.app.Activity;
+import androidx.appcompat.app.AppCompatActivity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
@@ -26,7 +26,7 @@ import com.angryburg.uapp.utils.P;
  * Created by Niles on 8/23/17.
  */
 
-public class AndroidShortcuts extends Activity implements BoardsListListener {
+public class AndroidShortcuts extends AppCompatActivity implements BoardsListListener {
     BoardsListAdapter adapter = null;
     private ListView.OnItemClickListener listener = new ListView.OnItemClickListener() {
         @Override
@@ -35,10 +35,11 @@ public class AndroidShortcuts extends Activity implements BoardsListListener {
             createShortcut(board.name, "danger/" + board.name + "/");
         }
     };
+
     private void createShortcut(String name, String shortcutName) {
         Intent launchIntent = new Intent();
         launchIntent.putExtra("URL", P.get("awoo_endpoint") + "/" + name);
-        launchIntent.setAction("com.angryburg.la_u_ncher.intent.action.BOARD");
+        launchIntent.setAction("com.angryburg.uapp.intent.action.BOARD");
         Intent result = new Intent();
         result.putExtra(Intent.EXTRA_SHORTCUT_INTENT, launchIntent);
         result.putExtra(Intent.EXTRA_SHORTCUT_NAME, shortcutName);
@@ -47,7 +48,8 @@ public class AndroidShortcuts extends Activity implements BoardsListListener {
         finish();
     }
 
-    @Override public void onCreate(Bundle state) {
+    @Override
+    public void onCreate(Bundle state) {
         super.onCreate(state);
         setContentView(R.layout.board_list);
         BoardsList.registerListener(this);
@@ -56,7 +58,7 @@ public class AndroidShortcuts extends Activity implements BoardsListListener {
             public void onClick(View view) {
                 Intent launchIntent = new Intent();
                 launchIntent.putExtra("fragment", HiddenSettingsActivity.FragmentType.THREAD_WATCHER.toString());
-                launchIntent.setAction("com.angryburg.la_u_ncher.intent.action.THREAD_WATCHER");
+                launchIntent.setAction("com.angryburg.uapp.intent.action.THREAD_WATCHER");
                 Intent result = new Intent();
                 result.putExtra(Intent.EXTRA_SHORTCUT_INTENT, launchIntent);
                 result.putExtra(Intent.EXTRA_SHORTCUT_NAME, "Thread Watcher");
@@ -72,6 +74,7 @@ public class AndroidShortcuts extends Activity implements BoardsListListener {
             }
         });
     }
+
     private Parcelable makeIcon() {
         String field_name = P.get("theme") + "_dangeru";
         try {
@@ -82,7 +85,9 @@ public class AndroidShortcuts extends Activity implements BoardsListListener {
             return Intent.ShortcutIconResource.fromContext(AndroidShortcuts.this, R.raw.normal_dangeru);
         }
     }
+
     boolean firstReady = true;
+
     @Override
     public synchronized void boardsListReady(final List<BoardsList.Board> list) {
         runOnUiThread(new Runnable() {
@@ -93,7 +98,8 @@ public class AndroidShortcuts extends Activity implements BoardsListListener {
                     findViewById(R.id.boards_loading).setVisibility(View.GONE);
                     listview.setOnItemClickListener(listener);
                     for (BoardsList.Board b : list) {
-                        if (b.description == null) b.getDescription(AndroidShortcuts.this);
+                        if (b.description == null)
+                            b.getDescription(AndroidShortcuts.this);
                     }
                     firstReady = false;
                 }
@@ -104,11 +110,14 @@ public class AndroidShortcuts extends Activity implements BoardsListListener {
     }
 
     private static class BoardsListAdapter extends ArrayAdapter<BoardsList.Board> {
-        public BoardsListAdapter(@NonNull Context context, @LayoutRes int unused, @NonNull List<BoardsList.Board> objects) {
+        public BoardsListAdapter(@NonNull Context context, @LayoutRes int unused,
+                @NonNull List<BoardsList.Board> objects) {
             super(context, 0, objects);
         }
+
         @NonNull
-        @Override public View getView(int position, View convertView, @NonNull ViewGroup parent) {
+        @Override
+        public View getView(int position, View convertView, @NonNull ViewGroup parent) {
             BoardsList.Board board = getItem(position);
             if (convertView == null) {
                 convertView = LayoutInflater.from(getContext()).inflate(R.layout.board_list_item, parent, false);

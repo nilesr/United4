@@ -178,7 +178,7 @@ public class UserscriptActivity extends MainActivity implements ThreadWatcherLis
                     startActivity(i2);
                 } else if (itemId == R.id.watch_thread) {
                     if (url_thread == null) {
-                        GenericAlertDialogFragment.newInstance("This shouldn't be possible", getFragmentManager());
+                        GenericAlertDialogFragment.newInstance("This shouldn't be possible", getSupportFragmentManager());
                         return true;
                     }
                     if (ThreadWatcher.isWatching(url_thread.second)) {

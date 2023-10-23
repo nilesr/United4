@@ -1,8 +1,8 @@
 package com.angryburg.uapp.fragments;
 
 import android.app.Dialog;
-import android.app.DialogFragment;
-import android.app.FragmentManager;
+import androidx.fragment.app.DialogFragment;
+import androidx.fragment.app.FragmentManager;
 import android.app.ProgressDialog;
 import android.os.Bundle;
 
@@ -24,7 +24,8 @@ public class GenericProgressDialogFragment extends DialogFragment {
 
     /**
      * Generic factory method for a progress dialog
-     * @param s the title and message of the dialog
+     * 
+     * @param s       the title and message of the dialog
      * @param manager the manager to use to add the dialog
      */
     public static void newInstance(String s, FragmentManager manager) {
@@ -37,10 +38,12 @@ public class GenericProgressDialogFragment extends DialogFragment {
 
     /**
      * Dismisses the current dialog
+     * 
      * @param fragmentManager the manager used to find the fragment to dismiss
      */
     public static void dismiss(FragmentManager fragmentManager) {
         DialogFragment f = (DialogFragment) fragmentManager.findFragmentByTag("progress_dialog");
-        if (f != null) f.dismiss();
+        if (f != null)
+            f.dismiss();
     }
 }

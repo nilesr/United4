@@ -1,10 +1,10 @@
 package com.angryburg.uapp.fragments;
 
-import android.app.Fragment;
 import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.widget.Toolbar;
+import androidx.fragment.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
@@ -31,7 +31,8 @@ import java.util.Arrays;
 
 public class SettingsListFragment extends Fragment implements HiddenSettingsFragment {
     /**
-     * Holds the number of times that the user has toggled startup music. At 5 it enables developer settings
+     * Holds the number of times that the user has toggled startup music. At 5 it
+     * enables developer settings
      */
     static int startup_toggle_count = 0;
     /**
@@ -43,8 +44,7 @@ public class SettingsListFragment extends Fragment implements HiddenSettingsFrag
                 public String getText() {
                     return "Userscript - Currently " + P.getReadable("userscript");
                 }
-            },
-            new Setting("startup_music", new Runnable() {
+            }, new Setting("startup_music", new Runnable() {
                 @Override
                 public void run() {
                     startup_toggle_count++;
@@ -53,11 +53,16 @@ public class SettingsListFragment extends Fragment implements HiddenSettingsFrag
                         P.set("testing", "true");
                         Toast.makeText(getActivity(), "You are now a developer", Toast.LENGTH_LONG).show();
                         NotifierService.notify(NotifierService.NotificationType.RELOAD_INDEX);
-                        getActivity().setResult(1); // 1 for reload, see MainActivity
+                        getActivity().setResult(1); // 1
+                        // for
+                        // reload,
+                        // see
+                        // MainActivity
                         getActivity().finish();
                     }
                 }
             }) {
+
                 @Override
                 public String getText() {
                     return "Startup music - Currently " + P.getReadable("startup_music");
@@ -66,9 +71,11 @@ public class SettingsListFragment extends Fragment implements HiddenSettingsFrag
             new Setting(null, new Runnable() {
                 @Override
                 public void run() {
-                    ((HiddenSettingsActivity) getActivity()).push(HiddenSettingsActivity.FragmentType.NOTIFICATION_SETTINGS);
+                    ((HiddenSettingsActivity) getActivity())
+                            .push(HiddenSettingsActivity.FragmentType.NOTIFICATION_SETTINGS);
                 }
             }) {
+
                 @Override
                 public String getText() {
                     return "Notification Settings";
@@ -80,6 +87,7 @@ public class SettingsListFragment extends Fragment implements HiddenSettingsFrag
                     ((HiddenSettingsActivity) getActivity()).push(HiddenSettingsActivity.FragmentType.JANITOR_LOGIN);
                 }
             }) {
+
                 @Override
                 public String getText() {
                     return "Janitor Login";
@@ -91,6 +99,7 @@ public class SettingsListFragment extends Fragment implements HiddenSettingsFrag
                     ((HiddenSettingsActivity) getActivity()).push(HiddenSettingsActivity.FragmentType.COLOR_LIST);
                 }
             }) {
+
                 @Override
                 public String getText() {
                     return "Change Toolbar Color";
@@ -102,24 +111,29 @@ public class SettingsListFragment extends Fragment implements HiddenSettingsFrag
                     NotifierService.notify(NotifierService.NotificationType.INVALIDATE_TOOLBAR);
                 }
             }) {
+
                 @Override
                 public String getText() {
-                    return "Always show activity back button in toolbar - Currently " + P.getReadable("force_show_back_btn");
+                    return "Always show activity back button in toolbar - Currently "
+                            + P.getReadable("force_show_back_btn");
                 }
             },
             new Setting(null, new Runnable() {
                 @Override
                 public void run() {
-                    String[] values = {"false", "-25", "match", "+25"};
-                    String new_value = values[(Arrays.asList(values).indexOf(P.get("window_bar_color")) + 1) % values.length];
+                    String[] values = { "false", "-25", "match", "+25" };
+                    String new_value = values[(Arrays.asList(values).indexOf(P.get("window_bar_color")) + 1)
+                            % values.length];
                     P.set("window_bar_color", new_value);
                     ((HiddenSettingsActivity) getActivity()).invalidateToolbarColor();
                     NotifierService.notify(NotifierService.NotificationType.INVALIDATE_TOOLBAR);
                 }
             }) {
+
                 @Override
                 public String getText() {
-                    return "Update window bar color to match toolbar (Android 5+) - Currently " + P.get("window_bar_color");
+                    return "Update window bar color to match toolbar (Android 5+) - Currently "
+                            + P.get("window_bar_color");
                 }
             },
             new Setting("mute_sounds", null) {
@@ -149,7 +163,8 @@ public class SettingsListFragment extends Fragment implements HiddenSettingsFrag
             new Setting("bar", null) {
                 @Override
                 public String getText() {
-                    return "Draw bar at beginning of new replies (requires userscript) - Currently " + P.getReadable("bar");
+                    return "Draw bar at beginning of new replies (requires userscript) - Currently "
+                            + P.getReadable("bar");
                 }
             },
             new Setting("scroll_to_bar", null) {
@@ -179,9 +194,11 @@ public class SettingsListFragment extends Fragment implements HiddenSettingsFrag
             new Setting("dark_mode", new Runnable() {
                 @Override
                 public void run() {
-                    Toast.makeText(getActivity(), "Change will take full effect after restarting the app", Toast.LENGTH_LONG).show();
+                    Toast.makeText(getActivity(), "Change will take full effect after restarting the app",
+                            Toast.LENGTH_LONG).show();
                 }
             }) {
+
                 @Override
                 public String getText() {
                     return "Dark mode - Currently " + P.getReadable("dark_mode");
@@ -193,12 +210,14 @@ public class SettingsListFragment extends Fragment implements HiddenSettingsFrag
                     ((HiddenSettingsActivity) getActivity()).push(HiddenSettingsActivity.FragmentType.HIDDEN_LIST);
                 }
             }) {
+
                 @Override
                 public String getText() {
                     return "Hidden Threads";
                 }
-            },
-    };
+
+            }, };
+
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
@@ -212,24 +231,28 @@ public class SettingsListFragment extends Fragment implements HiddenSettingsFrag
                     @Override
                     public View getView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
                         if (convertView == null) {
-                            convertView = LayoutInflater.from(getContext()).inflate(R.layout.settings_list_item, parent, false);
+                            convertView = LayoutInflater.from(getContext()).inflate(R.layout.settings_list_item, parent,
+                                    false);
                         }
                         final SettingInterface setting = settings[position];
                         final ViewGroup view = (ViewGroup) convertView;
                         view.removeAllViews();
                         if (setting.toggle() == null) {
                             TextView tv = new TextView(getActivity());
-                            tv.setLayoutParams(new LinearLayout.LayoutParams(0, ViewGroup.LayoutParams.MATCH_PARENT, 0.85f));
+                            tv.setLayoutParams(
+                                    new LinearLayout.LayoutParams(0, ViewGroup.LayoutParams.MATCH_PARENT, 0.85f));
                             tv.setText(setting.getText());
                             view.addView(tv);
                             ImageView iv = new ImageView(getContext());
                             iv.setImageResource(android.R.drawable.progress_horizontal);
-                            iv.setLayoutParams(new LinearLayout.LayoutParams(0, ViewGroup.LayoutParams.MATCH_PARENT, 0.15f));
+                            iv.setLayoutParams(
+                                    new LinearLayout.LayoutParams(0, ViewGroup.LayoutParams.MATCH_PARENT, 0.15f));
                             view.addView(iv);
                         } else {
                             CompoundButton sw = new Switch(getActivity());
                             view.addView(sw);
-                            sw.setLayoutParams(new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
+                            sw.setLayoutParams(new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,
+                                    ViewGroup.LayoutParams.MATCH_PARENT));
                             sw.setText(setting.getText());
                             sw.setChecked(P.getBool(setting.toggle()));
                             // this really shouldn't be necessary but it is
@@ -254,6 +277,7 @@ public class SettingsListFragment extends Fragment implements HiddenSettingsFrag
                 Toolbar toolbar = getActivity().findViewById(R.id.toolbar);
                 addOptions(toolbar);
             }
+
         });
         return res;
     }
@@ -265,6 +289,7 @@ public class SettingsListFragment extends Fragment implements HiddenSettingsFrag
 
     /**
      * adds a close button to the menu bar
+     * 
      * @param toolbar the toolbar
      */
     public void addOptions(Toolbar toolbar) {
@@ -281,13 +306,16 @@ public class SettingsListFragment extends Fragment implements HiddenSettingsFrag
     }
 
     /**
-     * An interface that each setting needs to implement, allows the menu handling system to
-     * get the text to display and how it should be displayed, as well as trigger an action
+     * An interface that each setting needs to implement, allows the menu handling
+     * system to
+     * get the text to display and how it should be displayed, as well as trigger an
+     * action
      * when the user clicks on the item
      */
     private interface SettingInterface {
         /**
          * Gets the text to display to the user
+         * 
          * @return the text to display to the user
          */
         String getText();
@@ -298,15 +326,19 @@ public class SettingsListFragment extends Fragment implements HiddenSettingsFrag
         void click();
 
         /**
-         * For non-submenus, returns a property that can be read as a boolean to see if the toggle
-         * should be shown in the enabled state or the disabled state, or null if there is no toggle
+         * For non-submenus, returns a property that can be read as a boolean to see if
+         * the toggle
+         * should be shown in the enabled state or the disabled state, or null if there
+         * is no toggle
+         * 
          * @return a property name to check, or null
          */
         String toggle();
     }
 
     /**
-     * Helper implementation of some of SettingsInterface, with some common logic abstracted out
+     * Helper implementation of some of SettingsInterface, with some common logic
+     * abstracted out
      */
     private abstract static class Setting implements SettingInterface {
         /**
@@ -320,8 +352,9 @@ public class SettingsListFragment extends Fragment implements HiddenSettingsFrag
 
         /**
          * Simple constructor that stores its arguments
+         * 
          * @param toggle The property to be toggled on click, or null
-         * @param click An action to perform on click, or null
+         * @param click  An action to perform on click, or null
          */
         Setting(String toggle, Runnable click) {
             this.toggle = toggle;
@@ -340,6 +373,8 @@ public class SettingsListFragment extends Fragment implements HiddenSettingsFrag
             }
         }
 
-        public String toggle() { return toggle; }
+        public String toggle() {
+            return toggle;
+        }
     }
 }

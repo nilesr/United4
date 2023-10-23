@@ -1,7 +1,7 @@
 package com.angryburg.uapp.fragments;
 
 import android.annotation.SuppressLint;
-import android.app.Fragment;
+import androidx.fragment.app.Fragment;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
@@ -45,7 +45,7 @@ public class ThreadWatcherFragment extends Fragment implements HiddenSettingsFra
                 // yet
                 if (ThreadWatcher.threads[i] == null) {
                     GenericAlertDialogFragment.newInstance("That thread hasn't loaded yet, please wait.",
-                            getFragmentManager());
+                            getParentFragmentManager());
                     return;
                 }
                 // Set the thread as read and open the thread in a new UserscriptActivity
@@ -232,7 +232,7 @@ public class ThreadWatcherFragment extends Fragment implements HiddenSettingsFra
                 public void onClick(View view) {
                     // if (thread == null) {
                     // GenericAlertDialogFragment.newInstance("This shouldn't happen, user tried to
-                    // unwatch a thread that was null", getFragmentManager());
+                    // unwatch a thread that was null", getSupportFragmentManager());
                     // return;
                     // }
                     // ThreadWatcher.unwatchThread(thread.post_id); // will invalidate the list view

@@ -19,27 +19,12 @@ import com.angryburg.uapp.utils.P;
 
 import androidx.media3.common.MediaItem;
 import androidx.media3.common.util.UnstableApi;
-import androidx.media3.exoplayer.DefaultLoadControl;
-import androidx.media3.exoplayer.ExoPlaybackException;
+import androidx.media3.datasource.DefaultDataSource;
 import androidx.media3.exoplayer.ExoPlayer;
-import androidx.media3.exoplayer.LoadControl;
-import androidx.media3.common.PlaybackParameters;
 import androidx.media3.common.Player;
-import androidx.media3.exoplayer.ExoPlayer;
-import androidx.media3.common.Timeline;
-import androidx.media3.exoplayer.upstream.DefaultBandwidthMeter;
-import androidx.media3.extractor.DefaultExtractorsFactory;
-import androidx.media3.extractor.ExtractorsFactory;
 import androidx.media3.exoplayer.source.ProgressiveMediaSource;
 import androidx.media3.exoplayer.source.MediaSource;
-import androidx.media3.exoplayer.source.TrackGroupArray;
-import androidx.media3.exoplayer.trackselection.AdaptiveTrackSelection;
-import androidx.media3.exoplayer.trackselection.DefaultTrackSelector;
-import androidx.media3.exoplayer.trackselection.TrackSelection;
-import androidx.media3.exoplayer.trackselection.TrackSelectionArray;
 import androidx.media3.datasource.DataSource;
-import androidx.media3.datasource.DefaultDataSourceFactory;
-import androidx.media3.common.util.Util;
 
 import org.json.JSONArray;
 
@@ -165,13 +150,9 @@ public class United extends Application {
         player = new ExoPlayer.Builder(getContext()).build();
         player.addListener(new SongDoneListener());
 
-        DataSource.Factory dataSourceFactory = new DefaultDataSourceFactory(getContext(),
-                Util.getUserAgent(getContext(), "la/u/ncher"));
-
-        //ExtractorsFactory extractorsFactory = new DefaultExtractorsFactory();
+        DataSource.Factory dataSourceFactory = new DefaultDataSource.Factory(getContext());
 
         MediaSource mediaSource = new ProgressiveMediaSource.Factory(dataSourceFactory).createMediaSource(MediaItem.fromUri(Uri.parse("https://niles.xyz/valhalla_music/" + id + ".mp3")));
-                //dataSourceFactory, extractorsFactory, null, null);
         player.setPlayWhenReady(true);
         player.setMediaItem(mediaSource.getMediaItem());
         player.prepare();

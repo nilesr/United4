@@ -1,6 +1,6 @@
 package com.angryburg.uapp.fragments;
 
-import android.app.Fragment;
+import androidx.fragment.app.Fragment;
 import android.os.Bundle;
 import androidx.annotation.Nullable;
 import androidx.appcompat.widget.Toolbar;
@@ -52,7 +52,7 @@ public class DebugSettingsListFragment extends Fragment implements HiddenSetting
                     public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
                         switch (i) {
                             case 0:
-                                PropertiesSingleton.resetAllAndExit(getFragmentManager());
+                                PropertiesSingleton.resetAllAndExit(getParentFragmentManager());
                                 break;
                             case 1:
                                 P.toggle("debug");
@@ -78,7 +78,8 @@ public class DebugSettingsListFragment extends Fragment implements HiddenSetting
                                         .push(HiddenSettingsActivity.FragmentType.PROPERTIES_LIST);
                                 break;
                             default:
-                                GenericAlertDialogFragment.newInstance("Should never happen", getFragmentManager());
+                                GenericAlertDialogFragment.newInstance("Should never happen",
+                                        getParentFragmentManager());
                                 break;
                         }
                     }

@@ -5,6 +5,8 @@ import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.widget.Toolbar;
+import androidx.fragment.app.Fragment;
+
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
@@ -25,7 +27,7 @@ import com.angryburg.uapp.utils.P;
  * Created by Niles on 9/1/17.
  */
 
-public class ColorListFragment extends android.app.Fragment implements HiddenSettingsFragment {
+public class ColorListFragment extends Fragment implements HiddenSettingsFragment {
     @Override
     public HiddenSettingsActivity.FragmentType getType() {
         return HiddenSettingsActivity.FragmentType.COLOR_LIST;

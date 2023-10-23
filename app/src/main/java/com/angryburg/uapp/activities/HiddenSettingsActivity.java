@@ -1,9 +1,9 @@
 package com.angryburg.uapp.activities;
 
-import android.app.Activity;
-import android.app.Fragment;
-import android.app.FragmentManager;
-import android.app.FragmentTransaction;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 import android.os.Bundle;
 import androidx.annotation.Nullable;
 import androidx.appcompat.widget.Toolbar;
@@ -29,25 +29,31 @@ import java.util.Stack;
 
 /**
  * An activity that can display multiple fragments.
- * It expects a "fragment" to be passed in through the intent, and it will put that fragment
- * in its frame. That fragment can call swapScreen on this activity to switch to a different fragment
- * When the user presses the back button, it will swapScreen back to the fragment from the intent if
+ * It expects a "fragment" to be passed in through the intent, and it will put
+ * that fragment
+ * in its frame. That fragment can call swapScreen on this activity to switch to
+ * a different fragment
+ * When the user presses the back button, it will swapScreen back to the
+ * fragment from the intent if
  * it wasn't already there, or finish() if it was.
  */
 
-public class HiddenSettingsActivity extends Activity {
+public class HiddenSettingsActivity extends AppCompatActivity {
     @SuppressWarnings("unused")
     private static final String TAG = HiddenSettingsActivity.class.getSimpleName();
     private Stack<FragmentType> windowStack;
-    @Override public void onCreate(Bundle savedInstanceState) {
+
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if (P.getBool("dark_mode")) setTheme(R.style.AppTheme_Dark);
+        if (P.getBool("dark_mode"))
+            setTheme(R.style.AppTheme_Dark);
         setContentView(R.layout.userscript_activity);
         invalidateToolbarColor();
         FragmentType type = FragmentType.DEBUG_SETTINGS_LIST;
         windowStack = new Stack<>();
         if (savedInstanceState != null && savedInstanceState.containsKey("stack")) {
-            //noinspection unchecked
+            // noinspection unchecked
             String[] arr = savedInstanceState.getStringArray("stack");
             if (arr != null) {
                 windowStack = new Stack<>();
@@ -56,7 +62,7 @@ public class HiddenSettingsActivity extends Activity {
                 }
                 type = windowStack.peek();
             }
-        } else if (getIntent().hasExtra("fragment") && savedInstanceState == null){
+        } else if (getIntent().hasExtra("fragment") && savedInstanceState == null) {
             type = FragmentType.valueOf(getIntent().getStringExtra("fragment"));
             windowStack.push(type);
         } else {
@@ -64,7 +70,9 @@ public class HiddenSettingsActivity extends Activity {
         }
         swapScreens(type);
     }
-    @Override public void onBackPressed() {
+
+    @Override
+    public void onBackPressed() {
         if (windowStack.isEmpty() || windowStack.size() == 1) {
             finish();
             return;
@@ -74,6 +82,7 @@ public class HiddenSettingsActivity extends Activity {
 
     /**
      * Replaces the top of the fragment stack with the given fragment type
+     * 
      * @param type The fragment to replace
      * @param args The arguments to pass to that fragment
      */
@@ -85,6 +94,7 @@ public class HiddenSettingsActivity extends Activity {
 
     /**
      * Pushes another fragment onto the fragment stack
+     * 
      * @param type the type of fragment to put on the stack
      * @param args optional arguments to pass to the fragment
      */
@@ -95,6 +105,7 @@ public class HiddenSettingsActivity extends Activity {
 
     /**
      * Pushes another fragment onto the fragment stack
+     * 
      * @param type the type of fragment to put on the stack
      */
     public void push(FragmentType type) {
@@ -112,21 +123,28 @@ public class HiddenSettingsActivity extends Activity {
         }
         swapScreens(windowStack.peek());
     }
+
     private void swapScreens(FragmentType type) {
         swapScreens(type, null);
     }
+
     /**
      * Switches to the passed fragment
-     * If the currently shown fragment has the same type as the argument, does nothing. Otherwise,
-     * removes the current fragment and makes a new fragment of the passed in type and shows it
-     * @param type the fragment to switch to
+     * If the currently shown fragment has the same type as the argument, does
+     * nothing. Otherwise,
+     * removes the current fragment and makes a new fragment of the passed in type
+     * and shows it
+     * 
+     * @param type      the fragment to switch to
      * @param arguments arguments to give to the fragment
      */
     private void swapScreens(FragmentType type, @Nullable Bundle arguments) {
-        FragmentManager manager = getFragmentManager();
+        FragmentManager manager = getSupportFragmentManager();
         FragmentTransaction transaction = manager.beginTransaction();
-        // if we already have a fragment and that fragment is not the fragment we want to show, remove it
-        // otherwise, it is the fragment we want to show, so we're done, just return and abort the transaction
+        // if we already have a fragment and that fragment is not the fragment we want
+        // to show, remove it
+        // otherwise, it is the fragment we want to show, so we're done, just return and
+        // abort the transaction
         if (manager.findFragmentByTag("fragment") != null) {
             if (((HiddenSettingsFragment) manager.findFragmentByTag("fragment")).getType() != type) {
                 transaction.remove(manager.findFragmentByTag("fragment"));
@@ -176,14 +194,16 @@ public class HiddenSettingsActivity extends Activity {
         }
         newFragment.setArguments(arguments);
         // Put the fragment in our layout
-        //transaction.add(newFragment, "fragment");
+        // transaction.add(newFragment, "fragment");
         transaction.replace(R.id.userscript_activity_main_fragment, newFragment, "fragment");
         transaction.addToBackStack("fragment"); // TODO is this needed?
         transaction.commit();
     }
 
     /**
-     * Save the currently shown fragment type to the saved instance state so it can be restored
+     * Save the currently shown fragment type to the saved instance state so it can
+     * be restored
+     * 
      * @param outState state to be saved
      */
     public void onSaveInstanceState(Bundle outState) {
@@ -191,7 +211,7 @@ public class HiddenSettingsActivity extends Activity {
         String[] arr = new String[windowStack.size()];
         int i = 0;
         for (FragmentType t : windowStack.toArray(new FragmentType[windowStack.size()]))
-            //noinspection ValueOfIncrementOrDecrementUsed
+            // noinspection ValueOfIncrementOrDecrementUsed
             arr[i++] = t.toString();
         outState.putStringArray("stack", arr);
     }
